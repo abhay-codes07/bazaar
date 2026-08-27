@@ -1,0 +1,716 @@
+{
+  "merchant_id": "m_019_tara_kids_wear",
+  "name": "Tara Kids Wear",
+  "vertical": "apparel",
+  "city": "Coimbatore",
+  "base_pincode": "641012",
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "gstin": "29ABCDE1019F1Z9",
+  "serviceability": {
+    "pincode_prefixes": [
+      "6410"
+    ],
+    "pincodes": [],
+    "delivery_fee_paise": 7900,
+    "free_delivery_above_paise": 0,
+    "eta_hours": 24,
+    "cod_allowed": true
+  },
+  "offer_rules": [
+    {
+      "rule_id": "NEW10",
+      "version": 1,
+      "type": "percent",
+      "value": 10,
+      "min_cart_paise": 30000,
+      "min_qty": 0,
+      "segment": "new",
+      "max_discount_paise": 20000,
+      "stackable": false,
+      "valid_until": null,
+      "description": "10% off first order, max ₹200"
+    },
+    {
+      "rule_id": "BULK5_PCT",
+      "version": 1,
+      "type": "percent",
+      "value": 5,
+      "min_cart_paise": 0,
+      "min_qty": 5,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "5% off when buying 5+ units of a line"
+    },
+    {
+      "rule_id": "FREE_DEL_999",
+      "version": 1,
+      "type": "free_delivery",
+      "value": 0,
+      "min_cart_paise": 99900,
+      "min_qty": 0,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "Free delivery above ₹999"
+    }
+  ],
+  "policy": {
+    "review_first": false,
+    "kill_switch": false,
+    "agent_allowlist": [],
+    "min_tier_for_checkout": 2,
+    "max_negotiation_rounds": 3,
+    "max_order_paise": 5000000,
+    "refunds_per_hour": 5,
+    "allowed_languages": [
+      "en",
+      "hi"
+    ]
+  },
+  "products": [
+    {
+      "sku": "m_019-00",
+      "name": "Lehenga Set",
+      "source_name": "Lehenga Set",
+      "description": "Lehenga Set — Semi-stitched",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 378800,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "lehenga",
+        "लहंगा"
+      ],
+      "use_case_tags": [
+        "wedding"
+      ],
+      "buyer_highlights": [
+        "Semi-stitched"
+      ],
+      "hsn": "6204",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-01",
+      "name": "Denim Jeans",
+      "source_name": "denim jeans",
+      "description": "Denim Jeans — Stretch",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 141200,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "jeans",
+        "जींस"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Stretch"
+      ],
+      "hsn": "6203",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-02",
+      "name": "Men's T-Shirt",
+      "source_name": "tshirt",
+      "description": "Men's T-Shirt — Bio-washed",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 57200,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "tshirt",
+        "टी-शर्ट",
+        "tee"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Bio-washed"
+      ],
+      "hsn": "6109",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-03",
+      "name": "Cotton Shorts",
+      "source_name": "shorts",
+      "description": "Cotton Shorts — Drawstring",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 46100,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "shorts",
+        "शॉर्ट्स"
+      ],
+      "use_case_tags": [
+        "summer"
+      ],
+      "buyer_highlights": [
+        "Drawstring"
+      ],
+      "hsn": "6203",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-04",
+      "name": "Cotton Socks (3 pk)",
+      "source_name": "Cotton Socks (3 pk) (socks)",
+      "description": "Cotton Socks (3 pk) — Ankle length",
+      "category": "accessories",
+      "unit": "pack",
+      "pack_size": 3.0,
+      "price_paise": 28500,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "socks",
+        "मोज़े",
+        "moze"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Ankle length"
+      ],
+      "hsn": "6115",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-05",
+      "name": "Dupatta",
+      "source_name": "Dupatta",
+      "description": "Dupatta — Chiffon",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 37500,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "dupatta",
+        "दुपट्टा",
+        "chunni"
+      ],
+      "use_case_tags": [
+        "festive"
+      ],
+      "buyer_highlights": [
+        "Chiffon"
+      ],
+      "hsn": "6214",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-06",
+      "name": "Nehru Jacket",
+      "source_name": "modi jacket",
+      "description": "Nehru Jacket — Jacquard",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 205700,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "modi jacket",
+        "नेहरू जैकेट"
+      ],
+      "use_case_tags": [
+        "festive",
+        "wedding"
+      ],
+      "buyer_highlights": [
+        "Jacquard"
+      ],
+      "hsn": "6211",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-07",
+      "name": "Leggings",
+      "source_name": "leggings",
+      "description": "Leggings — 4-way stretch",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 31500,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "leggings",
+        "लेगिंग"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "4-way stretch"
+      ],
+      "hsn": "6115",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-08",
+      "name": "Kurti",
+      "source_name": "Kurti (kurti)",
+      "description": "Kurti — Straight cut",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 81200,
+      "stock": 150,
+      "variants": [],
+      "synonyms": [
+        "kurti",
+        "कुर्ती"
+      ],
+      "use_case_tags": [
+        "daily",
+        "office"
+      ],
+      "buyer_highlights": [
+        "Straight cut"
+      ],
+      "hsn": "6204",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-09",
+      "name": "Kids' Frock",
+      "source_name": "Kids' Frock",
+      "description": "Kids' Frock — Soft cotton",
+      "category": "kids",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 66400,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "frock",
+        "फ्रॉक"
+      ],
+      "use_case_tags": [
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "Soft cotton"
+      ],
+      "hsn": "6209",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-10",
+      "name": "Women's Palazzo",
+      "source_name": "पलाज़ो",
+      "description": "Women's Palazzo — Rayon",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 74400,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "palazzo",
+        "पलाज़ो"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Rayon"
+      ],
+      "hsn": "6204",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-11",
+      "name": "Hoodie",
+      "source_name": "Hoodie",
+      "description": "Hoodie — Fleece",
+      "category": "casual",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 118300,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "hoodie",
+        "हुडी"
+      ],
+      "use_case_tags": [
+        "winter"
+      ],
+      "buyer_highlights": [
+        "Fleece"
+      ],
+      "hsn": "6110",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-12",
+      "name": "Sports Bra",
+      "source_name": "sports bra",
+      "description": "Sports Bra — Medium support",
+      "category": "activewear",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 65400,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "sports bra"
+      ],
+      "use_case_tags": [
+        "gym"
+      ],
+      "buyer_highlights": [
+        "Medium support"
+      ],
+      "hsn": "6212",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-13",
+      "name": "Salwar Suit Set",
+      "source_name": "Salwar Suit Set",
+      "description": "Salwar Suit Set — Unstitched",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 200100,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "suit",
+        "सलवार सूट"
+      ],
+      "use_case_tags": [
+        "festive"
+      ],
+      "buyer_highlights": [
+        "Unstitched"
+      ],
+      "hsn": "6204",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-14",
+      "name": "Kids' Kurta Pyjama",
+      "source_name": "Kids' Kurta Pyjama (kids kurta)",
+      "description": "Kids' Kurta Pyjama — Set of 2",
+      "category": "kids",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 86700,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "kids kurta",
+        "बच्चों का कुर्ता"
+      ],
+      "use_case_tags": [
+        "festive"
+      ],
+      "buyer_highlights": [
+        "Set of 2"
+      ],
+      "hsn": "6209",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-15",
+      "name": "Cotton Kurta",
+      "source_name": "kurta",
+      "description": "Cotton Kurta — 100% cotton",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 93200,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "kurta",
+        "कुर्ता"
+      ],
+      "use_case_tags": [
+        "festive",
+        "office"
+      ],
+      "buyer_highlights": [
+        "100% cotton"
+      ],
+      "hsn": "6205",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-16",
+      "name": "Formal Shirt",
+      "source_name": "shirt",
+      "description": "Formal Shirt — Wrinkle-free",
+      "category": "formal",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 106100,
+      "stock": 150,
+      "variants": [],
+      "synonyms": [
+        "shirt",
+        "शर्ट"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "Wrinkle-free"
+      ],
+      "hsn": "6205",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_019-17",
+      "name": "Woollen Shawl",
+      "source_name": "shawl",
+      "description": "Woollen Shawl — Kullu weave",
+      "category": "ethnic",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 137500,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "shawl",
+        "शॉल"
+      ],
+      "use_case_tags": [
+        "winter",
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "Kullu weave"
+      ],
+      "hsn": "6214",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    }
+  ],
+  "source_kind": "csv",
+  "created_at": "2026-08-28T00:00:00Z"
+}

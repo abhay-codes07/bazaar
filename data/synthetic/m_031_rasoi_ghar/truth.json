@@ -1,0 +1,789 @@
+{
+  "merchant_id": "m_031_rasoi_ghar",
+  "name": "Rasoi Ghar",
+  "vertical": "home_kitchen",
+  "city": "Jaipur",
+  "base_pincode": "302017",
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "gstin": "29ABCDE1031F1Z1",
+  "serviceability": {
+    "pincode_prefixes": [
+      "3020"
+    ],
+    "pincodes": [],
+    "delivery_fee_paise": 4900,
+    "free_delivery_above_paise": 99900,
+    "eta_hours": 24,
+    "cod_allowed": true
+  },
+  "offer_rules": [
+    {
+      "rule_id": "NEW10",
+      "version": 1,
+      "type": "percent",
+      "value": 10,
+      "min_cart_paise": 30000,
+      "min_qty": 0,
+      "segment": "new",
+      "max_discount_paise": 20000,
+      "stackable": false,
+      "valid_until": null,
+      "description": "10% off first order, max ₹200"
+    },
+    {
+      "rule_id": "BULK5_PCT",
+      "version": 1,
+      "type": "percent",
+      "value": 5,
+      "min_cart_paise": 0,
+      "min_qty": 5,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "5% off when buying 5+ units of a line"
+    },
+    {
+      "rule_id": "FREE_DEL_999",
+      "version": 1,
+      "type": "free_delivery",
+      "value": 0,
+      "min_cart_paise": 99900,
+      "min_qty": 0,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "Free delivery above ₹999"
+    }
+  ],
+  "policy": {
+    "review_first": false,
+    "kill_switch": false,
+    "agent_allowlist": [],
+    "min_tier_for_checkout": 2,
+    "max_negotiation_rounds": 2,
+    "max_order_paise": 5000000,
+    "refunds_per_hour": 5,
+    "allowed_languages": [
+      "en",
+      "hi"
+    ]
+  },
+  "products": [
+    {
+      "sku": "m_031-00",
+      "name": "Laundry Basket",
+      "source_name": "laundry basket",
+      "description": "Laundry Basket — Foldable",
+      "category": "storage",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 42400,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "laundry basket",
+        "कपड़े की टोकरी"
+      ],
+      "use_case_tags": [
+        "home"
+      ],
+      "buyer_highlights": [
+        "Foldable"
+      ],
+      "hsn": "3924",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-01",
+      "name": "Curtains 2pc",
+      "source_name": "Curtains 2pc",
+      "description": "Curtains 2pc — Blackout",
+      "category": "decor",
+      "unit": "pack",
+      "pack_size": 2.0,
+      "price_paise": 92600,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "curtain",
+        "पर्दा",
+        "parda"
+      ],
+      "use_case_tags": [
+        "home"
+      ],
+      "buyer_highlights": [
+        "Blackout"
+      ],
+      "hsn": "6303",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-02",
+      "name": "Steel Tiffin 3-tier",
+      "source_name": "Steel Tiffin 3-tier",
+      "description": "Steel Tiffin 3-tier — Leak-proof",
+      "category": "storage",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 56700,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "tiffin",
+        "टिफिन",
+        "lunch box"
+      ],
+      "use_case_tags": [
+        "office",
+        "school"
+      ],
+      "buyer_highlights": [
+        "Leak-proof"
+      ],
+      "hsn": "7323",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-03",
+      "name": "Storage Jars 6pc",
+      "source_name": "dabba",
+      "description": "Storage Jars 6pc — Airtight",
+      "category": "storage",
+      "unit": "pack",
+      "pack_size": 6.0,
+      "price_paise": 62400,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "dabba",
+        "डब्बा",
+        "containers"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Airtight"
+      ],
+      "hsn": "3924",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-04",
+      "name": "Kadhai 3L",
+      "source_name": "Kadhai 3L",
+      "description": "Kadhai 3L — Tri-ply",
+      "category": "cookware",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 96900,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "kadai",
+        "कड़ाही"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Tri-ply"
+      ],
+      "hsn": "7615",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-05",
+      "name": "Wall Clock",
+      "source_name": "Wall Clock",
+      "description": "Wall Clock — Silent sweep",
+      "category": "decor",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 72800,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "clock",
+        "घड़ी"
+      ],
+      "use_case_tags": [
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "Silent sweep"
+      ],
+      "hsn": "9105",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-06",
+      "name": "Dinner Set 24pc",
+      "source_name": "डिनर सेट",
+      "description": "Dinner Set 24pc — Bone china",
+      "category": "dining",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 286500,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "dinner set",
+        "डिनर सेट"
+      ],
+      "use_case_tags": [
+        "gifting",
+        "wedding"
+      ],
+      "buyer_highlights": [
+        "Bone china"
+      ],
+      "hsn": "6912",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-07",
+      "name": "Doormat",
+      "source_name": "doormat",
+      "description": "Doormat — Anti-slip",
+      "category": "decor",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 22900,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "doormat",
+        "पायदान"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Anti-slip"
+      ],
+      "hsn": "5703",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-08",
+      "name": "Electric Kettle 1.5L",
+      "source_name": "केतली",
+      "description": "Electric Kettle 1.5L — Auto cut-off",
+      "category": "appliances",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 98600,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "kettle",
+        "केतली"
+      ],
+      "use_case_tags": [
+        "office",
+        "hostel"
+      ],
+      "buyer_highlights": [
+        "Auto cut-off"
+      ],
+      "hsn": "8516",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-09",
+      "name": "Steel Water Bottle 1L",
+      "source_name": "Steel Water Bottle 1L (bottle)",
+      "description": "Steel Water Bottle 1L — Insulated",
+      "category": "drinkware",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 44300,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "bottle",
+        "बोतल"
+      ],
+      "use_case_tags": [
+        "school",
+        "office"
+      ],
+      "buyer_highlights": [
+        "Insulated"
+      ],
+      "hsn": "7323",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-10",
+      "name": "Mixer Grinder 750W",
+      "source_name": "mixie",
+      "description": "Mixer Grinder 750W — 3 jars",
+      "category": "appliances",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 370100,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "mixie",
+        "मिक्सर"
+      ],
+      "use_case_tags": [
+        "wedding"
+      ],
+      "buyer_highlights": [
+        "3 jars"
+      ],
+      "hsn": "8509",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-11",
+      "name": "Non-stick Tawa",
+      "source_name": "Non-stick Tawa",
+      "description": "Non-stick Tawa — 28 cm",
+      "category": "cookware",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 72900,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "tawa",
+        "तवा"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "28 cm"
+      ],
+      "hsn": "7615",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-12",
+      "name": "Towel Set 2pc",
+      "source_name": "towel",
+      "description": "Towel Set 2pc — 600 GSM",
+      "category": "linen",
+      "unit": "pack",
+      "pack_size": 2.0,
+      "price_paise": 72900,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "towel",
+        "तौलिया"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "600 GSM"
+      ],
+      "hsn": "6302",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-13",
+      "name": "Pressure Cooker 5L",
+      "source_name": "PRESSURE COOKER 5L",
+      "description": "Pressure Cooker 5L — Hard anodised",
+      "category": "cookware",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 184100,
+      "stock": 150,
+      "variants": [],
+      "synonyms": [
+        "cooker",
+        "प्रेशर कुकर"
+      ],
+      "use_case_tags": [
+        "daily",
+        "wedding"
+      ],
+      "buyer_highlights": [
+        "Hard anodised"
+      ],
+      "hsn": "7615",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-14",
+      "name": "Induction Cooktop",
+      "source_name": "Induction Cooktop",
+      "description": "Induction Cooktop — 1800 W",
+      "category": "appliances",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 249600,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "induction",
+        "इंडक्शन"
+      ],
+      "use_case_tags": [
+        "hostel"
+      ],
+      "buyer_highlights": [
+        "1800 W"
+      ],
+      "hsn": "8516",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-15",
+      "name": "Knife Set 5pc",
+      "source_name": "Knife Set 5pc",
+      "description": "Knife Set 5pc — Stainless",
+      "category": "tools",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 87200,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "knife set",
+        "चाकू सेट"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Stainless"
+      ],
+      "hsn": "8211",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-16",
+      "name": "Bedsheet Double",
+      "source_name": "BEDSHEET DOUBLE",
+      "description": "Bedsheet Double — Cotton 180 TC",
+      "category": "linen",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 91300,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "bedsheet",
+        "चादर",
+        "chadar"
+      ],
+      "use_case_tags": [
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "Cotton 180 TC"
+      ],
+      "hsn": "6304",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-17",
+      "name": "Chopping Board",
+      "source_name": "chopping board",
+      "description": "Chopping Board — Bamboo",
+      "category": "tools",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 32400,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "chopping board",
+        "कटिंग बोर्ड"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Bamboo"
+      ],
+      "hsn": "4419",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-18",
+      "name": "Spice Box",
+      "source_name": "मसाला डब्बा",
+      "description": "Spice Box — 7 compartments",
+      "category": "storage",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 45500,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "masala dabba",
+        "मसाला डब्बा"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "7 compartments"
+      ],
+      "hsn": "7323",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_031-19",
+      "name": "Casserole 2.5L",
+      "source_name": "Casserole 2.5L",
+      "description": "Casserole 2.5L — Insulated",
+      "category": "dining",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 68200,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "casserole",
+        "कैसरोल"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Insulated"
+      ],
+      "hsn": "7323",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    }
+  ],
+  "source_kind": "csv",
+  "created_at": "2026-08-28T00:00:00Z"
+}

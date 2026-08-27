@@ -1,0 +1,724 @@
+{
+  "merchant_id": "m_010_mahalakshmi_kirana",
+  "name": "Mahalakshmi Kirana",
+  "vertical": "grocery",
+  "city": "Bengaluru",
+  "base_pincode": "560034",
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "gstin": "",
+  "serviceability": {
+    "pincode_prefixes": [
+      "5600"
+    ],
+    "pincodes": [],
+    "delivery_fee_paise": 3000,
+    "free_delivery_above_paise": 49900,
+    "eta_hours": 48,
+    "cod_allowed": true
+  },
+  "offer_rules": [
+    {
+      "rule_id": "NEW10",
+      "version": 1,
+      "type": "percent",
+      "value": 10,
+      "min_cart_paise": 30000,
+      "min_qty": 0,
+      "segment": "new",
+      "max_discount_paise": 20000,
+      "stackable": false,
+      "valid_until": null,
+      "description": "10% off first order, max ₹200"
+    },
+    {
+      "rule_id": "BULK5_PCT",
+      "version": 1,
+      "type": "percent",
+      "value": 5,
+      "min_cart_paise": 0,
+      "min_qty": 5,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "5% off when buying 5+ units of a line"
+    },
+    {
+      "rule_id": "FREE_DEL_999",
+      "version": 1,
+      "type": "free_delivery",
+      "value": 0,
+      "min_cart_paise": 99900,
+      "min_qty": 0,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "Free delivery above ₹999"
+    }
+  ],
+  "policy": {
+    "review_first": false,
+    "kill_switch": false,
+    "agent_allowlist": [],
+    "min_tier_for_checkout": 2,
+    "max_negotiation_rounds": 2,
+    "max_order_paise": 5000000,
+    "refunds_per_hour": 5,
+    "allowed_languages": [
+      "en",
+      "hi"
+    ]
+  },
+  "products": [
+    {
+      "sku": "m_010-00",
+      "name": "Besan",
+      "source_name": "Besan",
+      "description": "Besan — Fine",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 9300,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "gram flour",
+        "बेसन"
+      ],
+      "use_case_tags": [
+        "snacks"
+      ],
+      "buyer_highlights": [
+        "Fine"
+      ],
+      "hsn": "1106",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-01",
+      "name": "Tea Leaves",
+      "source_name": "Tea Leaves",
+      "description": "Tea Leaves — Assam CTC",
+      "category": "beverages",
+      "unit": "g",
+      "pack_size": 250.0,
+      "price_paise": 11600,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "chai patti",
+        "चाय पत्ती",
+        "chai"
+      ],
+      "use_case_tags": [
+        "morning"
+      ],
+      "buyer_highlights": [
+        "Assam CTC"
+      ],
+      "hsn": "0902",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-02",
+      "name": "Cashew",
+      "source_name": "Cashew",
+      "description": "Cashew — W320 grade",
+      "category": "dry fruits",
+      "unit": "g",
+      "pack_size": 250.0,
+      "price_paise": 25700,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "kaju",
+        "काजू"
+      ],
+      "use_case_tags": [
+        "festive",
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "W320 grade"
+      ],
+      "hsn": "0801",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-03",
+      "name": "Curd",
+      "source_name": "Curd (dahi)",
+      "description": "Curd — Set curd",
+      "category": "dairy",
+      "unit": "g",
+      "pack_size": 400.0,
+      "price_paise": 3900,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "dahi",
+        "दही"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Set curd"
+      ],
+      "hsn": "0403",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-04",
+      "name": "Salt",
+      "source_name": "Salt",
+      "description": "Salt — Iodised",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 2600,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "namak",
+        "नमक"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Iodised"
+      ],
+      "hsn": "2501",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-05",
+      "name": "Wheat Atta",
+      "source_name": "Wheat Atta (gehu ka atta)",
+      "description": "Wheat Atta — Chakki fresh",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 5.0,
+      "price_paise": 22400,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "gehu ka atta",
+        "गेहूं आटा",
+        "atta"
+      ],
+      "use_case_tags": [
+        "daily",
+        "roti"
+      ],
+      "buyer_highlights": [
+        "Chakki fresh"
+      ],
+      "hsn": "1101",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-06",
+      "name": "Coffee Powder",
+      "source_name": "Coffee Powder",
+      "description": "Coffee Powder — 80:20 chicory blend",
+      "category": "beverages",
+      "unit": "g",
+      "pack_size": 200.0,
+      "price_paise": 19400,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "filter coffee",
+        "कॉफी"
+      ],
+      "use_case_tags": [
+        "morning"
+      ],
+      "buyer_highlights": [
+        "80:20 chicory blend"
+      ],
+      "hsn": "0901",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-07",
+      "name": "Toor Dal",
+      "source_name": "arhar dal",
+      "description": "Toor Dal — Unpolished",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 15700,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "arhar dal",
+        "तूर दाल",
+        "toor daal"
+      ],
+      "use_case_tags": [
+        "daily",
+        "protein"
+      ],
+      "buyer_highlights": [
+        "Unpolished"
+      ],
+      "hsn": "0713",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-08",
+      "name": "Almonds",
+      "source_name": "Almonds (badam)",
+      "description": "Almonds — California",
+      "category": "dry fruits",
+      "unit": "g",
+      "pack_size": 250.0,
+      "price_paise": 24100,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "badam",
+        "बादाम"
+      ],
+      "use_case_tags": [
+        "festive",
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "California"
+      ],
+      "hsn": "0802",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-09",
+      "name": "Basmati Rice",
+      "source_name": "Basmati Rice (basmati chawal)",
+      "description": "Basmati Rice — Long grain, aged 12 months",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 12500,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "basmati chawal",
+        "बासमती चावल",
+        "chawal"
+      ],
+      "use_case_tags": [
+        "daily",
+        "biryani"
+      ],
+      "buyer_highlights": [
+        "Long grain, aged 12 months"
+      ],
+      "hsn": "1006",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-10",
+      "name": "Rajma",
+      "source_name": "rajma",
+      "description": "Rajma — Chitra",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 16700,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "kidney beans",
+        "राजमा"
+      ],
+      "use_case_tags": [
+        "protein"
+      ],
+      "buyer_highlights": [
+        "Chitra"
+      ],
+      "hsn": "0713",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-11",
+      "name": "Poha",
+      "source_name": "पोहा",
+      "description": "Poha — Thick variety",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 5600,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "chivda",
+        "पोहा",
+        "flattened rice"
+      ],
+      "use_case_tags": [
+        "breakfast"
+      ],
+      "buyer_highlights": [
+        "Thick variety"
+      ],
+      "hsn": "1904",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-12",
+      "name": "Sugar",
+      "source_name": "चीनी",
+      "description": "Sugar — Sulphur-free",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 4300,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "cheeni",
+        "चीनी",
+        "shakkar"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Sulphur-free"
+      ],
+      "hsn": "1701",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-13",
+      "name": "Ghee",
+      "source_name": "GHEE",
+      "description": "Ghee — Cow ghee, granular",
+      "category": "dairy",
+      "unit": "l",
+      "pack_size": 1.0,
+      "price_paise": 60700,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "desi ghee",
+        "घी"
+      ],
+      "use_case_tags": [
+        "festive",
+        "cooking"
+      ],
+      "buyer_highlights": [
+        "Cow ghee, granular"
+      ],
+      "hsn": "0405",
+      "gst_rate_bp": 1200,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-14",
+      "name": "Mustard Oil",
+      "source_name": "sarson ka tel",
+      "description": "Mustard Oil — Kachi ghani",
+      "category": "oils",
+      "unit": "l",
+      "pack_size": 1.0,
+      "price_paise": 17200,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "sarson ka tel",
+        "सरसों तेल"
+      ],
+      "use_case_tags": [
+        "cooking"
+      ],
+      "buyer_highlights": [
+        "Kachi ghani"
+      ],
+      "hsn": "1514",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-15",
+      "name": "Moong Dal",
+      "source_name": "Moong Dal",
+      "description": "Moong Dal — Split, yellow",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 13900,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "moong daal",
+        "मूंग दाल"
+      ],
+      "use_case_tags": [
+        "daily",
+        "protein"
+      ],
+      "buyer_highlights": [
+        "Split, yellow"
+      ],
+      "hsn": "0713",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-16",
+      "name": "Red Chilli Powder",
+      "source_name": "lal mirch",
+      "description": "Red Chilli Powder — Guntur",
+      "category": "spices",
+      "unit": "g",
+      "pack_size": 200.0,
+      "price_paise": 8400,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "lal mirch",
+        "लाल मिर्च",
+        "mirchi powder"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Guntur"
+      ],
+      "hsn": "0904",
+      "gst_rate_bp": 500,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_010-17",
+      "name": "Chana Dal",
+      "source_name": "chane ki dal",
+      "description": "Chana Dal — Bold grain",
+      "category": "staples",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 8600,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "chane ki dal",
+        "चना दाल"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Bold grain"
+      ],
+      "hsn": "0713",
+      "gst_rate_bp": 0,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    }
+  ],
+  "source_kind": "csv",
+  "created_at": "2026-08-28T00:00:00Z"
+}

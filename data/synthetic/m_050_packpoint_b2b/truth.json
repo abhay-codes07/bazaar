@@ -1,0 +1,762 @@
+{
+  "merchant_id": "m_050_packpoint_b2b",
+  "name": "PackPoint B2B",
+  "vertical": "b2b_packaging",
+  "city": "Bengaluru",
+  "base_pincode": "560034",
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "gstin": "",
+  "serviceability": {
+    "pincode_prefixes": [
+      "5600"
+    ],
+    "pincodes": [],
+    "delivery_fee_paise": 3000,
+    "free_delivery_above_paise": 0,
+    "eta_hours": 12,
+    "cod_allowed": false
+  },
+  "offer_rules": [
+    {
+      "rule_id": "NEW10",
+      "version": 1,
+      "type": "percent",
+      "value": 10,
+      "min_cart_paise": 30000,
+      "min_qty": 0,
+      "segment": "new",
+      "max_discount_paise": 20000,
+      "stackable": false,
+      "valid_until": null,
+      "description": "10% off first order, max ₹200"
+    },
+    {
+      "rule_id": "BULK5_PCT",
+      "version": 1,
+      "type": "percent",
+      "value": 5,
+      "min_cart_paise": 0,
+      "min_qty": 5,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "5% off when buying 5+ units of a line"
+    },
+    {
+      "rule_id": "FREE_DEL_999",
+      "version": 1,
+      "type": "free_delivery",
+      "value": 0,
+      "min_cart_paise": 99900,
+      "min_qty": 0,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "Free delivery above ₹999"
+    },
+    {
+      "rule_id": "B2B_TIER8",
+      "version": 1,
+      "type": "percent",
+      "value": 8,
+      "min_cart_paise": 500000,
+      "min_qty": 0,
+      "segment": "b2b",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "8% for B2B buyers above ₹5,000"
+    }
+  ],
+  "policy": {
+    "review_first": false,
+    "kill_switch": false,
+    "agent_allowlist": [],
+    "min_tier_for_checkout": 2,
+    "max_negotiation_rounds": 1,
+    "max_order_paise": 5000000,
+    "refunds_per_hour": 5,
+    "allowed_languages": [
+      "en",
+      "hi"
+    ]
+  },
+  "products": [
+    {
+      "sku": "m_050-00",
+      "name": "Pizza Box 10in",
+      "source_name": "Pizza Box 10in",
+      "description": "Pizza Box 10in — Printed",
+      "category": "food",
+      "unit": "pack",
+      "pack_size": 25.0,
+      "price_paise": 29000,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "pizza box",
+        "पिज़्ज़ा बॉक्स"
+      ],
+      "use_case_tags": [
+        "restaurant"
+      ],
+      "buyer_highlights": [
+        "Printed"
+      ],
+      "hsn": "4819",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-01",
+      "name": "Thermocol Sheet",
+      "source_name": "Thermocol Sheet",
+      "description": "Thermocol Sheet — 25 mm",
+      "category": "cushioning",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 5200,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "thermocol",
+        "थर्मोकोल"
+      ],
+      "use_case_tags": [
+        "fragile"
+      ],
+      "buyer_highlights": [
+        "25 mm"
+      ],
+      "hsn": "3921",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-02",
+      "name": "Bubble Wrap Roll 100m",
+      "source_name": "bubble wrap",
+      "description": "Bubble Wrap Roll 100m — 10 mm bubble",
+      "category": "cushioning",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 61700,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "bubble wrap",
+        "बबल रैप"
+      ],
+      "use_case_tags": [
+        "fragile"
+      ],
+      "buyer_highlights": [
+        "10 mm bubble"
+      ],
+      "hsn": "3923",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-03",
+      "name": "Paper Cups 250ml",
+      "source_name": "PAPER CUPS 250ML",
+      "description": "Paper Cups 250ml — Double wall",
+      "category": "food",
+      "unit": "pack",
+      "pack_size": 100.0,
+      "price_paise": 20500,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "paper cup",
+        "पेपर कप"
+      ],
+      "use_case_tags": [
+        "restaurant"
+      ],
+      "buyer_highlights": [
+        "Double wall"
+      ],
+      "hsn": "4823",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-04",
+      "name": "Paper Bag Medium",
+      "source_name": "Paper Bag Medium",
+      "description": "Paper Bag Medium — Twisted handle",
+      "category": "bags",
+      "unit": "pack",
+      "pack_size": 50.0,
+      "price_paise": 30600,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "paper bag",
+        "पेपर बैग"
+      ],
+      "use_case_tags": [
+        "retail"
+      ],
+      "buyer_highlights": [
+        "Twisted handle"
+      ],
+      "hsn": "4819",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-05",
+      "name": "Fragile Tape",
+      "source_name": "fragile tape",
+      "description": "Fragile Tape — Printed",
+      "category": "tape",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 5700,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "fragile tape",
+        "फ्रैजाइल टेप"
+      ],
+      "use_case_tags": [
+        "fragile"
+      ],
+      "buyer_highlights": [
+        "Printed"
+      ],
+      "hsn": "3919",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-06",
+      "name": "Cardboard Sheet",
+      "source_name": "Cardboard Sheet (cardboard)",
+      "description": "Cardboard Sheet — 3 mm",
+      "category": "paper",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 2900,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "cardboard",
+        "गत्ता",
+        "gatta"
+      ],
+      "use_case_tags": [
+        "diy"
+      ],
+      "buyer_highlights": [
+        "3 mm"
+      ],
+      "hsn": "4808",
+      "gst_rate_bp": 1200,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-07",
+      "name": "Air Pillow Bags",
+      "source_name": "AIR PILLOW BAGS",
+      "description": "Air Pillow Bags — Pre-inflated",
+      "category": "cushioning",
+      "unit": "pack",
+      "pack_size": 200.0,
+      "price_paise": 44400,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "air pillow",
+        "एयर पिलो"
+      ],
+      "use_case_tags": [
+        "fragile"
+      ],
+      "buyer_highlights": [
+        "Pre-inflated"
+      ],
+      "hsn": "3923",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-08",
+      "name": "Corrugated Box 12x10x8",
+      "source_name": "carton",
+      "description": "Corrugated Box 12x10x8 — 3-ply",
+      "category": "boxes",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 1700,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "carton",
+        "कार्टन",
+        "box"
+      ],
+      "use_case_tags": [
+        "ecommerce"
+      ],
+      "buyer_highlights": [
+        "3-ply"
+      ],
+      "hsn": "4819",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-09",
+      "name": "Label Sticker A6",
+      "source_name": "shipping label",
+      "description": "Label Sticker A6 — Thermal",
+      "category": "labels",
+      "unit": "pack",
+      "pack_size": 500.0,
+      "price_paise": 26000,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "shipping label",
+        "लेबल"
+      ],
+      "use_case_tags": [
+        "ecommerce"
+      ],
+      "buyer_highlights": [
+        "Thermal"
+      ],
+      "hsn": "4821",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-10",
+      "name": "Food Container 500ml",
+      "source_name": "food box",
+      "description": "Food Container 500ml — Microwave safe",
+      "category": "food",
+      "unit": "pack",
+      "pack_size": 50.0,
+      "price_paise": 25400,
+      "stock": 150,
+      "variants": [],
+      "synonyms": [
+        "food box",
+        "फूड कंटेनर"
+      ],
+      "use_case_tags": [
+        "restaurant"
+      ],
+      "buyer_highlights": [
+        "Microwave safe"
+      ],
+      "hsn": "3924",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-11",
+      "name": "Strapping Roll",
+      "source_name": "Strapping Roll (patti)",
+      "description": "Strapping Roll — PP 12 mm",
+      "category": "strapping",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 47500,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "patti",
+        "स्ट्रैपिंग"
+      ],
+      "use_case_tags": [
+        "pallet"
+      ],
+      "buyer_highlights": [
+        "PP 12 mm"
+      ],
+      "hsn": "3920",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-12",
+      "name": "BOPP Tape 48mm",
+      "source_name": "BOPP Tape 48mm",
+      "description": "BOPP Tape 48mm — 65 m",
+      "category": "tape",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 4700,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "tape",
+        "टेप",
+        "packing tape"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "65 m"
+      ],
+      "hsn": "3919",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-13",
+      "name": "Stretch Film 1kg",
+      "source_name": "Stretch Film 1kg",
+      "description": "Stretch Film 1kg — 23 micron",
+      "category": "wrap",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 19200,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "stretch film",
+        "स्ट्रेच फिल्म"
+      ],
+      "use_case_tags": [
+        "pallet"
+      ],
+      "buyer_highlights": [
+        "23 micron"
+      ],
+      "hsn": "3920",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-14",
+      "name": "Mailer Box 8x6x3",
+      "source_name": "mailer box",
+      "description": "Mailer Box 8x6x3 — Kraft",
+      "category": "boxes",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 2100,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "mailer box",
+        "मेलर बॉक्स"
+      ],
+      "use_case_tags": [
+        "d2c"
+      ],
+      "buyer_highlights": [
+        "Kraft"
+      ],
+      "hsn": "4819",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-15",
+      "name": "Cling Film 300m",
+      "source_name": "Cling Film 300m",
+      "description": "Cling Film 300m — Food grade",
+      "category": "wrap",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 17400,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "cling film",
+        "क्लिंग फिल्म"
+      ],
+      "use_case_tags": [
+        "restaurant"
+      ],
+      "buyer_highlights": [
+        "Food grade"
+      ],
+      "hsn": "3920",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-16",
+      "name": "Courier Bag 10x12",
+      "source_name": "कूरियर बैग",
+      "description": "Courier Bag 10x12 — Tamper-proof",
+      "category": "bags",
+      "unit": "pack",
+      "pack_size": 100.0,
+      "price_paise": 35800,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "courier bag",
+        "कूरियर बैग",
+        "poly bag"
+      ],
+      "use_case_tags": [
+        "ecommerce"
+      ],
+      "buyer_highlights": [
+        "Tamper-proof"
+      ],
+      "hsn": "3923",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-17",
+      "name": "Kraft Paper Roll",
+      "source_name": "Kraft Paper Roll",
+      "description": "Kraft Paper Roll — 120 GSM",
+      "category": "paper",
+      "unit": "kg",
+      "pack_size": 1.0,
+      "price_paise": 7000,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "kraft paper",
+        "क्राफ्ट पेपर"
+      ],
+      "use_case_tags": [
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "120 GSM"
+      ],
+      "hsn": "4804",
+      "gst_rate_bp": 1200,
+      "cod_allowed": false,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_050-18",
+      "name": "Tissue Paper Sheets",
+      "source_name": "Tissue Paper Sheets",
+      "description": "Tissue Paper Sheets — 17 GSM",
+      "category": "paper",
+      "unit": "pack",
+      "pack_size": 100.0,
+      "price_paise": 16700,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "tissue",
+        "टिशू"
+      ],
+      "use_case_tags": [
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "17 GSM"
+      ],
+      "hsn": "4818",
+      "gst_rate_bp": 1800,
+      "cod_allowed": false,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    }
+  ],
+  "source_kind": "csv",
+  "created_at": "2026-08-28T00:00:00Z"
+}

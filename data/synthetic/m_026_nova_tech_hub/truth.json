@@ -1,0 +1,714 @@
+{
+  "merchant_id": "m_026_nova_tech_hub",
+  "name": "Nova Tech Hub",
+  "vertical": "electronics_accessories",
+  "city": "Jaipur",
+  "base_pincode": "302017",
+  "languages": [
+    "en",
+    "hi"
+  ],
+  "gstin": "29ABCDE1026F1Z6",
+  "serviceability": {
+    "pincode_prefixes": [
+      "3020"
+    ],
+    "pincodes": [],
+    "delivery_fee_paise": 4900,
+    "free_delivery_above_paise": 0,
+    "eta_hours": 24,
+    "cod_allowed": true
+  },
+  "offer_rules": [
+    {
+      "rule_id": "NEW10",
+      "version": 1,
+      "type": "percent",
+      "value": 10,
+      "min_cart_paise": 30000,
+      "min_qty": 0,
+      "segment": "new",
+      "max_discount_paise": 20000,
+      "stackable": false,
+      "valid_until": null,
+      "description": "10% off first order, max ₹200"
+    },
+    {
+      "rule_id": "BULK5_PCT",
+      "version": 1,
+      "type": "percent",
+      "value": 5,
+      "min_cart_paise": 0,
+      "min_qty": 5,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "5% off when buying 5+ units of a line"
+    },
+    {
+      "rule_id": "FREE_DEL_999",
+      "version": 1,
+      "type": "free_delivery",
+      "value": 0,
+      "min_cart_paise": 99900,
+      "min_qty": 0,
+      "segment": "any",
+      "max_discount_paise": 0,
+      "stackable": false,
+      "valid_until": null,
+      "description": "Free delivery above ₹999"
+    }
+  ],
+  "policy": {
+    "review_first": false,
+    "kill_switch": false,
+    "agent_allowlist": [],
+    "min_tier_for_checkout": 2,
+    "max_negotiation_rounds": 1,
+    "max_order_paise": 5000000,
+    "refunds_per_hour": 5,
+    "allowed_languages": [
+      "en",
+      "hi"
+    ]
+  },
+  "products": [
+    {
+      "sku": "m_026-00",
+      "name": "Wired Earphones",
+      "source_name": "wired earphones",
+      "description": "Wired Earphones — Deep bass",
+      "category": "audio",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 42900,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "earphone",
+        "ईयरफोन"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Deep bass"
+      ],
+      "hsn": "8518",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-01",
+      "name": "Bluetooth Speaker",
+      "source_name": "BLUETOOTH SPEAKER",
+      "description": "Bluetooth Speaker — IPX7",
+      "category": "audio",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 200900,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "speaker",
+        "स्पीकर"
+      ],
+      "use_case_tags": [
+        "party",
+        "gifting"
+      ],
+      "buyer_highlights": [
+        "IPX7"
+      ],
+      "hsn": "8518",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-02",
+      "name": "Keyboard",
+      "source_name": "Keyboard",
+      "description": "Keyboard — Compact",
+      "category": "computer",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 95100,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "keyboard",
+        "कीबोर्ड"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "Compact"
+      ],
+      "hsn": "8471",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-03",
+      "name": "Extension Board",
+      "source_name": "Extension Board",
+      "description": "Extension Board — 4 socket, surge",
+      "category": "power",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 63500,
+      "stock": 0,
+      "variants": [],
+      "synonyms": [
+        "extension",
+        "एक्सटेंशन बोर्ड"
+      ],
+      "use_case_tags": [
+        "home"
+      ],
+      "buyer_highlights": [
+        "4 socket, surge"
+      ],
+      "hsn": "8536",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-04",
+      "name": "Memory Card 64GB",
+      "source_name": "Memory Card 64GB (sd card)",
+      "description": "Memory Card 64GB — A1 U3",
+      "category": "storage",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 62400,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "sd card",
+        "मेमोरी कार्ड"
+      ],
+      "use_case_tags": [
+        "camera"
+      ],
+      "buyer_highlights": [
+        "A1 U3"
+      ],
+      "hsn": "8523",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-05",
+      "name": "20W Wall Charger",
+      "source_name": "charger",
+      "description": "20W Wall Charger — PD 3.0",
+      "category": "chargers",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 58300,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "charger",
+        "चार्जर",
+        "adapter"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "PD 3.0"
+      ],
+      "hsn": "8504",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-06",
+      "name": "HDMI Cable 2m",
+      "source_name": "एचडीएमआई",
+      "description": "HDMI Cable 2m — 4K 60 Hz",
+      "category": "cables",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 36900,
+      "stock": 150,
+      "variants": [],
+      "synonyms": [
+        "hdmi",
+        "एचडीएमआई"
+      ],
+      "use_case_tags": [
+        "home"
+      ],
+      "buyer_highlights": [
+        "4K 60 Hz"
+      ],
+      "hsn": "8544",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-07",
+      "name": "USB-C Cable 1m",
+      "source_name": "type c cable",
+      "description": "USB-C Cable 1m — 60 W, braided",
+      "category": "cables",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 25700,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "type c cable",
+        "चार्जिंग केबल",
+        "charger wire"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "60 W, braided"
+      ],
+      "hsn": "8544",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-08",
+      "name": "Tempered Glass",
+      "source_name": "स्क्रीन गार्ड",
+      "description": "Tempered Glass — 9H",
+      "category": "protection",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 14500,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "screen guard",
+        "स्क्रीन गार्ड"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "9H"
+      ],
+      "hsn": "7007",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-09",
+      "name": "Wireless Mouse",
+      "source_name": "Wireless Mouse",
+      "description": "Wireless Mouse — Silent click",
+      "category": "computer",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 61700,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "mouse",
+        "माउस"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "Silent click"
+      ],
+      "hsn": "8471",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 24,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-10",
+      "name": "Laptop Sleeve 14in",
+      "source_name": "LAPTOP SLEEVE 14IN",
+      "description": "Laptop Sleeve 14in — Water resistant",
+      "category": "bags",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 71800,
+      "stock": 3,
+      "variants": [],
+      "synonyms": [
+        "laptop bag",
+        "लैपटॉप स्लीव"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "Water resistant"
+      ],
+      "hsn": "4202",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-11",
+      "name": "Neckband",
+      "source_name": "neckband",
+      "description": "Neckband — Magnetic",
+      "category": "audio",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 112600,
+      "stock": 80,
+      "variants": [],
+      "synonyms": [
+        "neckband",
+        "नेकबैंड"
+      ],
+      "use_case_tags": [
+        "gym",
+        "commute"
+      ],
+      "buyer_highlights": [
+        "Magnetic"
+      ],
+      "hsn": "8518",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-12",
+      "name": "Car Charger",
+      "source_name": "car charger",
+      "description": "Car Charger — Dual port",
+      "category": "chargers",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 44900,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "car charger",
+        "कार चार्जर"
+      ],
+      "use_case_tags": [
+        "travel"
+      ],
+      "buyer_highlights": [
+        "Dual port"
+      ],
+      "hsn": "8504",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-13",
+      "name": "Smart Watch Strap",
+      "source_name": "स्ट्रैप",
+      "description": "Smart Watch Strap — Silicone",
+      "category": "wearables",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 29100,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "watch strap",
+        "स्ट्रैप"
+      ],
+      "use_case_tags": [
+        "daily"
+      ],
+      "buyer_highlights": [
+        "Silicone"
+      ],
+      "hsn": "9113",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 4,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-14",
+      "name": "Pen Drive 32GB",
+      "source_name": "pendrive",
+      "description": "Pen Drive 32GB — USB 3.0",
+      "category": "storage",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 44100,
+      "stock": 40,
+      "variants": [],
+      "synonyms": [
+        "pendrive",
+        "पेन ड्राइव"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "USB 3.0"
+      ],
+      "hsn": "8523",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-15",
+      "name": "Power Bank 10000mAh",
+      "source_name": "power bank",
+      "description": "Power Bank 10000mAh — 22.5 W",
+      "category": "power",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 111800,
+      "stock": 25,
+      "variants": [],
+      "synonyms": [
+        "power bank",
+        "पावर बैंक"
+      ],
+      "use_case_tags": [
+        "travel"
+      ],
+      "buyer_highlights": [
+        "22.5 W"
+      ],
+      "hsn": "8507",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 12,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-16",
+      "name": "Webcam 1080p",
+      "source_name": "WEBCAM 1080P",
+      "description": "Webcam 1080p — Auto focus",
+      "category": "computer",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 154200,
+      "stock": 8,
+      "variants": [],
+      "synonyms": [
+        "webcam",
+        "वेबकैम"
+      ],
+      "use_case_tags": [
+        "office"
+      ],
+      "buyer_highlights": [
+        "Auto focus"
+      ],
+      "hsn": "8525",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    },
+    {
+      "sku": "m_026-17",
+      "name": "Phone Stand",
+      "source_name": "Phone Stand",
+      "description": "Phone Stand — Foldable",
+      "category": "accessories",
+      "unit": "pc",
+      "pack_size": 1.0,
+      "price_paise": 25900,
+      "stock": 15,
+      "variants": [],
+      "synonyms": [
+        "mobile stand",
+        "मोबाइल स्टैंड"
+      ],
+      "use_case_tags": [
+        "desk"
+      ],
+      "buyer_highlights": [
+        "Foldable"
+      ],
+      "hsn": "3926",
+      "gst_rate_bp": 1800,
+      "cod_allowed": true,
+      "lead_time_hours": 48,
+      "confidence": {
+        "name": 1.0,
+        "price": 1.0,
+        "unit": 1.0,
+        "category": 1.0,
+        "gst": 1.0,
+        "stock": 1.0
+      },
+      "flags": []
+    }
+  ],
+  "source_kind": "csv",
+  "created_at": "2026-08-28T00:00:00Z"
+}

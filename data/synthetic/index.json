@@ -1,0 +1,366 @@
+[
+  {
+    "merchant_id": "m_000_sharma_general_store",
+    "name": "Sharma General Store",
+    "vertical": "grocery",
+    "city": "Bengaluru",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_001_annapurna_kirana",
+    "name": "Annapurna Kirana",
+    "vertical": "grocery",
+    "city": "Jaipur",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_002_lakshmi_provisions",
+    "name": "Lakshmi Provisions",
+    "vertical": "grocery",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_003_gupta_groceries",
+    "name": "Gupta Groceries",
+    "vertical": "grocery",
+    "city": "Pune",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_004_nandini_daily_needs",
+    "name": "Nandini Daily Needs",
+    "vertical": "grocery",
+    "city": "Coimbatore",
+    "skus": 21
+  },
+  {
+    "merchant_id": "m_005_shree_balaji_stores",
+    "name": "Shree Balaji Stores",
+    "vertical": "grocery",
+    "city": "Bengaluru",
+    "skus": 21
+  },
+  {
+    "merchant_id": "m_006_om_sai_kirana",
+    "name": "Om Sai Kirana",
+    "vertical": "grocery",
+    "city": "Jaipur",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_007_janta_grocery",
+    "name": "Janta Grocery",
+    "vertical": "grocery",
+    "city": "Indore",
+    "skus": 21
+  },
+  {
+    "merchant_id": "m_008_patel_provision_mart",
+    "name": "Patel Provision Mart",
+    "vertical": "grocery",
+    "city": "Pune",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_009_sri_venkateswara_stores",
+    "name": "Sri Venkateswara Stores",
+    "vertical": "grocery",
+    "city": "Coimbatore",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_010_mahalakshmi_kirana",
+    "name": "Mahalakshmi Kirana",
+    "vertical": "grocery",
+    "city": "Bengaluru",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_011_rang_boutique",
+    "name": "Rang Boutique",
+    "vertical": "apparel",
+    "city": "Jaipur",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_012_meera_ethnic_wear",
+    "name": "Meera Ethnic Wear",
+    "vertical": "apparel",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_013_urban_thread_co",
+    "name": "Urban Thread Co.",
+    "vertical": "apparel",
+    "city": "Pune",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_014_kalakriti_sarees",
+    "name": "Kalakriti Sarees",
+    "vertical": "apparel",
+    "city": "Coimbatore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_015_neelam_fashions",
+    "name": "Neelam Fashions",
+    "vertical": "apparel",
+    "city": "Bengaluru",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_016_dhaga_studio",
+    "name": "Dhaga Studio",
+    "vertical": "apparel",
+    "city": "Jaipur",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_017_jaipur_prints_house",
+    "name": "Jaipur Prints House",
+    "vertical": "apparel",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_018_amber_apparel",
+    "name": "Amber Apparel",
+    "vertical": "apparel",
+    "city": "Pune",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_019_tara_kids_wear",
+    "name": "Tara Kids Wear",
+    "vertical": "apparel",
+    "city": "Coimbatore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_020_saanjh_handloom",
+    "name": "Saanjh Handloom",
+    "vertical": "apparel",
+    "city": "Bengaluru",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_021_voltix_accessories",
+    "name": "Voltix Accessories",
+    "vertical": "electronics_accessories",
+    "city": "Jaipur",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_022_gadget_junction",
+    "name": "Gadget Junction",
+    "vertical": "electronics_accessories",
+    "city": "Indore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_023_chargeup_store",
+    "name": "ChargeUp Store",
+    "vertical": "electronics_accessories",
+    "city": "Pune",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_024_pixel_mobile_point",
+    "name": "Pixel Mobile Point",
+    "vertical": "electronics_accessories",
+    "city": "Coimbatore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_025_circuit_bazaar",
+    "name": "Circuit Bazaar",
+    "vertical": "electronics_accessories",
+    "city": "Bengaluru",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_026_nova_tech_hub",
+    "name": "Nova Tech Hub",
+    "vertical": "electronics_accessories",
+    "city": "Jaipur",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_027_kabra_electronics",
+    "name": "Kabra Electronics",
+    "vertical": "electronics_accessories",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_028_byte_stop",
+    "name": "Byte Stop",
+    "vertical": "electronics_accessories",
+    "city": "Pune",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_029_soundspace",
+    "name": "SoundSpace",
+    "vertical": "electronics_accessories",
+    "city": "Coimbatore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_030_mobicare_indore",
+    "name": "Mobicare Indore",
+    "vertical": "electronics_accessories",
+    "city": "Bengaluru",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_031_rasoi_ghar",
+    "name": "Rasoi Ghar",
+    "vertical": "home_kitchen",
+    "city": "Jaipur",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_032_griha_essentials",
+    "name": "Griha Essentials",
+    "vertical": "home_kitchen",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_033_steel_and_stone_kitchen",
+    "name": "Steel & Stone Kitchen",
+    "vertical": "home_kitchen",
+    "city": "Pune",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_034_anand_utensils",
+    "name": "Anand Utensils",
+    "vertical": "home_kitchen",
+    "city": "Coimbatore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_035_home_kraft",
+    "name": "Home Kraft",
+    "vertical": "home_kitchen",
+    "city": "Bengaluru",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_036_kitchen_kahani",
+    "name": "Kitchen Kahani",
+    "vertical": "home_kitchen",
+    "city": "Jaipur",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_037_vimal_steel_mart",
+    "name": "Vimal Steel Mart",
+    "vertical": "home_kitchen",
+    "city": "Indore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_038_aangan_living",
+    "name": "Aangan Living",
+    "vertical": "home_kitchen",
+    "city": "Pune",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_039_pune_home_store",
+    "name": "Pune Home Store",
+    "vertical": "home_kitchen",
+    "city": "Coimbatore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_040_ghar_sajja",
+    "name": "Ghar Sajja",
+    "vertical": "home_kitchen",
+    "city": "Bengaluru",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_041_packwell_industries",
+    "name": "Packwell Industries",
+    "vertical": "b2b_packaging",
+    "city": "Jaipur",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_042_bharat_packaging_co",
+    "name": "Bharat Packaging Co.",
+    "vertical": "b2b_packaging",
+    "city": "Indore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_043_safepack_supplies",
+    "name": "SafePack Supplies",
+    "vertical": "b2b_packaging",
+    "city": "Pune",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_044_coimbatore_cartons",
+    "name": "Coimbatore Cartons",
+    "vertical": "b2b_packaging",
+    "city": "Coimbatore",
+    "skus": 18
+  },
+  {
+    "merchant_id": "m_045_ekta_poly_products",
+    "name": "Ekta Poly Products",
+    "vertical": "b2b_packaging",
+    "city": "Bengaluru",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_046_kraft_and_co_packaging",
+    "name": "Kraft & Co. Packaging",
+    "vertical": "b2b_packaging",
+    "city": "Jaipur",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_047_shree_packaging_solutions",
+    "name": "Shree Packaging Solutions",
+    "vertical": "b2b_packaging",
+    "city": "Indore",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_048_rapid_pack_traders",
+    "name": "Rapid Pack Traders",
+    "vertical": "b2b_packaging",
+    "city": "Pune",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_049_nirmal_box_works",
+    "name": "Nirmal Box Works",
+    "vertical": "b2b_packaging",
+    "city": "Coimbatore",
+    "skus": 20
+  },
+  {
+    "merchant_id": "m_050_packpoint_b2b",
+    "name": "PackPoint B2B",
+    "vertical": "b2b_packaging",
+    "city": "Bengaluru",
+    "skus": 19
+  },
+  {
+    "merchant_id": "m_051_indore_packaging_depot",
+    "name": "Indore Packaging Depot",
+    "vertical": "b2b_packaging",
+    "city": "Jaipur",
+    "skus": 20
+  }
+]
