@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     bazaar_base_url: str = "http://localhost:8000"
     bazaar_db_url: str = f"sqlite:///{(ROOT / 'data' / 'runtime' / 'bazaar.db').as_posix()}"
     bazaar_api_version: str = "2026-08-28"
+    bazaar_admin_token: str = "dev-admin-token"
 
     @property
     def data_dir(self) -> Path:
