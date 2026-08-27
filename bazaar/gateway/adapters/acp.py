@@ -92,8 +92,9 @@ def _render(s: Session, m) -> dict[str, Any]:
             {"type": "total", "display_text": "Total", "amount": q.total_paise},
         ]
     msgs = []
-    if s.status == "declined":
-        msgs.append({"type": "error", "code": "policy_declined", "content": "; ".join(c["name"] for c in s.last_checks if not c["passed"])})
+    failed = [c["name"] for c in s.last_checks if not c["passed"]]
+    if failed and s.status in ("ready_for_payment", "open", "declined"):
+        msgs.append({"type": "error", "code": "policy_declined", "content": "; ".join(failed)})
     return {
         "id": s.session_id,
         "status": _acp_status(s),
@@ -176,7 +177,6 @@ async def delegate_payment(merchant_id: str, body: DelegateIn, request: Request)
 @router.post("/{merchant_id}/checkout_sessions/{sid}/complete")
 async def complete(merchant_id: str, sid: str, body: CompleteIn, request: Request):
     st = _state(request)
-    raw = await request.body()
     ik = request.headers.get("idempotency-key")
     key = f"acp:{sid}:{ik}" if ik else None
     if key and key in st.idempotency:

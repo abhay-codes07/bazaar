@@ -1,0 +1,3855 @@
+[
+ {
+  "task_id": "t000",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_000_sharma_general_store",
+  "session_id": "sess_ebc61076ce7bb7",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 39.873900008387864,
+  "explanations": [
+   "Quote: 5 × Toor Dal (1 kg) @ ₹159. Subtotal ₹795, GST ₹0, delivery ₹0 → total ₹795. 560034 tak lagbhag 36 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t001",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_001_annapurna_kirana",
+  "session_id": "sess_d6facb07937561",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 29.102700005751103,
+  "explanations": [
+   "Can't do that: only 80 of Wheat Atta available, 100 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t002",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_002_lakshmi_provisions",
+  "session_id": "sess_c411ac5a344830",
+  "gmv_paise": 39900,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 55.93919998500496,
+  "explanations": [
+   "कोटेशन: 2 × Mustard Oil (1 l) @ ₹190। उप-योग ₹380, GST ₹19, डिलीवरी ₹0 → कुल ₹399। 452010 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t003",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_003_gupta_groceries",
+  "session_id": "sess_5cebc533969d3e",
+  "gmv_paise": 16800,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 48.78880002070218,
+  "explanations": [
+   "Quote: 2 × Milk (1 l) @ ₹69. Subtotal ₹138, GST ₹0, delivery ₹30 → total ₹168. Delivery to 411045 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t004",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_003_gupta_groceries",
+  "session_id": "sess_0363c344bbd8e8",
+  "gmv_paise": 5100,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 57.38850001944229,
+  "explanations": [
+   "Quote: 1 × Salt (1 kg) @ ₹21. Subtotal ₹21, GST ₹0, delivery ₹30 → total ₹51. 411045 tak lagbhag 16 ghante mein.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t005",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_005_shree_balaji_stores",
+  "session_id": "sess_eb57a13a09a9fe",
+  "gmv_paise": 17400,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 45.27149995556101,
+  "explanations": [
+   "Quote: 2 × Chana Dal (1 kg) @ ₹87. Subtotal ₹174, GST ₹0, delivery ₹0 → total ₹174. Delivery to 560034 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t006",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_006_om_sai_kirana",
+  "session_id": "sess_9a431300cf2bda",
+  "gmv_paise": 159600,
+  "discount_paise": 8400,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 45.638800016604364,
+  "explanations": [
+   "कोटेशन: 10 × Rajma (1 kg) @ ₹168। उप-योग ₹1,680, GST ₹0, डिलीवरी ₹0 → कुल ₹1,680। 302017 तक लगभग 28 घंटे में।",
+   "कोटेशन: 10 × Rajma (1 kg) @ ₹168। उप-योग ₹1,680, छूट −₹84 (BULK5_PCT: −₹84), GST ₹0, डिलीवरी ₹0 → कुल ₹1,596। 302017 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t007",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_007_janta_grocery",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 28.479699976742268,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t008",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_008_patel_provision_mart",
+  "session_id": "sess_f2db26bb49b354",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 37.89320000214502,
+  "explanations": [
+   "Can't do that: only 25 of Ghee available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t009",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_009_sri_venkateswara_stores",
+  "session_id": "sess_b341155a8b5aea",
+  "gmv_paise": 56700,
+  "discount_paise": 6300,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 49.536700011231005,
+  "explanations": [
+   "Quote: 10 × Milk (1 l) @ ₹63. Subtotal ₹630, GST ₹0, delivery ₹0 → total ₹630. Delivery to 641012 in about 52 h.",
+   "Quote: 10 × Milk (1 l) @ ₹63. Subtotal ₹630, discount −₹63 (NEW10: −₹63), GST ₹0, delivery ₹0 → total ₹567. Delivery to 641012 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t010",
+  "expected": "decline_stock",
+  "outcome": "declined_by_policy",
+  "correct": true,
+  "merchant_id": "m_010_mahalakshmi_kirana",
+  "session_id": "sess_a47cb1d1716cfd",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 27.740899997297674,
+  "explanations": [
+   "यह संभव नहीं है: under_order_cap (₹50400 ≤ ₹50000)"
+  ],
+  "declined_checks": [
+   "under_order_cap"
+  ],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t011",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_011_rang_boutique",
+  "session_id": "sess_2b998437e6f0b2",
+  "gmv_paise": 167580,
+  "discount_paise": 8400,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 46.56049999175593,
+  "explanations": [
+   "Quote: 5 × Dupatta (1 pc) @ ₹336. Subtotal ₹1,680, GST ₹84, delivery ₹0 → total ₹1,764. Delivery to 302017 in about 52 h.",
+   "Quote: 5 × Dupatta (1 pc) @ ₹336. Subtotal ₹1,680, discount −₹84 (BULK5_PCT: −₹84), GST ₹79.80, delivery ₹0 → total ₹1,675.80. Delivery to 302017 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t012",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_012_meera_ethnic_wear",
+  "session_id": "sess_4a6490b0520c85",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 31.440399994608015,
+  "explanations": [
+   "Quote: 2 × Lehenga Set (1 pc) @ ₹4,183. Subtotal ₹8,366, GST ₹1,003.92, delivery ₹0 → total ₹9,369.92. 452010 tak lagbhag 16 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t013",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_013_urban_thread_co",
+  "session_id": "sess_cbff7b27929724",
+  "gmv_paise": 243180,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 43.819099955726415,
+  "explanations": [
+   "Quote: 3 × Kurti (1 pc) @ ₹772. Subtotal ₹2,316, GST ₹115.80, delivery ₹0 → total ₹2,431.80. 411045 tak lagbhag 96 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t014",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_014_kalakriti_sarees",
+  "session_id": "sess_a1693c501ece48",
+  "gmv_paise": 44020,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 51.01890000514686,
+  "explanations": [
+   "कोटेशन: 1 × Dupatta (1 pc) @ ₹344। उप-योग ₹344, GST ₹17.20, डिलीवरी ₹79 → कुल ₹440.20। 641012 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t015",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_015_neelam_fashions",
+  "session_id": "sess_6e5da059fad8de",
+  "gmv_paise": 1140300,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 42.12679999182001,
+  "explanations": [
+   "Quote: 10 × Formal Shirt (1 pc) @ ₹1,086. Subtotal ₹10,860, GST ₹543, delivery ₹0 → total ₹11,403. Delivery to 560034 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t016",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_016_dhaga_studio",
+  "session_id": "sess_c88ac7b0cd3bd6",
+  "gmv_paise": 938700,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 52.419599960558116,
+  "explanations": [
+   "Quote: 10 × Cotton Kurta (1 pc) @ ₹894. Subtotal ₹8,940, GST ₹447, delivery ₹0 → total ₹9,387. Delivery to 302017 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t017",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_017_jaipur_prints_house",
+  "session_id": "sess_8fe9ca6b4dc32b",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 27.66169997630641,
+  "explanations": [
+   "Can't do that: only 25 of Kurti available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t018",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_018_amber_apparel",
+  "session_id": "sess_b62de70e653641",
+  "gmv_paise": 173880,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 48.754499992355704,
+  "explanations": [
+   "Quote: 3 × Men's T-Shirt (1 pc) @ ₹552. Subtotal ₹1,656, GST ₹82.80, delivery ₹0 → total ₹1,738.80. Delivery to 411045 in about 24 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t019",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_019_tara_kids_wear",
+  "session_id": "sess_a84f11a3f5b61f",
+  "gmv_paise": 206010,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 46.61549994489178,
+  "explanations": [
+   "कोटेशन: 3 × Sports Bra (1 pc) @ ₹654। उप-योग ₹1,962, GST ₹98.10, डिलीवरी ₹79 → कुल ₹2,139.10। 641012 तक लगभग 36 घंटे में।",
+   "कोटेशन: 3 × Sports Bra (1 pc) @ ₹654। उप-योग ₹1,962, GST ₹98.10, डिलीवरी ₹0 → कुल ₹2,060.10। 641012 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t020",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_020_saanjh_handloom",
+  "session_id": "sess_cfa92f835a6947",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 3,
+  "latency_ms": 34.7180999815464,
+  "explanations": [
+   "Quote: 1 × Women's Palazzo (1 pc) @ ₹617. Subtotal ₹617, GST ₹30.85, delivery ₹0 → total ₹647.85. Delivery to 560034 in about 24 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t021",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_5880ee710caf66",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 38.25490002054721,
+  "explanations": [
+   "कोटेशन: 10 × Neckband (1 pc) @ ₹938। उप-योग ₹9,380, GST ₹1,688.40, डिलीवरी ₹0 → कुल ₹11,068.40। 302017 तक लगभग 16 घंटे में।",
+   "Quote: 10 × Neckband (1 pc) @ ₹938. Subtotal ₹9,380, discount −₹469 (BULK5_PCT: −₹469), GST ₹1,603.98, delivery ₹0 → total ₹10,514.98. Delivery to 302017 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t022",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_022_gadget_junction",
+  "session_id": "sess_c428dbb1c17d4a",
+  "gmv_paise": 198609,
+  "discount_paise": 18240,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 45.50190002191812,
+  "explanations": [
+   "Quote: 3 × 20W Wall Charger (1 pc) @ ₹608. Subtotal ₹1,824, GST ₹328.32, delivery ₹49 → total ₹2,201.32. 452010 tak lagbhag 36 ghante mein.",
+   "Quote: 3 × 20W Wall Charger (1 pc) @ ₹608. Subtotal ₹1,824, discount −₹182.40 (NEW10: −₹182.40), GST ₹295.49, delivery ₹49 → total ₹1,986.09. Delivery to 452010 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t023",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_2eef71f63327d6",
+  "gmv_paise": 2485257,
+  "discount_paise": 110850,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 91.45050001097843,
+  "explanations": [
+   "Quote: 10 × Bluetooth Speaker (1 pc) @ ₹2,217. Subtotal ₹22,170, GST ₹3,990.60, delivery ₹0 → total ₹26,160.60. Delivery to 302017 in about 24 h.",
+   "Quote: 10 × Bluetooth Speaker (1 pc) @ ₹2,217. Subtotal ₹22,170, discount −₹1,108.50 (BULK5_PCT: −₹1,108.50), GST ₹3,791.07, delivery ₹0 → total ₹24,852.57. Delivery to 302017 in about 24 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t024",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_024_pixel_mobile_point",
+  "session_id": "sess_1fd69e904e692c",
+  "gmv_paise": 131688,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 69.54050000058487,
+  "explanations": [
+   "Quote: 3 × HDMI Cable 2m (1 pc) @ ₹372. Subtotal ₹1,116, GST ₹200.88, delivery ₹49 → total ₹1,365.88. 641012 tak lagbhag 72 ghante mein.",
+   "Quote: 3 × HDMI Cable 2m (1 pc) @ ₹372. Subtotal ₹1,116, GST ₹200.88, delivery ₹0 → total ₹1,316.88. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t025",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_025_circuit_bazaar",
+  "session_id": "sess_b2212fe0b5cb65",
+  "gmv_paise": 711540,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 68.68319999193773,
+  "explanations": [
+   "Quote: 10 × Wireless Mouse (1 pc) @ ₹603. Subtotal ₹6,030, GST ₹1,085.40, delivery ₹0 → total ₹7,115.40. Delivery to 560034 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t026",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_026_nova_tech_hub",
+  "session_id": "sess_cfb5dc404e2acc",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 34.47949996916577,
+  "explanations": [
+   "Can't do that: only 25 of Memory Card 64GB available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t027",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_027_kabra_electronics",
+  "session_id": "sess_0d4fa54111c202",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 32.556199992541224,
+  "explanations": [
+   "Quote: 5 × Laptop Sleeve 14in (1 pc) @ ₹731. Subtotal ₹3,655, GST ₹657.90, delivery ₹0 → total ₹4,312.90. Delivery to 452010 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t028",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "sess_968c9228889ef5",
+  "gmv_paise": 2492399,
+  "discount_paise": 110950,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 59.17029996635392,
+  "explanations": [
+   "Quote: 10 × Bluetooth Speaker (1 pc) @ ₹2,219. Subtotal ₹22,190, GST ₹3,994.20, delivery ₹49 → total ₹26,233.20. Delivery to 411045 in about 60 h.",
+   "Quote: 10 × Bluetooth Speaker (1 pc) @ ₹2,219. Subtotal ₹22,190, discount −₹1,109.50 (BULK5_PCT: −₹1,109.50), GST ₹3,794.49, delivery ₹49 → total ₹24,923.99. Delivery to 411045 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t029",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_029_soundspace",
+  "session_id": "sess_32ccb02e691c84",
+  "gmv_paise": 81954,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 45.22920004092157,
+  "explanations": [
+   "Quote: 1 × Extension Board (1 pc) @ ₹653. Subtotal ₹653, GST ₹117.54, delivery ₹49 → total ₹819.54. 641012 tak lagbhag 16 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t030",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_030_mobicare_indore",
+  "session_id": "sess_9f3d635563e75b",
+  "gmv_paise": 62590,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 58.7762999930419,
+  "explanations": [
+   "Quote: 1 × Car Charger (1 pc) @ ₹505. Subtotal ₹505, GST ₹90.90, delivery ₹30 → total ₹625.90. Delivery to 560034 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t031",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_031_rasoi_ghar",
+  "session_id": "sess_b1dd9d478ca634",
+  "gmv_paise": 137592,
+  "discount_paise": 13650,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 94.0223999787122,
+  "explanations": [
+   "Quote: 3 × Spice Box (1 pc) @ ₹455. Subtotal ₹1,365, GST ₹163.80, delivery ₹0 → total ₹1,528.80. Delivery to 302017 in about 36 h.",
+   "Quote: 3 × Spice Box (1 pc) @ ₹455. Subtotal ₹1,365, discount −₹136.50 (NEW10: −₹136.50), GST ₹147.42, delivery ₹0 → total ₹1,375.92. Delivery to 302017 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t032",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_032_griha_essentials",
+  "session_id": "sess_12e781be5e6abc",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 35.91730003245175,
+  "explanations": [
+   "यह संभव नहीं है: only 25 of Steel Water Bottle 1L available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t033",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_033_steel_and_stone_kitchen",
+  "session_id": "sess_7b414788c76120",
+  "gmv_paise": 2771112,
+  "discount_paise": 123600,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 60.9796000062488,
+  "explanations": [
+   "कोटेशन: 10 × Induction Cooktop (1 pc) @ ₹2,472। उप-योग ₹24,720, GST ₹4,449.60, डिलीवरी ₹0 → कुल ₹29,169.60। 411045 तक लगभग 36 घंटे में।",
+   "कोटेशन: 10 × Induction Cooktop (1 pc) @ ₹2,472। उप-योग ₹24,720, छूट −₹1,236 (BULK5_PCT: −₹1,236), GST ₹4,227.12, डिलीवरी ₹0 → कुल ₹27,711.12। 411045 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t034",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_034_anand_utensils",
+  "session_id": "sess_a862484ce41857",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 30.6855000089854,
+  "explanations": [
+   "Quote: 1 × Spice Box (1 pc) @ ₹438. Subtotal ₹438, GST ₹52.56, delivery ₹79 → total ₹569.56. Delivery to 641012 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t035",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_035_home_kraft",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 21.1721999803558,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t036",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_036_kitchen_kahani",
+  "session_id": "sess_ef19410ba40811",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 37.02639997936785,
+  "explanations": [
+   "कोटेशन: 5 × Chopping Board (1 pc) @ ₹275। उप-योग ₹1,375, GST ₹165, डिलीवरी ₹79 → कुल ₹1,619। 302017 तक लगभग 52 घंटे में।",
+   "कोटेशन: 5 × Chopping Board (1 pc) @ ₹275। उप-योग ₹1,375, GST ₹165, डिलीवरी ₹0 → कुल ₹1,540। 302017 तक लगभग 52 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t037",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_037_vimal_steel_mart",
+  "session_id": "sess_2cd19b3b55fb4e",
+  "gmv_paise": 78624,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 50.77650002203882,
+  "explanations": [
+   "Quote: 3 × Doormat (1 pc) @ ₹234. Subtotal ₹702, GST ₹84.24, delivery ₹0 → total ₹786.24. Delivery to 452010 in about 96 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t038",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_038_aangan_living",
+  "session_id": "sess_a1ea05c9295215",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 37.796199962031096,
+  "explanations": [
+   "Quote: 10 × Pressure Cooker 5L (1 pc) @ ₹2,076. Subtotal ₹20,760, GST ₹2,491.20, delivery ₹0 → total ₹23,251.20. 411045 tak lagbhag 60 ghante mein.",
+   "Quote: 10 × Pressure Cooker 5L (1 pc) @ ₹2,076. Subtotal ₹20,760, discount −₹1,038 (BULK5_PCT: −₹1,038), GST ₹2,366.64, delivery ₹0 → total ₹22,088.64. Delivery to 411045 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t039",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_039_pune_home_store",
+  "session_id": "sess_dfed0a037c256f",
+  "gmv_paise": 148064,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 46.611999976448715,
+  "explanations": [
+   "कोटेशन: 2 × Non-stick Tawa (1 pc) @ ₹661। उप-योग ₹1,322, GST ₹158.64, डिलीवरी ₹0 → कुल ₹1,480.64। 641012 तक लगभग 52 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t040",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_040_ghar_sajja",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 22.36020000418648,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t041",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_041_packwell_industries",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 22.879500000271946,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t042",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_042_bharat_packaging_co",
+  "session_id": "sess_b771e14c153684",
+  "gmv_paise": 31028,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 67.95509997755289,
+  "explanations": [
+   "Quote: 1 × Cling Film 300m (1 pc) @ ₹196. Subtotal ₹196, GST ₹35.28, delivery ₹79 → total ₹310.28. Delivery to 452010 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t043",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_043_safepack_supplies",
+  "session_id": "sess_dce78aded41634",
+  "gmv_paise": 66528,
+  "discount_paise": 6600,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 74.32289997814223,
+  "explanations": [
+   "Quote: 10 × Kraft Paper Roll (1 kg) @ ₹66. Subtotal ₹660, GST ₹79.20, delivery ₹0 → total ₹739.20. Delivery to 411045 in about 28 h.",
+   "Quote: 10 × Kraft Paper Roll (1 kg) @ ₹66. Subtotal ₹660, discount −₹66 (NEW10: −₹66), GST ₹71.28, delivery ₹0 → total ₹665.28. Delivery to 411045 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t044",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_044_coimbatore_cartons",
+  "session_id": "sess_6ab910ec704da3",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 260.4595000157133,
+  "explanations": [
+   "यह संभव नहीं है: only 25 of Cardboard Sheet available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t045",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_045_ekta_poly_products",
+  "session_id": "sess_923957f51f2135",
+  "gmv_paise": 47436,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 358.14959998242557,
+  "explanations": [
+   "Quote: 2 × Cling Film 300m (1 pc) @ ₹201. Subtotal ₹402, GST ₹72.36, delivery ₹0 → total ₹474.36. 560034 tak lagbhag 36 ghante mein.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t046",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_050_packpoint_b2b",
+  "session_id": "sess_289ce22d68c9f2",
+  "gmv_paise": 10434,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 199.5337000116706,
+  "explanations": [
+   "Quote: 3 × Mailer Box 8x6x3 (1 pc) @ ₹21. Subtotal ₹63, GST ₹11.34, delivery ₹30 → total ₹104.34. 560034 tak lagbhag 24 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t047",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_047_shree_packaging_solutions",
+  "session_id": "sess_a6436b75eb6b0e",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 95.67880001850426,
+  "explanations": [
+   "यह संभव नहीं है: only 80 of Corrugated Box 12x10x8 available, 100 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t048",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_048_rapid_pack_traders",
+  "session_id": "sess_a24d1cd53f44f0",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 124.49030001880601,
+  "explanations": [
+   "कोटेशन: 10 × Bubble Wrap Roll 100m (1 pc) @ ₹689। उप-योग ₹6,890, GST ₹1,240.20, डिलीवरी ₹0 → कुल ₹8,130.20। 411045 तक लगभग 36 घंटे में।",
+   "कोटेशन: 10 × Bubble Wrap Roll 100m (1 pc) @ ₹689। उप-योग ₹6,890, छूट −₹551.20 (B2B_TIER8: −₹551.20), GST ₹1,140.98, डिलीवरी ₹0 → कुल ₹7,479.78। 411045 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t049",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_049_nirmal_box_works",
+  "session_id": "sess_d691e1364511c5",
+  "gmv_paise": 14160,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 199.75499995052814,
+  "explanations": [
+   "कोटेशन: 2 × Thermocol Sheet (1 pc) @ ₹60। उप-योग ₹120, GST ₹21.60, डिलीवरी ₹0 → कुल ₹141.60। 641012 तक लगभग 48 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t050",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_050_packpoint_b2b",
+  "session_id": "sess_8a83310d81fb90",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 92.085899959784,
+  "explanations": [
+   "Can't do that: only 80 of Cardboard Sheet available, 100 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t051",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_051_indore_packaging_depot",
+  "session_id": "sess_3c1e540fcc9bc5",
+  "gmv_paise": 23600,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 252.28319998132065,
+  "explanations": [
+   "कोटेशन: 1 × Cling Film 300m (1 pc) @ ₹200। उप-योग ₹200, GST ₹36, डिलीवरी ₹0 → कुल ₹236। 302017 तक लगभग 28 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t052",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_000_sharma_general_store",
+  "session_id": "sess_316ba8092b14c6",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 3,
+  "latency_ms": 97.44310000678524,
+  "explanations": [
+   "Quote: 2 × Curd (400 g) @ ₹40. Subtotal ₹80, GST ₹0, delivery ₹0 → total ₹80. Delivery to 560034 in about 48 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t053",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_001_annapurna_kirana",
+  "session_id": "sess_26ee28a61bd211",
+  "gmv_paise": 94500,
+  "discount_paise": 10000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 152.34480000799522,
+  "explanations": [
+   "कोटेशन: 10 × Basmati Rice (1 kg) @ ₹100। उप-योग ₹1,000, GST ₹50, डिलीवरी ₹0 → कुल ₹1,050। 302017 तक लगभग 24 घंटे में।",
+   "कोटेशन: 10 × Basmati Rice (1 kg) @ ₹100। उप-योग ₹1,000, छूट −₹100 (NEW10: −₹100), GST ₹45, डिलीवरी ₹0 → कुल ₹945। 302017 तक लगभग 24 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t054",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_002_lakshmi_provisions",
+  "session_id": "sess_06855dd78e635a",
+  "gmv_paise": 22890,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 110.28580000856891,
+  "explanations": [
+   "Quote: 2 × Tea Leaves (250 g) @ ₹109. Subtotal ₹218, GST ₹10.90, delivery ₹0 → total ₹228.90. Delivery to 452010 in about 48 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t055",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_003_gupta_groceries",
+  "session_id": "sess_09d8c85e4f3afb",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 3,
+  "latency_ms": 114.48470002505928,
+  "explanations": [
+   "कोटेशन: 1 × Besan (1 kg) @ ₹81। उप-योग ₹81, GST ₹4.05, डिलीवरी ₹30 → कुल ₹115.05। 411045 तक लगभग 36 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t056",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_008_patel_provision_mart",
+  "session_id": "sess_72ec9b5eea162a",
+  "gmv_paise": 69825,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 113.98439999902621,
+  "explanations": [
+   "Quote: 5 × Sunflower Oil (1 l) @ ₹133. Subtotal ₹665, GST ₹33.25, delivery ₹0 → total ₹698.25. Delivery to 411045 in about 8 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t057",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_005_shree_balaji_stores",
+  "session_id": "sess_809a2af5c6b94e",
+  "gmv_paise": 21210,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 112.31280001811683,
+  "explanations": [
+   "Quote: 2 × Basmati Rice (1 kg) @ ₹101. Subtotal ₹202, GST ₹10.10, delivery ₹0 → total ₹212.10. Delivery to 560034 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t058",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_005_shree_balaji_stores",
+  "session_id": "sess_ed664dc2ea25b7",
+  "gmv_paise": 4400,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 109.25430001225322,
+  "explanations": [
+   "Quote: 2 × Salt (1 kg) @ ₹22. Subtotal ₹44, GST ₹0, delivery ₹0 → total ₹44. Delivery to 560034 in about 16 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t059",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_007_janta_grocery",
+  "session_id": "sess_dc97f0f8a0fd53",
+  "gmv_paise": 56725,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 186.06310000177473,
+  "explanations": [
+   "कोटेशन: 5 × Besan (1 kg) @ ₹93। उप-योग ₹465, GST ₹23.25, डिलीवरी ₹79 → कुल ₹567.25। 452010 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t060",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_001_annapurna_kirana",
+  "session_id": "sess_2d9928ca773809",
+  "gmv_paise": 99750,
+  "discount_paise": 5000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 180.98949996056035,
+  "explanations": [
+   "कोटेशन: 10 × Basmati Rice (1 kg) @ ₹100। उप-योग ₹1,000, GST ₹50, डिलीवरी ₹0 → कुल ₹1,050। 302017 तक लगभग 24 घंटे में।",
+   "कोटेशन: 10 × Basmati Rice (1 kg) @ ₹100। उप-योग ₹1,000, छूट −₹50 (BULK5_PCT: −₹50), GST ₹47.50, डिलीवरी ₹0 → कुल ₹997.50। 302017 तक लगभग 24 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t061",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_009_sri_venkateswara_stores",
+  "session_id": "sess_af339e315d5cd8",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 77.74370000697672,
+  "explanations": [
+   "Can't do that: only 40 of Sunflower Oil available, 60 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t062",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_010_mahalakshmi_kirana",
+  "session_id": "sess_d637c2b84539b7",
+  "gmv_paise": 22530,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 136.2987000029534,
+  "explanations": [
+   "Quote: 2 × Besan (1 kg) @ ₹93. Subtotal ₹186, GST ₹9.30, delivery ₹30 → total ₹225.30. 560034 tak lagbhag 96 ghante mein.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t063",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_011_rang_boutique",
+  "session_id": "sess_4aeee8753ddaa7",
+  "gmv_paise": 434784,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 117.28249996667728,
+  "explanations": [
+   "Quote: 2 × Nehru Jacket (1 pc) @ ₹1,941. Subtotal ₹3,882, GST ₹465.84, delivery ₹0 → total ₹4,347.84. Delivery to 302017 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t064",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_012_meera_ethnic_wear",
+  "session_id": "sess_b1e41747195a2c",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 99.52430002158508,
+  "explanations": [
+   "Quote: 2 × Kurti (1 pc) @ ₹855. Subtotal ₹1,710, GST ₹85.50, delivery ₹0 → total ₹1,795.50. Delivery to 452010 in about 28 h.",
+   "Quote: 2 × Kurti (1 pc) @ ₹855. Subtotal ₹1,710, discount −₹171 (NEW10: −₹171), GST ₹76.95, delivery ₹0 → total ₹1,615.95. Delivery to 452010 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t065",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_013_urban_thread_co",
+  "session_id": "sess_1ea8a07f4956d1",
+  "gmv_paise": 100905,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 121.74919998506084,
+  "explanations": [
+   "कोटेशन: 1 × Cotton Kurta (1 pc) @ ₹961। उप-योग ₹961, GST ₹48.05, डिलीवरी ₹0 → कुल ₹1,009.05। 411045 तक लगभग 72 घंटे में।",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t066",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_013_urban_thread_co",
+  "session_id": "sess_984a54c36b09d7",
+  "gmv_paise": 1054956,
+  "discount_paise": 49575,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 128.47840000176802,
+  "explanations": [
+   "कोटेशन: 5 × Nehru Jacket (1 pc) @ ₹1,983। उप-योग ₹9,915, GST ₹1,189.80, डिलीवरी ₹0 → कुल ₹11,104.80। 411045 तक लगभग 60 घंटे में।",
+   "Quote: 5 × Nehru Jacket (1 pc) @ ₹1,983. Subtotal ₹9,915, discount −₹495.75 (BULK5_PCT: −₹495.75), GST ₹1,130.31, delivery ₹0 → total ₹10,549.56. Delivery to 411045 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t067",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_015_neelam_fashions",
+  "session_id": "sess_e01f20be5dcb81",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 108.86720003327355,
+  "explanations": [
+   "कोटेशन: 1 × Sports Bra (1 pc) @ ₹560। उप-योग ₹560, GST ₹28, डिलीवरी ₹30 → कुल ₹618। 560034 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t068",
+  "expected": "decline_stock",
+  "outcome": "declined_by_policy",
+  "correct": true,
+  "merchant_id": "m_016_dhaga_studio",
+  "session_id": "sess_bd3ae6c1602ebe",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 96.47089999634773,
+  "explanations": [
+   "Can't do that: under_order_cap (₹53415 ≤ ₹50000)"
+  ],
+  "declined_checks": [
+   "under_order_cap"
+  ],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t069",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_017_jaipur_prints_house",
+  "session_id": "sess_8bcfb538dd7ebc",
+  "gmv_paise": 273000,
+  "discount_paise": 20000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 165.30380002222955,
+  "explanations": [
+   "Quote: 5 × Men's T-Shirt (1 pc) @ ₹560. Subtotal ₹2,800, GST ₹140, delivery ₹0 → total ₹2,940. 452010 tak lagbhag 36 ghante mein.",
+   "Quote: 5 × Men's T-Shirt (1 pc) @ ₹560. Subtotal ₹2,800, discount −₹200 (NEW10: −₹200), GST ₹130, delivery ₹0 → total ₹2,730. Delivery to 452010 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t070",
+  "expected": "decline_stock",
+  "outcome": "declined_by_policy",
+  "correct": true,
+  "merchant_id": "m_018_amber_apparel",
+  "session_id": "sess_8a1ae05cf065bb",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 83.82970001548529,
+  "explanations": [
+   "यह संभव नहीं है: under_order_cap (₹74925 ≤ ₹50000)"
+  ],
+  "declined_checks": [
+   "under_order_cap"
+  ],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t071",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_019_tara_kids_wear",
+  "session_id": "sess_512ce2d77cec2d",
+  "gmv_paise": 2249020,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 120.06899999687448,
+  "explanations": [
+   "Quote: 10 × Salwar Suit Set (1 pc) @ ₹2,001. Subtotal ₹20,010, GST ₹2,401.20, delivery ₹79 → total ₹22,490.20. Delivery to 641012 in about 48 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t072",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_020_saanjh_handloom",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 62.84859997685999,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t073",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_9c6fcc465b136f",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 90.833600028418,
+  "explanations": [
+   "कोटेशन: 3 × Wired Earphones (1 pc) @ ₹434। उप-योग ₹1,302, GST ₹234.36, डिलीवरी ₹0 → कुल ₹1,536.36। 302017 तक लगभग 60 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t074",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_022_gadget_junction",
+  "session_id": "sess_7dc436095d86d1",
+  "gmv_paise": 417310,
+  "discount_paise": 20000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 123.95129998913035,
+  "explanations": [
+   "Quote: 5 × Memory Card 64GB (1 pc) @ ₹739. Subtotal ₹3,695, GST ₹665.10, delivery ₹49 → total ₹4,409.10. Delivery to 452010 in about 16 h.",
+   "Quote: 5 × Memory Card 64GB (1 pc) @ ₹739. Subtotal ₹3,695, discount −₹200 (NEW10: −₹200), GST ₹629.10, delivery ₹49 → total ₹4,173.10. Delivery to 452010 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t075",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_cb3d9ae3247251",
+  "gmv_paise": 261606,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 130.3071000147611,
+  "explanations": [
+   "Quote: 1 × Bluetooth Speaker (1 pc) @ ₹2,217. Subtotal ₹2,217, GST ₹399.06, delivery ₹0 → total ₹2,616.06. Delivery to 302017 in about 24 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t076",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "sess_bc7e5c4481789a",
+  "gmv_paise": 124287,
+  "discount_paise": 5325,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 155.69269994739443,
+  "explanations": [
+   "Quote: 5 × Phone Case (1 pc) @ ₹213. Subtotal ₹1,065, GST ₹191.70, delivery ₹49 → total ₹1,305.70. Delivery to 411045 in about 72 h.",
+   "Quote: 5 × Phone Case (1 pc) @ ₹213. Subtotal ₹1,065, discount −₹53.25 (BULK5_PCT: −₹53.25), GST ₹182.12, delivery ₹49 → total ₹1,242.87. Delivery to 411045 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t077",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_025_circuit_bazaar",
+  "session_id": "sess_801c4337519180",
+  "gmv_paise": 242608,
+  "discount_paise": 20000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 140.44240000657737,
+  "explanations": [
+   "कोटेशन: 2 × Power Bank 10000mAh (1 pc) @ ₹1,128। उप-योग ₹2,256, GST ₹406.08, डिलीवरी ₹0 → कुल ₹2,662.08। 560034 तक लगभग 36 घंटे में।",
+   "कोटेशन: 2 × Power Bank 10000mAh (1 pc) @ ₹1,128। उप-योग ₹2,256, छूट −₹200 (NEW10: −₹200), GST ₹370.08, डिलीवरी ₹0 → कुल ₹2,426.08। 560034 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t078",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_026_nova_tech_hub",
+  "session_id": "sess_2decee6cf33b5a",
+  "gmv_paise": 151866,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 208.3816999802366,
+  "explanations": [
+   "कोटेशन: 3 × Wired Earphones (1 pc) @ ₹429। उप-योग ₹1,287, GST ₹231.66, डिलीवरी ₹49 → कुल ₹1,567.66। 302017 तक लगभग 36 घंटे में।",
+   "कोटेशन: 3 × Wired Earphones (1 pc) @ ₹429। उप-योग ₹1,287, GST ₹231.66, डिलीवरी ₹0 → कुल ₹1,518.66। 302017 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t079",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_027_kabra_electronics",
+  "session_id": "sess_ab72ae59e772c3",
+  "gmv_paise": 31388,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 145.0996000203304,
+  "explanations": [
+   "Quote: 1 × USB-C Cable 1m (1 pc) @ ₹266. Subtotal ₹266, GST ₹47.88, delivery ₹0 → total ₹313.88. Delivery to 452010 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t080",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 57.695999974384904,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t081",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "sess_a5fbb426542d1d",
+  "gmv_paise": 1314110,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 170.6518999999389,
+  "explanations": [
+   "Quote: 5 × Bluetooth Speaker (1 pc) @ ₹2,219. Subtotal ₹11,095, GST ₹1,997.10, delivery ₹49 → total ₹13,141.10. 411045 tak lagbhag 60 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t082",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_030_mobicare_indore",
+  "session_id": "sess_3161a6187fd493",
+  "gmv_paise": 98934,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 121.11299997195601,
+  "explanations": [
+   "Quote: 3 × Smart Watch Strap (1 pc) @ ₹271. Subtotal ₹813, GST ₹146.34, delivery ₹30 → total ₹989.34. Delivery to 560034 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t083",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_031_rasoi_ghar",
+  "session_id": "sess_91707ac5309618",
+  "gmv_paise": 317520,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 140.2047000010498,
+  "explanations": [
+   "Quote: 5 × Steel Tiffin 3-tier (1 pc) @ ₹567. Subtotal ₹2,835, GST ₹340.20, delivery ₹0 → total ₹3,175.20. 302017 tak lagbhag 72 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t084",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_032_griha_essentials",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 59.38160000368953,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t085",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_033_steel_and_stone_kitchen",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 61.25110003631562,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t086",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_034_anand_utensils",
+  "session_id": "sess_858df3db32f93c",
+  "gmv_paise": 236590,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 147.2524999990128,
+  "explanations": [
+   "Quote: 2 × Bedsheet Double (1 pc) @ ₹1,089. Subtotal ₹2,178, GST ₹108.90, delivery ₹79 → total ₹2,365.90. Delivery to 641012 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t087",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_035_home_kraft",
+  "session_id": "sess_d22af93abac8aa",
+  "gmv_paise": 157059,
+  "discount_paise": 16620,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 192.6687000086531,
+  "explanations": [
+   "कोटेशन: 2 × Curtains 2pc (2 pack) @ ₹831। उप-योग ₹1,662, GST ₹83.10, डिलीवरी ₹0 → कुल ₹1,745.10। 560034 तक लगभग 8 घंटे में।",
+   "कोटेशन: 2 × Curtains 2pc (2 pack) @ ₹831। उप-योग ₹1,662, छूट −₹166.20 (NEW10: −₹166.20), GST ₹74.79, डिलीवरी ₹0 → कुल ₹1,570.59। 560034 तक लगभग 8 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t088",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_036_kitchen_kahani",
+  "session_id": "sess_fb76ad23ce5f1c",
+  "gmv_paise": 710140,
+  "discount_paise": 33000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 162.26289997575805,
+  "explanations": [
+   "Quote: 10 × Casserole 2.5L (1 pc) @ ₹660. Subtotal ₹6,600, GST ₹792, delivery ₹79 → total ₹7,471. Delivery to 302017 in about 16 h.",
+   "Quote: 10 × Casserole 2.5L (1 pc) @ ₹660. Subtotal ₹6,600, discount −₹330 (BULK5_PCT: −₹330), GST ₹752.40, delivery ₹79 → total ₹7,101.40. Delivery to 302017 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t089",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_037_vimal_steel_mart",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 86.93729998776689,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t090",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_038_aangan_living",
+  "session_id": "sess_219c10a47cd71f",
+  "gmv_paise": 371700,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 365.12429994763806,
+  "explanations": [
+   "Quote: 5 × Wall Clock (1 pc) @ ₹630. Subtotal ₹3,150, GST ₹567, delivery ₹0 → total ₹3,717. Delivery to 411045 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t091",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_039_pune_home_store",
+  "session_id": "sess_13ab244a3c7ab4",
+  "gmv_paise": 96447,
+  "discount_paise": 9370,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 172.25669999606907,
+  "explanations": [
+   "Quote: 1 × Bedsheet Double (1 pc) @ ₹937. Subtotal ₹937, GST ₹46.85, delivery ₹79 → total ₹1,062.85. Delivery to 641012 in about 72 h.",
+   "Quote: 1 × Bedsheet Double (1 pc) @ ₹937. Subtotal ₹937, discount −₹93.70 (NEW10: −₹93.70), GST ₹42.17, delivery ₹79 → total ₹964.47. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t092",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_040_ghar_sajja",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 128.76880000112578,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t093",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_041_packwell_industries",
+  "session_id": "sess_450e863d0bfe8f",
+  "gmv_paise": 32120,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 216.40149998711422,
+  "explanations": [
+   "कोटेशन: 10 × Cardboard Sheet (1 pc) @ ₹26। उप-योग ₹260, GST ₹31.20, डिलीवरी ₹30 → कुल ₹321.20। 302017 तक लगभग 96 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t094",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_042_bharat_packaging_co",
+  "session_id": "sess_faa0981e1d942a",
+  "gmv_paise": 26780,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 306.48770002881065,
+  "explanations": [
+   "Quote: 1 × Tissue Paper Sheets (100 pack) @ ₹160. Subtotal ₹160, GST ₹28.80, delivery ₹79 → total ₹267.80. Delivery to 452010 in about 24 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t095",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_043_safepack_supplies",
+  "session_id": "sess_a4345f1d49745e",
+  "gmv_paise": 58292,
+  "discount_paise": 2600,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 137.8190999967046,
+  "explanations": [
+   "कोटेशन: 10 × Thermocol Sheet (1 pc) @ ₹52। उप-योग ₹520, GST ₹93.60, डिलीवरी ₹0 → कुल ₹613.60। 411045 तक लगभग 72 घंटे में।",
+   "Quote: 10 × Thermocol Sheet (1 pc) @ ₹52. Subtotal ₹520, discount −₹26 (BULK5_PCT: −₹26), GST ₹88.92, delivery ₹0 → total ₹582.92. Delivery to 411045 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t096",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_043_safepack_supplies",
+  "session_id": "sess_0728309b72f822",
+  "gmv_paise": 151866,
+  "discount_paise": 14300,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 134.51169995823875,
+  "explanations": [
+   "कोटेशन: 10 × Tissue Paper Sheets (100 pack) @ ₹143। उप-योग ₹1,430, GST ₹257.40, डिलीवरी ₹0 → कुल ₹1,687.40। 411045 तक लगभग 36 घंटे में।",
+   "कोटेशन: 10 × Tissue Paper Sheets (100 pack) @ ₹143। उप-योग ₹1,430, छूट −₹143 (NEW10: −₹143), GST ₹231.66, डिलीवरी ₹0 → कुल ₹1,518.66। 411045 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t097",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_045_ekta_poly_products",
+  "session_id": "sess_9cfca6ecfc0b50",
+  "gmv_paise": 22981,
+  "discount_paise": 1025,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 137.6095999730751,
+  "explanations": [
+   "Quote: 5 × BOPP Tape 48mm (1 pc) @ ₹41. Subtotal ₹205, GST ₹36.90, delivery ₹0 → total ₹241.90. Delivery to 560034 in about 28 h.",
+   "Quote: 5 × BOPP Tape 48mm (1 pc) @ ₹41. Subtotal ₹205, discount −₹10.25 (BULK5_PCT: −₹10.25), GST ₹35.06, delivery ₹0 → total ₹229.81. Delivery to 560034 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t098",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_046_kraft_and_co_packaging",
+  "session_id": "sess_3a437866de126f",
+  "gmv_paise": 9018,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 128.98189999395981,
+  "explanations": [
+   "कोटेशन: 3 × Corrugated Box 12x10x8 (1 pc) @ ₹17। उप-योग ₹51, GST ₹9.18, डिलीवरी ₹30 → कुल ₹90.18। 302017 तक लगभग 72 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t099",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_047_shree_packaging_solutions",
+  "session_id": "sess_435f26d55669a3",
+  "gmv_paise": 118534,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 122.76850000489503,
+  "explanations": [
+   "Quote: 3 × Pizza Box 10in (25 pack) @ ₹321. Subtotal ₹963, GST ₹173.34, delivery ₹49 → total ₹1,185.34. Delivery to 452010 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t100",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_051_indore_packaging_depot",
+  "session_id": "sess_093d394758618e",
+  "gmv_paise": 32450,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 129.96960000600666,
+  "explanations": [
+   "Quote: 5 × Fragile Tape (1 pc) @ ₹55. Subtotal ₹275, GST ₹49.50, delivery ₹0 → total ₹324.50. 302017 tak lagbhag 28 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t101",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_049_nirmal_box_works",
+  "session_id": "sess_3c461602c2ceb6",
+  "gmv_paise": 29792,
+  "discount_paise": 1400,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 183.31180000677705,
+  "explanations": [
+   "Quote: 10 × Cardboard Sheet (1 pc) @ ₹28. Subtotal ₹280, GST ₹33.60, delivery ₹0 → total ₹313.60. Delivery to 641012 in about 72 h.",
+   "Quote: 10 × Cardboard Sheet (1 pc) @ ₹28. Subtotal ₹280, discount −₹14 (BULK5_PCT: −₹14), GST ₹31.92, delivery ₹0 → total ₹297.92. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t102",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_050_packpoint_b2b",
+  "session_id": "sess_84e34c916c8515",
+  "gmv_paise": 19638,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 110.34270003437996,
+  "explanations": [
+   "Quote: 3 × BOPP Tape 48mm (1 pc) @ ₹47. Subtotal ₹141, GST ₹25.38, delivery ₹30 → total ₹196.38. Delivery to 560034 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t103",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_051_indore_packaging_depot",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 65.82019996130839,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t104",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_000_sharma_general_store",
+  "session_id": "sess_7855d1e29c19aa",
+  "gmv_paise": 53298,
+  "discount_paise": 5640,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 159.2454999918118,
+  "explanations": [
+   "कोटेशन: 2 × Cashew (250 g) @ ₹282। उप-योग ₹564, GST ₹28.20, डिलीवरी ₹0 → कुल ₹592.20। 560034 तक लगभग 48 घंटे में।",
+   "कोटेशन: 2 × Cashew (250 g) @ ₹282। उप-योग ₹564, छूट −₹56.40 (NEW10: −₹56.40), GST ₹25.38, डिलीवरी ₹0 → कुल ₹532.98। 560034 तक लगभग 48 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t105",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_001_annapurna_kirana",
+  "session_id": "sess_0c0b7482327c6f",
+  "gmv_paise": 170000,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 119.21610002173111,
+  "explanations": [
+   "Quote: 10 × Rajma (1 kg) @ ₹170. Subtotal ₹1,700, GST ₹0, delivery ₹0 → total ₹1,700. 302017 tak lagbhag 24 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t106",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_002_lakshmi_provisions",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 69.10209998022765,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t107",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_003_gupta_groceries",
+  "session_id": "sess_8b0db8955740e4",
+  "gmv_paise": 25890,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 133.669100003317,
+  "explanations": [
+   "Quote: 2 × Basmati Rice (1 kg) @ ₹109. Subtotal ₹218, GST ₹10.90, delivery ₹30 → total ₹258.90. Delivery to 411045 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t108",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_008_patel_provision_mart",
+  "session_id": "sess_2c26bab27356cd",
+  "gmv_paise": 33180,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 113.59079997055233,
+  "explanations": [
+   "कोटेशन: 4 × Red Chilli Powder (200 g) @ ₹79। उप-योग ₹316, GST ₹15.80, डिलीवरी ₹0 → कुल ₹331.80। 411045 तक लगभग 16 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t109",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_005_shree_balaji_stores",
+  "session_id": "sess_05afabe69ad143",
+  "gmv_paise": 4305,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 143.82820000173524,
+  "explanations": [
+   "Quote: 1 × Sugar (1 kg) @ ₹41. Subtotal ₹41, GST ₹2.05, delivery ₹0 → total ₹43.05. Delivery to 560034 in about 16 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t110",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_006_om_sai_kirana",
+  "session_id": "sess_2922ea16dc0734",
+  "gmv_paise": 138902,
+  "discount_paise": 13780,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 204.78420000290498,
+  "explanations": [
+   "Quote: 2 × Ghee (1 l) @ ₹689. Subtotal ₹1,378, GST ₹165.36, delivery ₹0 → total ₹1,543.36. Delivery to 302017 in about 28 h.",
+   "Quote: 2 × Ghee (1 l) @ ₹689. Subtotal ₹1,378, discount −₹137.80 (NEW10: −₹137.80), GST ₹148.82, delivery ₹0 → total ₹1,389.02. Delivery to 302017 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t111",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_007_janta_grocery",
+  "session_id": "sess_ddaf9376cce5b5",
+  "gmv_paise": 96288,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 166.45550000248477,
+  "explanations": [
+   "Quote: 4 × Coffee Powder (200 g) @ ₹204. Subtotal ₹816, GST ₹146.88, delivery ₹0 → total ₹962.88. 452010 tak lagbhag 8 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t112",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_008_patel_provision_mart",
+  "session_id": "sess_f8c26d833783b7",
+  "gmv_paise": 18480,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 100.27399996761233,
+  "explanations": [
+   "Quote: 2 × Besan (1 kg) @ ₹88. Subtotal ₹176, GST ₹8.80, delivery ₹0 → total ₹184.80. Delivery to 411045 in about 8 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t113",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_009_sri_venkateswara_stores",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 69.06690000323579,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t114",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_010_mahalakshmi_kirana",
+  "session_id": "sess_6d806111458b82",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 85.78999998280779,
+  "explanations": [
+   "Quote: 2 × Ghee (1 l) @ ₹607. Subtotal ₹1,214, GST ₹145.68, delivery ₹0 → total ₹1,359.68. 560034 tak lagbhag 52 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t115",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_011_rang_boutique",
+  "session_id": "sess_cdb8bc90285f77",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 93.95870001753792,
+  "explanations": [
+   "Quote: 3 × Cotton Kurta (1 pc) @ ₹972. Subtotal ₹2,916, GST ₹145.80, delivery ₹0 → total ₹3,061.80. Delivery to 302017 in about 8 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t116",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_012_meera_ethnic_wear",
+  "session_id": "sess_4256d0dcb73c23",
+  "gmv_paise": 296576,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 108.10579999815673,
+  "explanations": [
+   "Quote: 2 × Hoodie (1 pc) @ ₹1,324. Subtotal ₹2,648, GST ₹317.76, delivery ₹0 → total ₹2,965.76. Delivery to 452010 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t117",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_013_urban_thread_co",
+  "session_id": "sess_06fde54d906d5c",
+  "gmv_paise": 385035,
+  "discount_paise": 19300,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 130.6444999645464,
+  "explanations": [
+   "कोटेशन: 5 × Kurti (1 pc) @ ₹772। उप-योग ₹3,860, GST ₹193, डिलीवरी ₹0 → कुल ₹4,053। 411045 तक लगभग 96 घंटे में।",
+   "Quote: 5 × Kurti (1 pc) @ ₹772. Subtotal ₹3,860, discount −₹193 (BULK5_PCT: −₹193), GST ₹183.35, delivery ₹0 → total ₹3,850.35. Delivery to 411045 in about 96 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t118",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_014_kalakriti_sarees",
+  "session_id": "sess_9c6321f28b9b4f",
+  "gmv_paise": 198160,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 130.69319998612627,
+  "explanations": [
+   "कोटेशन: 3 × Kids' Frock (1 pc) @ ₹604। उप-योग ₹1,812, GST ₹90.60, डिलीवरी ₹79 → कुल ₹1,981.60। 641012 तक लगभग 72 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t119",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_015_neelam_fashions",
+  "session_id": "sess_e4c311db9a86ad",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 133.3091999986209,
+  "explanations": [
+   "कोटेशन: 1 × Leggings (1 pc) @ ₹293। उप-योग ₹293, GST ₹14.65, डिलीवरी ₹30 → कुल ₹337.65। 560034 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t120",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_016_dhaga_studio",
+  "session_id": "sess_568cde4522b882",
+  "gmv_paise": 170520,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 134.80240001808852,
+  "explanations": [
+   "Quote: 1 × Cotton Saree (1 pc) @ ₹1,624. Subtotal ₹1,624, GST ₹81.20, delivery ₹0 → total ₹1,705.20. Delivery to 302017 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t121",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_017_jaipur_prints_house",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 73.12459999229759,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t122",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_018_amber_apparel",
+  "session_id": "sess_769abe0d641319",
+  "gmv_paise": 107415,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 112.81210003653541,
+  "explanations": [
+   "कोटेशन: 3 × Leggings (1 pc) @ ₹341। उप-योग ₹1,023, GST ₹51.15, डिलीवरी ₹0 → कुल ₹1,074.15। 411045 तक लगभग 60 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t123",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_018_amber_apparel",
+  "session_id": "sess_98f750290692bf",
+  "gmv_paise": 301245,
+  "discount_paise": 15100,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 124.71529998583719,
+  "explanations": [
+   "कोटेशन: 5 × Women's Palazzo (1 pc) @ ₹604। उप-योग ₹3,020, GST ₹151, डिलीवरी ₹0 → कुल ₹3,171। 411045 तक लगभग 16 घंटे में।",
+   "कोटेशन: 5 × Women's Palazzo (1 pc) @ ₹604। उप-योग ₹3,020, छूट −₹151 (BULK5_PCT: −₹151), GST ₹143.45, डिलीवरी ₹0 → कुल ₹3,012.45। 411045 तक लगभग 16 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t124",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_020_saanjh_handloom",
+  "session_id": "sess_dc156ab388b745",
+  "gmv_paise": 230895,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 121.42239999957383,
+  "explanations": [
+   "Quote: 3 × Kurti (1 pc) @ ₹733. Subtotal ₹2,199, GST ₹109.95, delivery ₹0 → total ₹2,308.95. Delivery to 560034 in about 36 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t125",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_8ecd313175b602",
+  "gmv_paise": 104784,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 152.3522000061348,
+  "explanations": [
+   "Quote: 3 × Smart Watch Strap (1 pc) @ ₹296. Subtotal ₹888, GST ₹159.84, delivery ₹0 → total ₹1,047.84. Delivery to 302017 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t126",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_022_gadget_junction",
+  "session_id": "sess_ba8ca5b6a6847f",
+  "gmv_paise": 2573760,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 106.32040002383292,
+  "explanations": [
+   "Quote: 10 × Bluetooth Speaker (1 pc) @ ₹2,177. Subtotal ₹21,770, GST ₹3,918.60, delivery ₹49 → total ₹25,737.60. Delivery to 452010 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t127",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_023_chargeup_store",
+  "session_id": "sess_b10e6445602ec1",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 83.05810001911595,
+  "explanations": [
+   "यह संभव नहीं है: only 40 of Wired Earphones available, 60 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t128",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_024_pixel_mobile_point",
+  "session_id": "sess_a3b45c8328db89",
+  "gmv_paise": 168920,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 158.20999996503815,
+  "explanations": [
+   "Quote: 2 × Memory Card 64GB (1 pc) @ ₹695. Subtotal ₹1,390, GST ₹250.20, delivery ₹49 → total ₹1,689.20. 641012 tak lagbhag 48 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t129",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_025_circuit_bazaar",
+  "session_id": "sess_917cb23b79caff",
+  "gmv_paise": 84836,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 146.5713000507094,
+  "explanations": [
+   "Quote: 1 × Laptop Sleeve 14in (1 pc) @ ₹652. Subtotal ₹652, GST ₹117.36, delivery ₹79 → total ₹848.36. Delivery to 560034 in about 28 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t130",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_026_nova_tech_hub",
+  "session_id": "sess_fb013a2afb65f7",
+  "gmv_paise": 57882,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 173.49680000916123,
+  "explanations": [
+   "कोटेशन: 1 × Car Charger (1 pc) @ ₹449। उप-योग ₹449, GST ₹80.82, डिलीवरी ₹49 → कुल ₹578.82। 302017 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t131",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_027_kabra_electronics",
+  "session_id": "sess_59f10d71f24f0c",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 92.62279997346923,
+  "explanations": [
+   "Quote: 5 × Car Charger (1 pc) @ ₹492. Subtotal ₹2,460, GST ₹442.80, delivery ₹0 → total ₹2,902.80. Delivery to 452010 in about 24 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t132",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "sess_5713ce99ddebb0",
+  "gmv_paise": 154816,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 174.25959999673069,
+  "explanations": [
+   "कोटेशन: 2 × Memory Card 64GB (1 pc) @ ₹656। उप-योग ₹1,312, GST ₹236.16, डिलीवरी ₹49 → कुल ₹1,597.16। 411045 तक लगभग 72 घंटे में।",
+   "कोटेशन: 2 × Memory Card 64GB (1 pc) @ ₹656। उप-योग ₹1,312, GST ₹236.16, डिलीवरी ₹0 → कुल ₹1,548.16। 411045 तक लगभग 72 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t133",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_029_soundspace",
+  "session_id": "sess_fdefb8445482a2",
+  "gmv_paise": 64372,
+  "discount_paise": 5600,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 125.06440002471209,
+  "explanations": [
+   "Quote: 2 × Smart Watch Strap (1 pc) @ ₹280. Subtotal ₹560, GST ₹100.80, delivery ₹49 → total ₹709.80. Delivery to 641012 in about 8 h.",
+   "Quote: 2 × Smart Watch Strap (1 pc) @ ₹280. Subtotal ₹560, discount −₹56 (NEW10: −₹56), GST ₹90.72, delivery ₹49 → total ₹643.72. Delivery to 641012 in about 8 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t134",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_030_mobicare_indore",
+  "session_id": "sess_17af0f4c6a1eb2",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 88.12530001159757,
+  "explanations": [
+   "Quote: 1 × Tempered Glass (1 pc) @ ₹154. Subtotal ₹154, GST ₹27.72, delivery ₹30 → total ₹211.72. Delivery to 560034 in about 96 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t135",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_031_rasoi_ghar",
+  "session_id": "sess_5af2f2da203c81",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 93.4026000322774,
+  "explanations": [
+   "Quote: 3 × Wall Clock (1 pc) @ ₹728. Subtotal ₹2,184, GST ₹393.12, delivery ₹0 → total ₹2,577.12. Delivery to 302017 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t136",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_032_griha_essentials",
+  "session_id": "sess_57188e9f94639d",
+  "gmv_paise": 1040400,
+  "discount_paise": 48750,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 140.1101000374183,
+  "explanations": [
+   "Quote: 5 × Pressure Cooker 5L (1 pc) @ ₹1,950. Subtotal ₹9,750, GST ₹1,170, delivery ₹30 → total ₹10,950. Delivery to 452010 in about 52 h.",
+   "Quote: 5 × Pressure Cooker 5L (1 pc) @ ₹1,950. Subtotal ₹9,750, discount −₹487.50 (BULK5_PCT: −₹487.50), GST ₹1,111.50, delivery ₹30 → total ₹10,404. Delivery to 452010 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t137",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_033_steel_and_stone_kitchen",
+  "session_id": "sess_108cfec5b101ab",
+  "gmv_paise": 86328,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 112.5643000123091,
+  "explanations": [
+   "Quote: 2 × Spice Box (1 pc) @ ₹372. Subtotal ₹744, GST ₹89.28, delivery ₹30 → total ₹863.28. Delivery to 411045 in about 48 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t138",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_034_anand_utensils",
+  "session_id": "sess_253d821064c692",
+  "gmv_paise": 143980,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 145.57589998003095,
+  "explanations": [
+   "Quote: 2 × Towel Set 2pc (2 pack) @ ₹648. Subtotal ₹1,296, GST ₹64.80, delivery ₹79 → total ₹1,439.80. Delivery to 641012 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t139",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_035_home_kraft",
+  "session_id": "sess_9a6a0e54726ede",
+  "gmv_paise": 89279,
+  "discount_paise": 9130,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 145.04550001583993,
+  "explanations": [
+   "कोटेशन: 1 × Bedsheet Double (1 pc) @ ₹913। उप-योग ₹913, GST ₹45.65, डिलीवरी ₹30 → कुल ₹988.65। 560034 तक लगभग 28 घंटे में।",
+   "Quote: 1 × Bedsheet Double (1 pc) @ ₹913. Subtotal ₹913, discount −₹91.30 (NEW10: −₹91.30), GST ₹41.09, delivery ₹30 → total ₹892.79. Delivery to 560034 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t140",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_036_kitchen_kahani",
+  "session_id": "sess_1065e99a043ae1",
+  "gmv_paise": 166940,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 127.74109997553751,
+  "explanations": [
+   "Quote: 5 × Doormat (1 pc) @ ₹284. Subtotal ₹1,420, GST ₹170.40, delivery ₹79 → total ₹1,669.40. Delivery to 302017 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t141",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_037_vimal_steel_mart",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 65.57350000366569,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t142",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_038_aangan_living",
+  "session_id": "sess_9dba10ead75d1b",
+  "gmv_paise": 1104432,
+  "discount_paise": 51900,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 133.3790000062436,
+  "explanations": [
+   "Quote: 5 × Pressure Cooker 5L (1 pc) @ ₹2,076. Subtotal ₹10,380, GST ₹1,245.60, delivery ₹0 → total ₹11,625.60. Delivery to 411045 in about 60 h.",
+   "Quote: 5 × Pressure Cooker 5L (1 pc) @ ₹2,076. Subtotal ₹10,380, discount −₹519 (BULK5_PCT: −₹519), GST ₹1,183.32, delivery ₹0 → total ₹11,044.32. Delivery to 411045 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t143",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_039_pune_home_store",
+  "session_id": "sess_d375c57eba5dbc",
+  "gmv_paise": 707840,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 126.08560000080615,
+  "explanations": [
+   "Quote: 10 × Casserole 2.5L (1 pc) @ ₹632. Subtotal ₹6,320, GST ₹758.40, delivery ₹0 → total ₹7,078.40. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t144",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_040_ghar_sajja",
+  "session_id": "sess_fc240eb64c8873",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 3,
+  "latency_ms": 108.19049994461238,
+  "explanations": [
+   "कोटेशन: 1 × Chopping Board (1 pc) @ ₹289। उप-योग ₹289, GST ₹34.68, डिलीवरी ₹30 → कुल ₹353.68। 560034 तक लगभग 24 घंटे में।",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t145",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_041_packwell_industries",
+  "session_id": "sess_77f3f952155012",
+  "gmv_paise": 7248,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 149.89530004095286,
+  "explanations": [
+   "कोटेशन: 1 × Corrugated Box 18x14x10 (1 pc) @ ₹36। उप-योग ₹36, GST ₹6.48, डिलीवरी ₹30 → कुल ₹72.48। 302017 तक लगभग 52 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t146",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_042_bharat_packaging_co",
+  "session_id": "sess_5622f40c0a5d77",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 101.22209996916354,
+  "explanations": [
+   "कोटेशन: 5 × Pizza Box 10in (25 pack) @ ₹316। उप-योग ₹1,580, GST ₹284.40, डिलीवरी ₹0 → कुल ₹1,864.40। 452010 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t147",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_043_safepack_supplies",
+  "session_id": "sess_e007ef86d3c3b9",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 93.01509999204427,
+  "explanations": [
+   "Quote: 3 × Tissue Paper Sheets (100 pack) @ ₹143. Subtotal ₹429, GST ₹77.22, delivery ₹0 → total ₹506.22. Delivery to 411045 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t148",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_044_coimbatore_cartons",
+  "session_id": "sess_b984aaea31345b",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 72.02109997160733,
+  "explanations": [
+   "Can't do that: only 25 of Corrugated Box 12x10x8 available, 45 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t149",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_045_ekta_poly_products",
+  "session_id": "sess_0e8d79e7f81ab1",
+  "gmv_paise": 242136,
+  "discount_paise": 10800,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 267.8868999937549,
+  "explanations": [
+   "कोटेशन: 5 × Air Pillow Bags (200 pack) @ ₹432। उप-योग ₹2,160, GST ₹388.80, डिलीवरी ₹0 → कुल ₹2,548.80। 560034 तक लगभग 28 घंटे में।",
+   "Quote: 5 × Air Pillow Bags (200 pack) @ ₹432. Subtotal ₹2,160, discount −₹108 (BULK5_PCT: −₹108), GST ₹369.36, delivery ₹0 → total ₹2,421.36. Delivery to 560034 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t150",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_046_kraft_and_co_packaging",
+  "session_id": "sess_39dadbb87acdba",
+  "gmv_paise": 51002,
+  "discount_paise": 4520,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 123.50479996530339,
+  "explanations": [
+   "Quote: 1 × Strapping Roll (1 pc) @ ₹452. Subtotal ₹452, GST ₹81.36, delivery ₹30 → total ₹563.36. 302017 tak lagbhag 60 ghante mein.",
+   "Quote: 1 × Strapping Roll (1 pc) @ ₹452. Subtotal ₹452, discount −₹45.20 (NEW10: −₹45.20), GST ₹73.22, delivery ₹30 → total ₹510.02. Delivery to 302017 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t151",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_047_shree_packaging_solutions",
+  "session_id": "sess_c7ea968c7240bb",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 101.3160000438802,
+  "explanations": [
+   "कोटेशन: 10 × Cardboard Sheet (1 pc) @ ₹26। उप-योग ₹260, GST ₹31.20, डिलीवरी ₹49 → कुल ₹340.20। 452010 तक लगभग 16 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t152",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_048_rapid_pack_traders",
+  "session_id": "sess_4a1fb13f108697",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 97.09060000022873,
+  "explanations": [
+   "कोटेशन: 10 × Thermocol Sheet (1 pc) @ ₹58। उप-योग ₹580, GST ₹104.40, डिलीवरी ₹0 → कुल ₹684.40। 411045 तक लगभग 48 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t153",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_049_nirmal_box_works",
+  "session_id": "sess_cc0365b59a28bf",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 89.14339996408671,
+  "explanations": [
+   "Quote: 1 × Stretch Film 1kg (1 pc) @ ₹197. Subtotal ₹197, GST ₹35.46, delivery ₹0 → total ₹232.46. 641012 tak lagbhag 72 ghante mein."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t154",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_050_packpoint_b2b",
+  "session_id": "sess_19cf63b185fae1",
+  "gmv_paise": 92916,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 122.35010002041236,
+  "explanations": [
+   "कोटेशन: 3 × Food Container 500ml (50 pack) @ ₹254। उप-योग ₹762, GST ₹137.16, डिलीवरी ₹30 → कुल ₹929.16। 560034 तक लगभग 16 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t155",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_051_indore_packaging_depot",
+  "session_id": "sess_bf56bbd4c3b1d0",
+  "gmv_paise": 269040,
+  "discount_paise": 12000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 127.92629998875782,
+  "explanations": [
+   "कोटेशन: 10 × Label Sticker A6 (500 pack) @ ₹240। उप-योग ₹2,400, GST ₹432, डिलीवरी ₹0 → कुल ₹2,832। 302017 तक लगभग 52 घंटे में।",
+   "कोटेशन: 10 × Label Sticker A6 (500 pack) @ ₹240। उप-योग ₹2,400, छूट −₹120 (BULK5_PCT: −₹120), GST ₹410.40, डिलीवरी ₹0 → कुल ₹2,690.40। 302017 तक लगभग 52 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t156",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_000_sharma_general_store",
+  "session_id": "sess_d6d2f11d1493aa",
+  "gmv_paise": 11970,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 182.39529995480552,
+  "explanations": [
+   "Quote: 1 × Basmati Rice (1 kg) @ ₹114. Subtotal ₹114, GST ₹5.70, delivery ₹0 → total ₹119.70. Delivery to 560034 in about 72 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t157",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_001_annapurna_kirana",
+  "session_id": "sess_e653abe4e14634",
+  "gmv_paise": 69500,
+  "discount_paise": 3400,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 129.106700012926,
+  "explanations": [
+   "Quote: 10 × Poha (1 kg) @ ₹68. Subtotal ₹680, GST ₹0, delivery ₹49 → total ₹729. Delivery to 302017 in about 16 h.",
+   "Quote: 10 × Poha (1 kg) @ ₹68. Subtotal ₹680, discount −₹34 (BULK5_PCT: −₹34), GST ₹0, delivery ₹49 → total ₹695. Delivery to 302017 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t158",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_002_lakshmi_provisions",
+  "session_id": "sess_1c5e953e73e831",
+  "gmv_paise": 8300,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 104.91619998356327,
+  "explanations": [
+   "कोटेशन: 1 × Jaggery (1 kg) @ ₹83। उप-योग ₹83, GST ₹0, डिलीवरी ₹0 → कुल ₹83। 452010 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t159",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_003_gupta_groceries",
+  "session_id": "sess_347e08f8b7db98",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 90.41909995721653,
+  "explanations": [
+   "कोटेशन: 2 × Ghee (1 l) @ ₹657। उप-योग ₹1,314, GST ₹157.68, डिलीवरी ₹0 → कुल ₹1,471.68। 411045 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t160",
+  "expected": "decline_stock",
+  "outcome": "stock",
+  "correct": true,
+  "merchant_id": "m_004_nandini_daily_needs",
+  "session_id": "sess_90aafcd1eabba4",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 83.23950000340119,
+  "explanations": [
+   "Can't do that: only 40 of Turmeric Powder available, 60 requested"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t161",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_005_shree_balaji_stores",
+  "session_id": "sess_3383c56e6fbaac",
+  "gmv_paise": 22470,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 137.05869996920228,
+  "explanations": [
+   "Quote: 1 × Almonds (250 g) @ ₹214. Subtotal ₹214, GST ₹10.70, delivery ₹0 → total ₹224.70. Delivery to 560034 in about 36 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t162",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_000_sharma_general_store",
+  "session_id": "sess_d54822498ff761",
+  "gmv_paise": 39648,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 153.72150001348928,
+  "explanations": [
+   "कोटेशन: 2 × Coffee Powder (200 g) @ ₹168। उप-योग ₹336, GST ₹60.48, डिलीवरी ₹0 → कुल ₹396.48। 560034 तक लगभग 36 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t163",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_007_janta_grocery",
+  "session_id": "sess_7fdc13add1be6a",
+  "gmv_paise": 61387,
+  "discount_paise": 6090,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 155.5058999801986,
+  "explanations": [
+   "कोटेशन: 1 × Ghee (1 l) @ ₹609। उप-योग ₹609, GST ₹73.08, डिलीवरी ₹0 → कुल ₹682.08। 452010 तक लगभग 28 घंटे में।",
+   "कोटेशन: 1 × Ghee (1 l) @ ₹609। उप-योग ₹609, छूट −₹60.90 (NEW10: −₹60.90), GST ₹65.77, डिलीवरी ₹0 → कुल ₹613.87। 452010 तक लगभग 28 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t164",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_008_patel_provision_mart",
+  "session_id": "sess_f134b9458769f8",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 3,
+  "latency_ms": 95.96310002962127,
+  "explanations": [
+   "कोटेशन: 2 × Sugar (1 kg) @ ₹46। उप-योग ₹92, GST ₹4.60, डिलीवरी ₹0 → कुल ₹96.60। 411045 तक लगभग 16 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t165",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_009_sri_venkateswara_stores",
+  "session_id": "sess_4f95085dfe08c8",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 102.56470000604168,
+  "explanations": [
+   "Quote: 2 × Basmati Rice (1 kg) @ ₹119. Subtotal ₹238, GST ₹11.90, delivery ₹30 → total ₹279.90. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t166",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_010_mahalakshmi_kirana",
+  "session_id": "sess_51459c44008327",
+  "gmv_paise": 48150,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 107.19989996869117,
+  "explanations": [
+   "Quote: 10 × Sugar (1 kg) @ ₹43. Subtotal ₹430, GST ₹21.50, delivery ₹30 → total ₹481.50. Delivery to 560034 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t167",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_011_rang_boutique",
+  "session_id": "sess_eb1906b8678088",
+  "gmv_paise": 137550,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 229.69369997736067,
+  "explanations": [
+   "कोटेशन: 2 × Sports Bra (1 pc) @ ₹655। उप-योग ₹1,310, GST ₹65.50, डिलीवरी ₹0 → कुल ₹1,375.50। 302017 तक लगभग 52 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t168",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_012_meera_ethnic_wear",
+  "session_id": "sess_964b8f1cdecea7",
+  "gmv_paise": 36180,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 125.33810001332313,
+  "explanations": [
+   "कोटेशन: 1 × Leggings (1 pc) @ ₹316। उप-योग ₹316, GST ₹15.80, डिलीवरी ₹30 → कुल ₹361.80। 452010 तक लगभग 52 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t169",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_013_urban_thread_co",
+  "session_id": "sess_8a4c6403645af8",
+  "gmv_paise": 60480,
+  "discount_paise": 6400,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 124.69879997661337,
+  "explanations": [
+   "Quote: 2 × Leggings (1 pc) @ ₹320. Subtotal ₹640, GST ₹32, delivery ₹0 → total ₹672. 411045 tak lagbhag 52 ghante mein.",
+   "Quote: 2 × Leggings (1 pc) @ ₹320. Subtotal ₹640, discount −₹64 (NEW10: −₹64), GST ₹28.80, delivery ₹0 → total ₹604.80. Delivery to 411045 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t170",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_014_kalakriti_sarees",
+  "session_id": "sess_e262d6abc481b2",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 98.06260000914335,
+  "explanations": [
+   "कोटेशन: 1 × Women's Palazzo (1 pc) @ ₹733। उप-योग ₹733, GST ₹36.65, डिलीवरी ₹79 → कुल ₹848.65। 641012 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t171",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_015_neelam_fashions",
+  "session_id": "sess_17be5c5742b65e",
+  "gmv_paise": 222810,
+  "discount_paise": 5000,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 134.89420001860708,
+  "explanations": [
+   "Quote: 2 × Formal Shirt (1 pc) @ ₹1,086. Subtotal ₹2,172, GST ₹108.60, delivery ₹0 → total ₹2,280.60. 560034 tak lagbhag 36 ghante mein.",
+   "Quote: 2 × Formal Shirt (1 pc) @ ₹1,086. Subtotal ₹2,172, discount −₹50 (FLAT50_RET: −₹50), GST ₹106.10, delivery ₹0 → total ₹2,228.10. Delivery to 560034 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t172",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_015_neelam_fashions",
+  "session_id": "sess_bff4f2df69275a",
+  "gmv_paise": 52770,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 125.07720000576228,
+  "explanations": [
+   "Quote: 1 × Men's T-Shirt (1 pc) @ ₹474. Subtotal ₹474, GST ₹23.70, delivery ₹30 → total ₹527.70. Delivery to 560034 in about 60 h.",
+   "Can't do that: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t173",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_017_jaipur_prints_house",
+  "session_id": "sess_2fee9b87f8f589",
+  "gmv_paise": 226576,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 119.01789996773005,
+  "explanations": [
+   "कोटेशन: 1 × Nehru Jacket (1 pc) @ ₹2,023। उप-योग ₹2,023, GST ₹242.76, डिलीवरी ₹0 → कुल ₹2,265.76। 452010 तक लगभग 72 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t174",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_018_amber_apparel",
+  "session_id": "sess_1392970857b5ae",
+  "gmv_paise": 1287300,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 135.3735999437049,
+  "explanations": [
+   "कोटेशन: 10 × Woollen Shawl (1 pc) @ ₹1,226। उप-योग ₹12,260, GST ₹613, डिलीवरी ₹0 → कुल ₹12,873। 411045 तक लगभग 16 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t175",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_019_tara_kids_wear",
+  "session_id": "sess_a4907896b0ee71",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 99.58300000289455,
+  "explanations": [
+   "Quote: 10 × Women's Palazzo (1 pc) @ ₹744. Subtotal ₹7,440, GST ₹372, delivery ₹79 → total ₹7,891. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t176",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_020_saanjh_handloom",
+  "session_id": "sess_7fea65cad7f922",
+  "gmv_paise": 116424,
+  "discount_paise": 11550,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 145.6459000473842,
+  "explanations": [
+   "Quote: 1 × Hoodie (1 pc) @ ₹1,155. Subtotal ₹1,155, GST ₹138.60, delivery ₹0 → total ₹1,293.60. Delivery to 560034 in about 60 h.",
+   "Quote: 1 × Hoodie (1 pc) @ ₹1,155. Subtotal ₹1,155, discount −₹115.50 (NEW10: −₹115.50), GST ₹124.74, delivery ₹0 → total ₹1,164.24. Delivery to 560034 in about 60 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t177",
+  "expected": "decline_stock",
+  "outcome": "declined_by_policy",
+  "correct": true,
+  "merchant_id": "m_021_voltix_accessories",
+  "session_id": "sess_1ec7bed4644a21",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 72.13330001104623,
+  "explanations": [
+   "Yeh possible nahi hai: under_order_cap (₹154700 ≤ ₹50000)"
+  ],
+  "declined_checks": [
+   "under_order_cap"
+  ],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t178",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_022_gadget_junction",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 66.25809997785836,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t179",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_023_chargeup_store",
+  "session_id": "sess_8d22d98bad10b2",
+  "gmv_paise": 736320,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 115.82329997327179,
+  "explanations": [
+   "Quote: 10 × Wireless Mouse (1 pc) @ ₹624. Subtotal ₹6,240, GST ₹1,123.20, delivery ₹0 → total ₹7,363.20. Delivery to 411045 in about 96 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t180",
+  "expected": "decline_unknown_item",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_024_pixel_mobile_point",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 63.88100003823638,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t181",
+  "expected": "decline_stock",
+  "outcome": "declined_by_policy",
+  "correct": true,
+  "merchant_id": "m_025_circuit_bazaar",
+  "session_id": "sess_11cb3586eff01e",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 84.08469997812063,
+  "explanations": [
+   "यह संभव नहीं है: under_order_cap (₹155380 ≤ ₹50000)"
+  ],
+  "declined_checks": [
+   "under_order_cap"
+  ],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t182",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_026_nova_tech_hub",
+  "session_id": "sess_bd37948848c2ba",
+  "gmv_paise": 270636,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 118.24500001966953,
+  "explanations": [
+   "कोटेशन: 2 × Neckband (1 pc) @ ₹1,126। उप-योग ₹2,252, GST ₹405.36, डिलीवरी ₹49 → कुल ₹2,706.36। 302017 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t183",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_027_kabra_electronics",
+  "session_id": "sess_15aca69958f5ff",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 91.56229998916388,
+  "explanations": [
+   "Quote: 5 × HDMI Cable 2m (1 pc) @ ₹346. Subtotal ₹1,730, GST ₹311.40, delivery ₹0 → total ₹2,041.40. Delivery to 452010 in about 36 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t184",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_028_byte_stop",
+  "session_id": "sess_2957c9fb5313c2",
+  "gmv_paise": 141128,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 203.74289999017492,
+  "explanations": [
+   "कोटेशन: 1 × Power Bank 10000mAh (1 pc) @ ₹1,196। उप-योग ₹1,196, GST ₹215.28, डिलीवरी ₹49 → कुल ₹1,460.28। 411045 तक लगभग 60 घंटे में।",
+   "कोटेशन: 1 × Power Bank 10000mAh (1 pc) @ ₹1,196। उप-योग ₹1,196, GST ₹215.28, डिलीवरी ₹0 → कुल ₹1,411.28। 411045 तक लगभग 60 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t185",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_029_soundspace",
+  "session_id": "sess_1edfc0ce4fbaf1",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 1,
+  "steps": 3,
+  "latency_ms": 94.09859997685999,
+  "explanations": [
+   "Quote: 3 × USB-C Cable 1m (1 pc) @ ₹280. Subtotal ₹840, GST ₹151.20, delivery ₹49 → total ₹1,040.20. Delivery to 641012 in about 28 h.",
+   "Quote: 3 × USB-C Cable 1m (1 pc) @ ₹280. Subtotal ₹840, discount −₹84 (NEW10: −₹84), GST ₹136.08, delivery ₹49 → total ₹941.08. Delivery to 641012 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t186",
+  "expected": "decline_unserviceable",
+  "outcome": "no_merchant",
+  "correct": true,
+  "merchant_id": "m_030_mobicare_indore",
+  "session_id": "",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 1,
+  "latency_ms": 69.28150000749156,
+  "explanations": [],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t187",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_031_rasoi_ghar",
+  "session_id": "sess_64bef0ae608698",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 172.16399998869747,
+  "explanations": [
+   "कोटेशन: 2 × Dinner Set 24pc (1 pc) @ ₹2,865। उप-योग ₹5,730, GST ₹687.60, डिलीवरी ₹0 → कुल ₹6,417.60। 302017 तक लगभग 48 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t188",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_032_griha_essentials",
+  "session_id": "sess_9b14d36bf25bc4",
+  "gmv_paise": 257296,
+  "discount_paise": 11950,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 154.34549999190494,
+  "explanations": [
+   "Quote: 10 × Doormat (1 pc) @ ₹239. Subtotal ₹2,390, GST ₹286.80, delivery ₹30 → total ₹2,706.80. Delivery to 452010 in about 52 h.",
+   "Quote: 10 × Doormat (1 pc) @ ₹239. Subtotal ₹2,390, discount −₹119.50 (BULK5_PCT: −₹119.50), GST ₹272.46, delivery ₹30 → total ₹2,572.96. Delivery to 452010 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t189",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_033_steel_and_stone_kitchen",
+  "session_id": "sess_1af7972c5fb32d",
+  "gmv_paise": 177005,
+  "discount_paise": 17560,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 123.136899957899,
+  "explanations": [
+   "Quote: 2 × Knife Set 5pc (1 pc) @ ₹878. Subtotal ₹1,756, GST ₹210.72, delivery ₹0 → total ₹1,966.72. Delivery to 411045 in about 28 h.",
+   "Quote: 2 × Knife Set 5pc (1 pc) @ ₹878. Subtotal ₹1,756, discount −₹175.60 (NEW10: −₹175.60), GST ₹189.65, delivery ₹0 → total ₹1,770.05. Delivery to 411045 in about 28 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t190",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_034_anand_utensils",
+  "session_id": "sess_06098d399c230d",
+  "gmv_paise": 212020,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 125.78990001929924,
+  "explanations": [
+   "कोटेशन: 3 × Towel Set 2pc (2 pack) @ ₹648। उप-योग ₹1,944, GST ₹97.20, डिलीवरी ₹79 → कुल ₹2,120.20। 641012 तक लगभग 36 घंटे में।"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t191",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_035_home_kraft",
+  "session_id": "sess_8edcda49745d88",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 89.04270001221448,
+  "explanations": [
+   "Quote: 3 × Induction Cooktop (1 pc) @ ₹2,201. Subtotal ₹6,603, GST ₹1,188.54, delivery ₹0 → total ₹7,791.54. Delivery to 560034 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t192",
+  "expected": "decline_unserviceable",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_040_ghar_sajja",
+  "session_id": "sess_83e48534f95b93",
+  "gmv_paise": 502880,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 107.04890004126355,
+  "explanations": [
+   "Quote: 10 × Spice Box (1 pc) @ ₹449. Subtotal ₹4,490, GST ₹538.80, delivery ₹0 → total ₹5,028.80. Delivery to 560034 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": true,
+  "error": ""
+ },
+ {
+  "task_id": "t193",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_037_vimal_steel_mart",
+  "session_id": "sess_ba1565fe0ab952",
+  "gmv_paise": 90720,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 6,
+  "latency_ms": 194.5795999490656,
+  "explanations": [
+   "कोटेशन: 2 × Spice Box (1 pc) @ ₹405। उप-योग ₹810, GST ₹97.20, डिलीवरी ₹0 → कुल ₹907.20। 452010 तक लगभग 72 घंटे में।",
+   "यह संभव नहीं है: no pre-approved offer applies to this cart"
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t194",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_038_aangan_living",
+  "session_id": "sess_4a967fda751239",
+  "gmv_paise": 509656,
+  "discount_paise": 23950,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 169.52309996122494,
+  "explanations": [
+   "Quote: 10 × Laundry Basket (1 pc) @ ₹479. Subtotal ₹4,790, GST ₹574.80, delivery ₹0 → total ₹5,364.80. Delivery to 411045 in about 96 h.",
+   "Quote: 10 × Laundry Basket (1 pc) @ ₹479. Subtotal ₹4,790, discount −₹239.50 (BULK5_PCT: −₹239.50), GST ₹546.06, delivery ₹0 → total ₹5,096.56. Delivery to 411045 in about 96 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t195",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_039_pune_home_store",
+  "session_id": "sess_259377bd3a0afa",
+  "gmv_paise": 76150,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 125.53520000074059,
+  "explanations": [
+   "Quote: 1 × Towel Set 2pc (2 pack) @ ₹650. Subtotal ₹650, GST ₹32.50, delivery ₹79 → total ₹761.50. Delivery to 641012 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t196",
+  "expected": "decline_budget",
+  "outcome": "buyer_walked_budget",
+  "correct": true,
+  "merchant_id": "m_040_ghar_sajja",
+  "session_id": "sess_04f4de33f18b7e",
+  "gmv_paise": 0,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 2,
+  "latency_ms": 89.885100023821,
+  "explanations": [
+   "Quote: 2 × Spice Box (1 pc) @ ₹449. Subtotal ₹898, GST ₹107.76, delivery ₹0 → total ₹1,005.76. Delivery to 560034 in about 16 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t197",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_041_packwell_industries",
+  "session_id": "sess_696991c3883b5f",
+  "gmv_paise": 189647,
+  "discount_paise": 8325,
+  "negotiation_rounds": 1,
+  "steps": 6,
+  "latency_ms": 127.80829996336251,
+  "explanations": [
+   "Quote: 5 × Courier Bag 10x12 (100 pack) @ ₹333. Subtotal ₹1,665, GST ₹299.70, delivery ₹30 → total ₹1,994.70. Delivery to 302017 in about 52 h.",
+   "Quote: 5 × Courier Bag 10x12 (100 pack) @ ₹333. Subtotal ₹1,665, discount −₹83.25 (BULK5_PCT: −₹83.25), GST ₹284.72, delivery ₹30 → total ₹1,896.47. Delivery to 302017 in about 52 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t198",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_042_bharat_packaging_co",
+  "session_id": "sess_2226b06510defc",
+  "gmv_paise": 322140,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 151.95239998865873,
+  "explanations": [
+   "Quote: 10 × Food Container 500ml (50 pack) @ ₹273. Subtotal ₹2,730, GST ₹491.40, delivery ₹0 → total ₹3,221.40. Delivery to 452010 in about 24 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ },
+ {
+  "task_id": "t199",
+  "expected": "order",
+  "outcome": "order",
+  "correct": true,
+  "merchant_id": "m_043_safepack_supplies",
+  "session_id": "sess_3cdbf5d2e4a51d",
+  "gmv_paise": 1888,
+  "discount_paise": 0,
+  "negotiation_rounds": 0,
+  "steps": 5,
+  "latency_ms": 118.66530001861975,
+  "explanations": [
+   "Quote: 1 × Corrugated Box 12x10x8 (1 pc) @ ₹16. Subtotal ₹16, GST ₹2.88, delivery ₹0 → total ₹18.88. Delivery to 411045 in about 72 h."
+  ],
+  "declined_checks": [],
+  "rerouted": false,
+  "error": ""
+ }
+]
