@@ -1,0 +1,33 @@
+# local planning/tracking docs — never committed
+CLAUDE.md
+progress.md
+decision.md
+flow.md
+docs/
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.egg-info/
+.mypy_cache/
+.ruff_cache/
+data/runtime/
+*.db
+*.sqlite
+
+# node
+node_modules/
+console/dist/
+console/.vite/
+
+# misc
+.DS_Store
+Thumbs.db
+*.log
