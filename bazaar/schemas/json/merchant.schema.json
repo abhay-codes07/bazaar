@@ -1,0 +1,494 @@
+{
+  "$defs": {
+    "AgentTier": {
+      "enum": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "title": "AgentTier",
+      "type": "integer"
+    },
+    "FieldConfidence": {
+      "description": "Per-field confidence produced by the compiler; anything < ``review_threshold`` is queued.",
+      "properties": {
+        "name": {
+          "default": 1.0,
+          "title": "Name",
+          "type": "number"
+        },
+        "price": {
+          "default": 1.0,
+          "title": "Price",
+          "type": "number"
+        },
+        "unit": {
+          "default": 1.0,
+          "title": "Unit",
+          "type": "number"
+        },
+        "category": {
+          "default": 1.0,
+          "title": "Category",
+          "type": "number"
+        },
+        "gst": {
+          "default": 1.0,
+          "title": "Gst",
+          "type": "number"
+        },
+        "stock": {
+          "default": 1.0,
+          "title": "Stock",
+          "type": "number"
+        }
+      },
+      "title": "FieldConfidence",
+      "type": "object"
+    },
+    "MerchantPolicy": {
+      "properties": {
+        "review_first": {
+          "default": false,
+          "title": "Review First",
+          "type": "boolean"
+        },
+        "kill_switch": {
+          "default": false,
+          "title": "Kill Switch",
+          "type": "boolean"
+        },
+        "agent_allowlist": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Agent Allowlist",
+          "type": "array"
+        },
+        "min_tier_for_checkout": {
+          "$ref": "#/$defs/AgentTier",
+          "default": 2
+        },
+        "max_negotiation_rounds": {
+          "default": 2,
+          "maximum": 5,
+          "minimum": 0,
+          "title": "Max Negotiation Rounds",
+          "type": "integer"
+        },
+        "max_order_paise": {
+          "default": 5000000,
+          "minimum": 0,
+          "title": "Max Order Paise",
+          "type": "integer"
+        },
+        "refunds_per_hour": {
+          "default": 5,
+          "minimum": 0,
+          "title": "Refunds Per Hour",
+          "type": "integer"
+        },
+        "allowed_languages": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Languages",
+          "type": "array"
+        }
+      },
+      "title": "MerchantPolicy",
+      "type": "object"
+    },
+    "OfferRule": {
+      "description": "A pre-approved offer. The LLM may only *select* a rule id; it can never invent one.",
+      "properties": {
+        "rule_id": {
+          "title": "Rule Id",
+          "type": "string"
+        },
+        "version": {
+          "default": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "type": {
+          "$ref": "#/$defs/OfferType"
+        },
+        "value": {
+          "minimum": 0,
+          "title": "Value",
+          "type": "integer"
+        },
+        "min_cart_paise": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Min Cart Paise",
+          "type": "integer"
+        },
+        "min_qty": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Min Qty",
+          "type": "integer"
+        },
+        "segment": {
+          "$ref": "#/$defs/Segment",
+          "default": "any"
+        },
+        "max_discount_paise": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Max Discount Paise",
+          "type": "integer"
+        },
+        "stackable": {
+          "default": false,
+          "title": "Stackable",
+          "type": "boolean"
+        },
+        "valid_until": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Valid Until"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "rule_id",
+        "type",
+        "value"
+      ],
+      "title": "OfferRule",
+      "type": "object"
+    },
+    "OfferType": {
+      "enum": [
+        "percent",
+        "flat",
+        "free_delivery"
+      ],
+      "title": "OfferType",
+      "type": "string"
+    },
+    "Product": {
+      "properties": {
+        "sku": {
+          "title": "Sku",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "source_name": {
+          "default": "",
+          "title": "Source Name",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "unit": {
+          "$ref": "#/$defs/Unit",
+          "default": "pc"
+        },
+        "pack_size": {
+          "default": 1.0,
+          "title": "Pack Size",
+          "type": "number"
+        },
+        "price_paise": {
+          "minimum": 0,
+          "title": "Price Paise",
+          "type": "integer"
+        },
+        "stock": {
+          "minimum": 0,
+          "title": "Stock",
+          "type": "integer"
+        },
+        "variants": {
+          "items": {
+            "$ref": "#/$defs/Variant"
+          },
+          "title": "Variants",
+          "type": "array"
+        },
+        "synonyms": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Synonyms",
+          "type": "array"
+        },
+        "use_case_tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Use Case Tags",
+          "type": "array"
+        },
+        "buyer_highlights": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Buyer Highlights",
+          "type": "array"
+        },
+        "hsn": {
+          "default": "",
+          "title": "Hsn",
+          "type": "string"
+        },
+        "gst_rate_bp": {
+          "default": 0,
+          "maximum": 2800,
+          "minimum": 0,
+          "title": "Gst Rate Bp",
+          "type": "integer"
+        },
+        "cod_allowed": {
+          "default": true,
+          "title": "Cod Allowed",
+          "type": "boolean"
+        },
+        "lead_time_hours": {
+          "default": 24,
+          "minimum": 0,
+          "title": "Lead Time Hours",
+          "type": "integer"
+        },
+        "confidence": {
+          "$ref": "#/$defs/FieldConfidence"
+        },
+        "flags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Flags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "sku",
+        "name",
+        "category",
+        "price_paise",
+        "stock"
+      ],
+      "title": "Product",
+      "type": "object"
+    },
+    "Segment": {
+      "description": "Merchant-defined *business* segments. Never demographic.",
+      "enum": [
+        "any",
+        "new",
+        "returning",
+        "b2b"
+      ],
+      "title": "Segment",
+      "type": "string"
+    },
+    "Serviceability": {
+      "description": "Where and how the merchant delivers. Pincode prefixes are inclusive (``\"5600\"`` covers 560001-560099).",
+      "properties": {
+        "pincode_prefixes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pincode Prefixes",
+          "type": "array"
+        },
+        "pincodes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Pincodes",
+          "type": "array"
+        },
+        "delivery_fee_paise": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Delivery Fee Paise",
+          "type": "integer"
+        },
+        "free_delivery_above_paise": {
+          "default": 0,
+          "minimum": 0,
+          "title": "Free Delivery Above Paise",
+          "type": "integer"
+        },
+        "eta_hours": {
+          "default": 24,
+          "minimum": 0,
+          "title": "Eta Hours",
+          "type": "integer"
+        },
+        "cod_allowed": {
+          "default": true,
+          "title": "Cod Allowed",
+          "type": "boolean"
+        }
+      },
+      "title": "Serviceability",
+      "type": "object"
+    },
+    "Unit": {
+      "enum": [
+        "pc",
+        "kg",
+        "g",
+        "l",
+        "ml",
+        "dozen",
+        "pack",
+        "m",
+        "box"
+      ],
+      "title": "Unit",
+      "type": "string"
+    },
+    "Variant": {
+      "properties": {
+        "variant_id": {
+          "title": "Variant Id",
+          "type": "string"
+        },
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "price_paise": {
+          "minimum": 0,
+          "title": "Price Paise",
+          "type": "integer"
+        },
+        "stock": {
+          "minimum": 0,
+          "title": "Stock",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "variant_id",
+        "label",
+        "price_paise",
+        "stock"
+      ],
+      "title": "Variant",
+      "type": "object"
+    },
+    "Vertical": {
+      "enum": [
+        "grocery",
+        "apparel",
+        "electronics_accessories",
+        "home_kitchen",
+        "b2b_packaging"
+      ],
+      "title": "Vertical",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "merchant_id": {
+      "title": "Merchant Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "vertical": {
+      "$ref": "#/$defs/Vertical"
+    },
+    "city": {
+      "title": "City",
+      "type": "string"
+    },
+    "base_pincode": {
+      "title": "Base Pincode",
+      "type": "string"
+    },
+    "languages": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Languages",
+      "type": "array"
+    },
+    "gstin": {
+      "default": "",
+      "title": "Gstin",
+      "type": "string"
+    },
+    "serviceability": {
+      "$ref": "#/$defs/Serviceability"
+    },
+    "offer_rules": {
+      "items": {
+        "$ref": "#/$defs/OfferRule"
+      },
+      "title": "Offer Rules",
+      "type": "array"
+    },
+    "policy": {
+      "$ref": "#/$defs/MerchantPolicy"
+    },
+    "products": {
+      "items": {
+        "$ref": "#/$defs/Product"
+      },
+      "title": "Products",
+      "type": "array"
+    },
+    "source_kind": {
+      "default": "csv",
+      "enum": [
+        "csv",
+        "sheet",
+        "shopify",
+        "woocommerce",
+        "image",
+        "instagram",
+        "voice"
+      ],
+      "title": "Source Kind",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    }
+  },
+  "required": [
+    "merchant_id",
+    "name",
+    "vertical",
+    "city",
+    "base_pincode"
+  ],
+  "title": "Merchant",
+  "type": "object"
+}
