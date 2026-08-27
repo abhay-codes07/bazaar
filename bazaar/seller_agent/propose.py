@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 
 from bazaar.llm.base import LLM, wrap_untrusted
 from bazaar.llm.fake import _extract_data_blocks, handler
-from bazaar.schemas.models import Merchant
+from bazaar.schemas.models import Merchant, Unit
 from bazaar.seller_agent.intent import parse_intent
 
 PROPOSAL_SCHEMA: dict[str, Any] = {
@@ -102,8 +102,9 @@ def _fake_propose(system: str, user: str, schema: dict) -> dict:
         qty = int(intent.quantity) if intent.quantity else 1
         if merchant is not None:
             p = merchant.product(sku)
-            if p is not None and intent.unit is not None and intent.unit == p.unit and p.pack_size and p.pack_size > 1:
-                qty = max(1, int(round(intent.quantity / p.pack_size)))
+            measure = {Unit.KG, Unit.GRAM, Unit.LITRE, Unit.ML}
+            if p is not None and intent.unit is not None and intent.unit == p.unit and intent.unit in measure and p.pack_size and p.pack_size > 1:
+                qty = max(1, int(round(intent.quantity / p.pack_size)))  # "10 kg" of a 5 kg pack = 2 packs; "5 pack" stays 5
         return {"tool": "quote", "args": {"lines": [{"sku": sku, "qty": qty}], "pincode": pincode, "segment": state.get("segment", "any")}, "language": lang, "rationale": "buyer named an item and quantity"}
     if intent.matched_skus:
         return {"tool": "search_products", "args": {"query": intent.product_query or msg}, "language": lang, "rationale": "show matching products"}

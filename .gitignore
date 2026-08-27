@@ -31,3 +31,6 @@ console/.vite/
 .DS_Store
 Thumbs.db
 *.log
+
+# simulator scratch
+results/.tmp/

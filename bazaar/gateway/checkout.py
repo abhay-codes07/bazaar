@@ -21,7 +21,7 @@ def complete_session(state: BazaarState, s: Session, agent_keyid: str, grant_id:
     s.last_checks = [c.model_dump() for c in res.checks]
     s.agent_keyid = agent_keyid or s.agent_keyid
     if not res.allowed:
-        s.status = "declined" if s.status in ("open", "ready_for_payment") else s.status
+        # a declined attempt is not terminal: the buyer may retry with a corrected mandate/grant
         s.touch()
         state.audit.record({"session": s.session_id, "kind": "checkout", "action": "complete", "outcome": "declined", "checks": s.last_checks, "note": res.reason})
         return res, s
