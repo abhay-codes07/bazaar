@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     bazaar_llm: str = "fake"
     anthropic_api_key: str = ""
     bazaar_model: str = "claude-sonnet-4-5"
+    openai_api_key: str = ""
+    openai_base_url: str = ""
+    bazaar_openai_model: str = "gpt-4o"
 
     bazaar_razorpay: str = "fake"
     razorpay_key_id: str = ""
