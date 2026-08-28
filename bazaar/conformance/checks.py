@@ -48,6 +48,12 @@ def run_conformance(http, merchant_id: str | None = None) -> list[Check]:
     r = http.request("POST", "/bazaar/v1/discover", content=json.dumps({"intent": "anything", "pincode": "000000"}), headers={"content-type": "application/json"})
     add("discover_returns_list", r.status_code == 200 and isinstance(r.json().get("candidates"), list))
 
+    # protocol adapters
+    r = http.request("GET", f"/ucp/{mid}/.well-known/ucp")
+    add("ucp_merchant_profile", r.status_code == 200 and any(c.get("name") == "dev.ucp.shopping.checkout" for c in r.json().get("ucp", {}).get("capabilities", [])))
+    r = http.request("POST", f"/beckn/{mid}/search", content=json.dumps({"context": {"domain": "ONDC:RET10", "bap_id": "conf", "bap_uri": "https://conf.example", "transaction_id": "t", "message_id": "m"}, "message": {"intent": {}}}), headers={"content-type": "application/json"})
+    add("beckn_search_ack_and_callback", r.status_code == 200 and r.json().get("message", {}).get("ack", {}).get("status") == "ACK" and r.json().get("callback", {}).get("context", {}).get("action") == "on_search")
+
     # session state machine
     agent = BuyerAgentClient(http, operator="conformance")
     agent.register()
