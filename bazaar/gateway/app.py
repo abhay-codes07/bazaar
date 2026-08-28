@@ -34,13 +34,18 @@ from bazaar.compiler.ingest import read_csv_text
 from bazaar.compiler.readiness import readiness_score
 from bazaar.gateway.adapters.acp import router as acp_router
 from bazaar.gateway.auth import identify, require_admin
-from bazaar.gateway.checkout import approve_review, cancel_session, complete_session, session_summary
+from bazaar.gateway.checkout import (
+    approve_review,
+    cancel_session,
+    complete_session,
+    run_turn,
+    session_summary,
+)
 from bazaar.gateway.discover import DiscoverRequest, discover
-from bazaar.gateway.sessions import Session
+from bazaar.gateway.playground import router as playground_router
 from bazaar.gateway.state import BazaarState
 from bazaar.razorpay_client import verify_webhook_signature
 from bazaar.schemas.models import AgentTier, Merchant, MerchantPolicy, OfferRule, Product, Segment
-from bazaar.seller_agent.agent import BuyerContext
 from bazaar.trust.fairness_auditor import audit_merchant
 from bazaar.trust.http_sig import TAG_PAY
 from bazaar.trust.mandates import CheckoutMandate, PaymentMandate
@@ -220,21 +225,6 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"grant_id": grant_id, "revoked": True}
 
     # ------------------------------------------------------------------ sessions
-    def _run_turn(s: Session, message: str, caller_keyid: str, tier: AgentTier) -> dict[str, Any]:
-        agent = st.agent(s.merchant_id)
-        ctx = BuyerContext(agent_keyid=caller_keyid or s.agent_keyid, tier=tier, segment=s.segment, session_id=s.session_id)
-        r = agent.handle(message, ctx, s.state)
-        s.state = r.state
-        s.language = r.language or s.language
-        s.turns.append(r.model_dump(mode="json"))
-        if r.ok and r.action in ("quote", "apply_offer"):
-            s.quote = r.result
-            s.status = "ready_for_payment" if s.status in ("open", "ready_for_payment") else s.status
-        if r.ok and r.action == "reserve":
-            s.reservation_id = r.result["reservation_id"]
-        s.touch()
-        return {"session": session_summary(s), "turn": r.model_dump(mode="json")}
-
     @app.post("/bazaar/v1/sessions", status_code=201)
     async def create_session(body: SessionCreate, request: Request):
         caller = await identify(request, st)
@@ -244,7 +234,7 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         s = st.new_session(merchant_id=m.merchant_id, agent_keyid=caller.keyid, tier=caller.tier, segment=body.segment, language=body.language or "en")
         st.audit.record({"session": s.session_id, "kind": "session", "action": "create", "outcome": "ok", "note": f"agent={caller.keyid or 'unsigned'} tier={int(caller.tier)}"})
         if body.message:
-            return _run_turn(s, body.message, caller.keyid, caller.tier)
+            return run_turn(st, s, body.message, caller.keyid, caller.tier)
         return {"session": session_summary(s), "turn": None}
 
     @app.get("/bazaar/v1/sessions/{sid}")
@@ -264,7 +254,7 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
             raise HTTPException(409, detail={"error": f"session_{s.status}"})
         if s.agent_keyid and caller.keyid and caller.keyid != s.agent_keyid:
             raise HTTPException(403, detail={"error": "session_belongs_to_another_agent"})
-        return _run_turn(s, body.message, caller.keyid, caller.tier if caller.keyid else s.tier)
+        return run_turn(st, s, body.message, caller.keyid, caller.tier if caller.keyid else s.tier)
 
     @app.post("/bazaar/v1/sessions/{sid}/complete")
     async def complete(sid: str, request: Request, body: CompleteIn):
@@ -432,7 +422,14 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         sess = {s.session_id for s in st.sessions.values() if s.merchant_id == mid}
         rows = [e for e in st.audit.entries if e.get("session") in sess or (e.get("kind") == "merchant" and mid in str(e.get("note", "")))]
         ok, bad = st.audit.verify_chain()
-        return {"chain_ok": ok, "first_bad_seq": bad, "merkle_root": st.audit.merkle_root(), "entries": [{k: e.get(k) for k in ("seq", "at", "audit_id", "session", "kind", "action", "outcome", "note", "money", "hash")} for e in rows[-limit:]]}
+        def _row(e: dict[str, Any]) -> dict[str, Any]:
+            r = {k: e.get(k) for k in ("seq", "at", "audit_id", "session", "outcome", "note", "money", "hash")}
+            r["kind"] = e.get("kind") or "agent_turn"
+            r["action"] = e.get("action") or (e.get("proposal") or {}).get("tool") or ""
+            r["note"] = r["note"] or (", ".join(c["name"] for c in e.get("checks", []) if not c.get("passed")) and "failed: " + ", ".join(c["name"] for c in e.get("checks", []) if not c.get("passed")))
+            return r
+
+        return {"chain_ok": ok, "first_bad_seq": bad, "merkle_root": st.audit.merkle_root(), "entries": [_row(e) for e in rows[-limit:]]}
 
     @app.get("/bazaar/v1/merchants/{mid}/acp/feed")
     def acp_feed(mid: str, request: Request):
@@ -444,6 +441,7 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary()}
 
     app.include_router(acp_router)
+    app.include_router(playground_router)
     return app
 
 

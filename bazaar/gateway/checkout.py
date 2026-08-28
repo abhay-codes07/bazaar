@@ -6,6 +6,8 @@ from typing import Any
 
 from bazaar.gateway.sessions import Session
 from bazaar.gateway.state import BazaarState
+from bazaar.schemas.models import AgentTier
+from bazaar.seller_agent.agent import BuyerContext
 from bazaar.seller_agent.offer_engine import Quote
 from bazaar.trust.mandates import CheckoutMandate, PaymentMandate
 from bazaar.trust.policy import PolicyResult
@@ -64,3 +66,20 @@ def session_summary(s: Session) -> dict[str, Any]:
     d = s.public()
     d["turns"] = [{k: t.get(k) for k in ("action", "ok", "explanation", "audit_id", "language")} for t in s.turns]
     return d
+
+
+def run_turn(state: BazaarState, s: Session, message: str, caller_keyid: str, tier: AgentTier) -> dict[str, Any]:
+    """One buyer message through the merchant's Seller Agent; updates the session."""
+    agent = state.agent(s.merchant_id)
+    ctx = BuyerContext(agent_keyid=caller_keyid or s.agent_keyid, tier=tier, segment=s.segment, session_id=s.session_id)
+    r = agent.handle(message, ctx, s.state)
+    s.state = r.state
+    s.language = r.language or s.language
+    s.turns.append(r.model_dump(mode="json"))
+    if r.ok and r.action in ("quote", "apply_offer"):
+        s.quote = r.result
+        s.status = "ready_for_payment" if s.status in ("open", "ready_for_payment") else s.status
+    if r.ok and r.action == "reserve":
+        s.reservation_id = r.result["reservation_id"]
+    s.touch()
+    return {"session": session_summary(s), "turn": r.model_dump(mode="json")}
