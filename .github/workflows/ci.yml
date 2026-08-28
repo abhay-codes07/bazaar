@@ -20,13 +20,14 @@ jobs:
 
   console:
     runs-on: ubuntu-latest
-    if: ${{ hashFiles('console/package.json') != '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npm ci
+        working-directory: console
+      - run: npx tsc -b
         working-directory: console
       - run: npm run build
         working-directory: console
