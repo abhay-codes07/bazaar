@@ -23,3 +23,24 @@ def test_handler_registration_and_required_keys():
 
 def test_factory_default_is_fake():
     assert isinstance(get_llm(), FakeLLM)
+
+
+def test_openai_backend_requires_key_and_parses_tool_call(monkeypatch):
+    from types import SimpleNamespace
+
+    from bazaar.llm.openai_client import OpenAILLM
+
+    with pytest.raises(ValueError):
+        OpenAILLM(api_key="")
+    llm = OpenAILLM(api_key="sk-test")
+    captured = {}
+
+    def fake_create(**kw):
+        captured.update(kw)
+        call = SimpleNamespace(function=SimpleNamespace(arguments='{"name": "Basmati Rice", "category": "staples", "synonyms": [], "confidence": 0.9}'))
+        return SimpleNamespace(choices=[SimpleNamespace(message=SimpleNamespace(tool_calls=[call]))])
+
+    monkeypatch.setattr(llm._client.chat.completions, "create", fake_create)
+    out = llm.complete_json("normalize_product", "sys", "user", {"type": "object", "properties": {"name": {"type": "string"}}, "required": ["name"]})
+    assert out["name"] == "Basmati Rice"
+    assert captured["tool_choice"]["function"]["name"] == "answer_normalize_product" and captured["temperature"] == 0
