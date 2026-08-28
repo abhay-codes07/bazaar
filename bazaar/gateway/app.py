@@ -33,6 +33,8 @@ from bazaar.compiler.exports import (
 from bazaar.compiler.ingest import read_csv_text
 from bazaar.compiler.readiness import readiness_score
 from bazaar.gateway.adapters.acp import router as acp_router
+from bazaar.gateway.adapters.beckn import router as beckn_router
+from bazaar.gateway.adapters.ucp import router as ucp_router
 from bazaar.gateway.auth import identify, require_admin
 from bazaar.gateway.checkout import (
     approve_review,
@@ -142,7 +144,7 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
     # ------------------------------------------------------------------ manifests
     @app.get("/.well-known/bazaar")
     def network_manifest(request: Request):
-        return {"bazaar": {"version": API_VERSION, "network": "razorpay-bazaar", "services": {"discover": f"{base(request)}/bazaar/v1/discover", "sessions": f"{base(request)}/bazaar/v1/sessions", "agents": f"{base(request)}/bazaar/v1/agents/register", "acp": f"{base(request)}/acp"}, "merchants": len(st.merchants), "extensions": ["in.razorpay.bazaar.india"], "signature": {"alg": "ed25519", "spec": "RFC 9421", "tags": ["agent-browse", "agent-pay"]}}}
+        return {"bazaar": {"version": API_VERSION, "network": "razorpay-bazaar", "services": {"discover": f"{base(request)}/bazaar/v1/discover", "sessions": f"{base(request)}/bazaar/v1/sessions", "agents": f"{base(request)}/bazaar/v1/agents/register", "acp": f"{base(request)}/acp", "ucp": f"{base(request)}/ucp", "beckn": f"{base(request)}/beckn"}, "merchants": len(st.merchants), "extensions": ["in.razorpay.bazaar.india"], "signature": {"alg": "ed25519", "spec": "RFC 9421", "tags": ["agent-browse", "agent-pay"]}}}
 
     @app.get("/.well-known/ucp")
     def network_ucp(request: Request):
@@ -441,6 +443,8 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary()}
 
     app.include_router(acp_router)
+    app.include_router(ucp_router)
+    app.include_router(beckn_router)
     app.include_router(playground_router)
     return app
 

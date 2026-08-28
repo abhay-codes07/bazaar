@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-08-27T23:49:52Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-08-28T00:12:07Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -31,11 +31,11 @@ Lift: **+8 orders, +₹9,583 GMV (1.03×)**.
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 100.0%. Errors: 0.
 
-By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 112.3 ms · p95 204.8 ms (in-process, offline backend).
+By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 80.1 ms · p95 122.3 ms (in-process, offline backend).
 
 ## Trust
 
-- Audit entries 1018, hash chain intact: **True**, Merkle root `5b2e94f1e2f6a867…`
+- Audit entries 1018, hash chain intact: **True**, Merkle root `bb60a128030e79a7…`
 - Explanations present on 100.0% of agent turns
 - Grants issued 129, used 129; fairness-ledger entries 48, inconsistencies **0**
 
@@ -63,6 +63,6 @@ By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 112.3 ms · p95 2
 
 ## Fairness audit — 52/52 merchants pass, 185 rules, 159,840 cohort simulations, 0 findings
 
-## Protocol conformance — 22/22 checks, conformant: **True**
+## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 39.3 s._
+_Elapsed 37.9 s._
