@@ -38,9 +38,11 @@ class Task(BaseModel):
 
 
 def _qty_for(p, rng: random.Random) -> tuple[int, str]:
+    """(quantity in the buyer's words, unit). For kg/l lines sold in packs > 1 the quantity is a
+    whole number of packs, e.g. a 5 kg atta pack → '5 kg' or '10 kg', never '2 kg'."""
     if p.unit in (Unit.KG, Unit.LITRE):
-        q = rng.choice([1, 2, 5, 10])
-        return q, p.unit.value
+        packs = rng.choice([1, 2, 5, 10]) if p.pack_size <= 1 else rng.choice([1, 2, 3])
+        return int(packs * max(1, p.pack_size)), p.unit.value
     if p.unit in (Unit.GRAM, Unit.ML):
         n = rng.choice([1, 2, 4])
         return n, "pack"
@@ -60,7 +62,7 @@ def generate_tasks(merchants: list[Merchant], n: int = 200, seed: int = 20260828
             continue
         p = rng.choice(sellable)
         q, unit = _qty_for(p, rng)
-        lines_qty = q if unit != "pack" else q
+        lines_qty = max(1, int(round(q / p.pack_size))) if unit in ("kg", "l") and p.pack_size > 1 else q
         est = p.price_paise * lines_qty
         roll = rng.random()
         pin = m.base_pincode

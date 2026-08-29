@@ -9,16 +9,17 @@ Hard rules (enforced here, not by prompt):
 
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from pydantic import BaseModel, Field
 
 from bazaar.compiler.enrich import enrich_with_llm, normalize_with_llm
 from bazaar.compiler.ingest import RawRow, read_csv, read_shopify_json
-from bazaar.compiler.normalize import parse_gst, parse_price, parse_stock, parse_unit
+from bazaar.compiler.normalize import coerce_unit, parse_gst, parse_price, parse_stock, parse_unit
 from bazaar.compiler.sanitize import sanitize_text
 from bazaar.llm import LLM, get_llm
-from bazaar.schemas.models import FieldConfidence, Merchant, Product, Unit
+from bazaar.schemas.models import FieldConfidence, Merchant, Product
 
 REVIEW_THRESHOLD = 0.8
 
@@ -53,9 +54,14 @@ def _row_to_product(row: RawRow, idx: int, merchant_id: str, vertical: str, llm:
     norm = normalize_with_llm(llm, clean_name or src_name, desc, vertical)
     price_paise, p_conf = parse_price(row.get("price", ""))
     unit, pack, u_conf = parse_unit(row.get("unit", ""), norm["name"])
-    if u_conf < 0.8 and norm.get("unit_hint"):
+    hinted = coerce_unit(str(norm.get("unit_hint", "")))
+    if u_conf < 0.8 and hinted is not None:
         # blank/ambiguous cell: prefer the dictionary/model hint over keyword guess
-        unit, pack, u_conf = Unit(norm["unit_hint"]), float(norm.get("pack_hint") or 1.0), max(u_conf, 0.85)
+        try:
+            pack_hint = float(norm.get("pack_hint") or 1.0)
+        except (TypeError, ValueError):
+            pack_hint = 1.0
+        unit, pack, u_conf = hinted, pack_hint if pack_hint > 0 else 1.0, max(u_conf, 0.85)
     stock, s_conf = parse_stock(row.get("stock", ""))
     gst_bp, g_conf = parse_gst(row.get("gst", ""))
     enrich = enrich_with_llm(llm, norm["name"], norm["category"], desc)
@@ -103,13 +109,22 @@ def _row_to_product(row: RawRow, idx: int, merchant_id: str, vertical: str, llm:
     return product, reviews, modified
 
 
-def compile_rows(rows: list[RawRow], merchant: Merchant, llm: LLM | None = None) -> CompiledCatalog:
+def compile_rows(rows: list[RawRow], merchant: Merchant, llm: LLM | None = None, workers: int = 8) -> CompiledCatalog:
     llm = llm or get_llm()
     products: list[Product] = []
     queue: list[ReviewItem] = []
     stripped = 0
-    for i, row in enumerate(rows):
-        p, reviews, modified = _row_to_product(row, i, merchant.merchant_id, merchant.vertical.value, llm)
+
+    def one(i_row):
+        i, row = i_row
+        return _row_to_product(row, i, merchant.merchant_id, merchant.vertical.value, llm)
+
+    if llm.name == "fake" or workers <= 1:
+        outs = [one(x) for x in enumerate(rows)]
+    else:
+        with ThreadPoolExecutor(max_workers=workers) as ex:
+            outs = list(ex.map(one, enumerate(rows)))  # order preserved
+    for p, reviews, modified in outs:
         products.append(p)
         queue.extend(reviews)
         stripped += int(modified)
@@ -117,7 +132,7 @@ def compile_rows(rows: list[RawRow], merchant: Merchant, llm: LLM | None = None)
     return CompiledCatalog(merchant=m, review_queue=queue, stripped_injections=stripped, rows_in=len(rows))
 
 
-def compile_merchant(source: Path, merchant: Merchant, llm: LLM | None = None) -> CompiledCatalog:
+def compile_merchant(source: Path, merchant: Merchant, llm: LLM | None = None, workers: int = 8) -> CompiledCatalog:
     """``merchant`` carries identity/serviceability/policy; products are compiled from ``source``."""
     if source.suffix.lower() == ".csv":
         rows = read_csv(source)
@@ -125,4 +140,4 @@ def compile_merchant(source: Path, merchant: Merchant, llm: LLM | None = None) -
         rows = read_shopify_json(source)
     else:
         raise ValueError(f"unsupported source type: {source.suffix}")
-    return compile_rows(rows, merchant, llm)
+    return compile_rows(rows, merchant, llm, workers)

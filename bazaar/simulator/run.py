@@ -24,6 +24,7 @@ from bazaar.conformance.checks import run_conformance
 from bazaar.conformance.checks import summarize as summarize_conf
 from bazaar.gateway import BazaarState, create_app
 from bazaar.gateway.client import BuyerAgentClient
+from bazaar.llm import FakeLLM, get_llm
 from bazaar.settings import ROOT, get_settings
 from bazaar.simulator.buyer_agent import TaskResult, run_task, summarize
 from bazaar.simulator.redteam import run_redteam, summarize_redteam
@@ -32,8 +33,8 @@ from bazaar.synthetic import load_corpus
 from bazaar.trust.fairness_auditor import audit_merchant
 
 
-def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True) -> tuple[BazaarState, TestClient, BuyerAgentClient]:
-    st = BazaarState(audit_path=tmp / "audit.jsonl")
+def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True, llm=None) -> tuple[BazaarState, TestClient, BuyerAgentClient]:
+    st = BazaarState(audit_path=tmp / "audit.jsonl", llm=llm)
     for m in merchants:
         mm = m.model_copy(deep=True)
         if fresh_stock:
@@ -48,7 +49,7 @@ def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True) -> tuple[Bazaar
     return st, client, buyer
 
 
-def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True) -> dict[str, Any]:
+def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True, max_merchants: int = 0) -> dict[str, Any]:
     t0 = time.time()
     corpus_dir = corpus_dir or get_settings().data_dir / "synthetic"
     out_dir = out_dir or ROOT / "results"
@@ -58,10 +59,24 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     for f in tmp.glob("*.jsonl"):
         f.unlink()
     merchants = load_corpus(corpus_dir)
-    report: dict[str, Any] = {"version": __version__, "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "backend": {"llm": get_settings().bazaar_llm, "payments": get_settings().bazaar_razorpay}}
+    if max_merchants:
+        merchants = merchants[:max_merchants]
+    s = get_settings()
+    llm = get_llm()
+    backend: dict[str, Any] = {"llm": s.bazaar_llm, "payments": s.bazaar_razorpay}
+    if s.bazaar_llm == "openai":
+        backend.update({"model": s.bazaar_openai_model, "compile_model": s.bazaar_openai_model_compile, "cache": s.bazaar_llm_cache})
+    report: dict[str, Any] = {"version": __version__, "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "backend": backend}
 
-    # ---- compiler
-    pairs = [(compile_merchant(corpus_dir / m.merchant_id / "source.csv", m.model_copy(update={"products": []})), m) for m in merchants]
+    def log(msg: str) -> None:
+        print(f"[{time.time() - t0:6.0f}s] {msg}", file=sys.stderr, flush=True)
+
+    # ---- compiler (parallel for real backends; cached)
+    pairs = []
+    for i, m in enumerate(merchants, 1):
+        pairs.append((compile_merchant(corpus_dir / m.merchant_id / "source.csv", m.model_copy(update={"products": []}), llm, workers=s.bazaar_llm_workers), m))
+        if i % 10 == 0 or i == len(merchants):
+            log(f"compiled {i}/{len(merchants)} merchants")
     ev = evaluate(pairs)
     readiness = [readiness_score(c.merchant).score for c, _ in pairs]
     report["compiler"] = {**ev.model_dump(), "readiness_mean": round(statistics.mean(readiness), 1), "readiness_min": min(readiness), "readiness_truth_mean": round(statistics.mean(readiness_score(m).score for m in merchants), 1)}
@@ -74,8 +89,12 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
             p.stock = max(p.stock, 25)
         sim_merchants.append(mm)
     tasks = generate_tasks(sim_merchants, n_tasks)
-    st, client, buyer = _fresh_state(sim_merchants, tmp, fresh_stock=False)
-    results: list[TaskResult] = [run_task(buyer, t, st) for t in tasks]
+    st, client, buyer = _fresh_state(sim_merchants, tmp, fresh_stock=False, llm=llm)
+    results: list[TaskResult] = []
+    for i, t in enumerate(tasks, 1):
+        results.append(run_task(buyer, t, st))
+        if i % 25 == 0 or i == len(tasks):
+            log(f"tasks {i}/{len(tasks)} · orders so far {sum(r.outcome == 'order' for r in results)}")
     summ = summarize(results)
     by_lang: dict[str, list[bool]] = {}
     for t, r in zip(tasks, results, strict=True):
@@ -88,7 +107,9 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     report["transactions"] = summ
     report["trust"] = {"audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "merkle_root": st.audit.merkle_root(), "ledger": st.ledger.summary(), "grants_issued": sum(1 for e in st.grant_events if e["event"] == "grant.issued"), "grants_used": sum(1 for e in st.grant_events if e["event"] == "grant.used"), "explanations_present": round(sum(1 for s in st.sessions.values() for t in s.turns if t["explanation"]) / max(1, sum(len(s.turns) for s in st.sessions.values())), 3)}
 
-    st_b, client_b, buyer_b = _fresh_state(sim_merchants, tmp / "baseline", fresh_stock=False)
+    # the baseline is a static price list with no agent behind it: no model calls needed
+    st_b, client_b, buyer_b = _fresh_state(sim_merchants, tmp / "baseline", fresh_stock=False, llm=FakeLLM())
+    log("baseline done")
     base_results = [run_task(buyer_b, t, st_b, baseline=True) for t in tasks]
     base = summarize(base_results)
     report["baseline_no_bazaar"] = {k: base[k] for k in ("orders", "task_to_order_rate", "possible_completion_rate", "gmv_paise")}
@@ -97,8 +118,9 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
 
     # ---- red team (fresh state so the transaction numbers stay clean)
     if redteam:
-        st_r, client_r, buyer_r = _fresh_state(merchants, tmp / "redteam")
+        st_r, client_r, buyer_r = _fresh_state(merchants, tmp / "redteam", llm=llm)
         cases = run_redteam(buyer_r, st_r)
+        log(f"red team {sum(c.passed for c in cases)}/{len(cases)}")
         report["redteam"] = {**summarize_redteam(cases), "detail": [c.model_dump() for c in cases]}
 
     # ---- fairness across all merchants
@@ -112,6 +134,8 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
         checks = run_conformance(client_c)
         report["conformance"] = {**summarize_conf(checks), "detail": [c.model_dump() for c in checks]}
 
+    if hasattr(llm, "stats"):
+        report["backend"]["llm_cache"] = llm.stats()
     report["elapsed_s"] = round(time.time() - t0, 1)
     (out_dir / "results.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     (out_dir / "RESULTS.md").write_text(render_markdown(report), encoding="utf-8")
@@ -131,7 +155,7 @@ def render_markdown(r: dict[str, Any]) -> str:
         "",
         f"Generated {r['generated_at']} by `python -m bazaar.simulator.run` (v{r['version']}, llm=`{r['backend']['llm']}`, payments=`{r['backend']['payments']}`). Nothing here is hand-edited.",
         "",
-        "## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)",
+        f"## Catalog compiler ({c['merchants']} merchants, messy CSV → agent-readable catalog)",
         "",
         "| field | accuracy |",
         "|---|---|",
@@ -182,8 +206,9 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--no-redteam", action="store_true")
     p.add_argument("--no-fairness", action="store_true")
     p.add_argument("--no-conformance", action="store_true")
+    p.add_argument("--merchants", type=int, default=0, help="limit the corpus (cheap trial runs on paid backends)")
     a = p.parse_args(argv)
-    rep = run_all(a.tasks, Path(a.out), redteam=not a.no_redteam, fairness=not a.no_fairness, conformance=not a.no_conformance)
+    rep = run_all(a.tasks, Path(a.out), redteam=not a.no_redteam, fairness=not a.no_fairness, conformance=not a.no_conformance, max_merchants=a.merchants)
     t = rep["transactions"]
     print(f"tasks={t['tasks']} orders={t['orders']} gmv={t['gmv_paise'] / 100:.0f} accuracy={t['accuracy']} errors={t['errors']}")
     if "redteam" in rep:

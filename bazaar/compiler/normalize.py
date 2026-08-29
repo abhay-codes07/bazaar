@@ -105,3 +105,14 @@ def parse_gst(cell: str) -> tuple[int, float]:
 
 def strip_parenthetical(name: str) -> str:
     return re.sub(r"\s*\(.*?\)\s*", " ", name).strip()
+
+
+def coerce_unit(hint: str) -> Unit | None:
+    """Accept any spelling a model might return ('litre', 'Kg', 'pieces', 'packet') → Unit."""
+    h = (hint or "").strip().lower().rstrip(".")
+    if not h:
+        return None
+    try:
+        return Unit(h)
+    except ValueError:
+        return _UNIT_MAP.get(h)

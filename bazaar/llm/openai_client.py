@@ -14,20 +14,21 @@ from bazaar.llm.base import LLM, LLMError
 class OpenAILLM(LLM):
     name = "openai"
 
-    def __init__(self, api_key: str, model: str = "gpt-4o", base_url: str = ""):
+    def __init__(self, api_key: str, model: str = "gpt-4o", base_url: str = "", task_models: dict[str, str] | None = None):
         if not api_key:
             raise ValueError("OPENAI_API_KEY is required for BAZAAR_LLM=openai")
         from openai import OpenAI
 
         self._client = OpenAI(api_key=api_key, base_url=base_url or None)
         self._model = model
+        self._task_models = dict(task_models or {})  # e.g. {"normalize_product": "gpt-4o-mini"}
 
     def complete_json(self, task: str, system: str, user: str, schema: dict[str, Any]) -> dict[str, Any]:
         fn_name = f"answer_{task}"
         tool = {"type": "function", "function": {"name": fn_name, "description": f"Return the structured answer for task '{task}'.", "parameters": schema}}
         try:
             resp = self._client.chat.completions.create(
-                model=self._model,
+                model=self._task_models.get(task, self._model),
                 temperature=0,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
                 tools=[tool],

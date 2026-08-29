@@ -10,6 +10,7 @@ Every turn returns ``{result, explanation, policy_checks[], audit_id}``.
 
 from __future__ import annotations
 
+import re
 import secrets
 from datetime import datetime, timezone
 from typing import Any, Protocol
@@ -65,6 +66,41 @@ class MemoryAudit:
 
 
 SIDE_EFFECT_TOOLS = {"reserve", "apply_offer"}
+READ_ONLY_TOOLS = {"search_products", "get_availability", "check_serviceability"}
+MAX_STEPS = 3
+_QTY_RX = re.compile(r"(?i)\b\d+(?:\.\d+)?\s*(kg|kilo|g|gm|gram|l|ltr|litre|pc|pcs|piece|pack|packs|packet|dozen|box)\b|\b\d+\s*(x|\u00d7)\s*\w")
+
+
+def normalize_args(tool: str, args: dict[str, Any], state: dict[str, Any]) -> dict[str, Any]:
+    """Accept the argument shapes real models produce and map them to the tool contract."""
+    a = dict(args or {})
+    if tool == "quote":
+        lines = a.get("lines") or a.get("items") or a.get("cart") or []
+        if not lines and (a.get("sku") or a.get("product_id") or a.get("item_id")):
+            lines = [{"sku": a.get("sku") or a.get("product_id") or a.get("item_id"), "qty": a.get("qty") or a.get("quantity") or 1}]
+        norm = []
+        for ln in lines:
+            if not isinstance(ln, dict):
+                continue
+            sku = ln.get("sku") or ln.get("product_id") or ln.get("item_id") or ln.get("id")
+            qty = ln.get("qty") or ln.get("quantity") or ln.get("count") or 1
+            try:
+                qty = max(1, int(round(float(qty))))
+            except (TypeError, ValueError):
+                qty = 1
+            if sku:
+                norm.append({"sku": str(sku), "qty": qty})
+        a["lines"] = norm
+        a["pincode"] = str(a.get("pincode") or a.get("postal_code") or state.get("pincode") or "")
+        a["segment"] = str(a.get("segment") or state.get("segment") or "any")
+    elif tool in ("check_serviceability", "get_availability"):
+        a["sku"] = str(a.get("sku") or a.get("product_id") or a.get("item_id") or "")
+        a["pincode"] = str(a.get("pincode") or a.get("postal_code") or state.get("pincode") or "")
+        if tool == "get_availability":
+            a["qty"] = a.get("qty") or a.get("quantity") or 1
+    elif tool in ("apply_offer", "reserve"):
+        a["quote_id"] = str(a.get("quote_id") or state.get("quote_id") or "")
+    return a
 
 
 class SellerAgent:
@@ -106,21 +142,22 @@ class SellerAgent:
         return checks
 
     # ------------------------------------------------------------------ execute
-    def execute(self, prop: Proposal) -> ToolResult:
+    def execute(self, prop: Proposal, state: dict[str, Any] | None = None) -> ToolResult:
         t = self.tools
-        a = prop.args
+        a = normalize_args(prop.tool, prop.args, state or {})
+        prop.args = a
         if prop.tool == "search_products":
             return t.search_products(a.get("query", ""), int(a.get("limit", 5)))
         if prop.tool == "get_availability":
-            return t.get_availability(a["sku"], int(a.get("qty", 1)))
+            return t.get_availability(a.get("sku", ""), int(a.get("qty", 1)))
         if prop.tool == "check_serviceability":
             return t.check_serviceability(a.get("pincode", ""), a.get("sku", ""))
         if prop.tool == "quote":
             return t.quote(a.get("lines", []), a.get("pincode", ""), a.get("segment", "any"), a.get("rule_ids"))
         if prop.tool == "apply_offer":
-            return t.apply_offer(a["quote_id"], prop.rule_id or a.get("rule_id", ""))
+            return t.apply_offer(a.get("quote_id", ""), prop.rule_id or a.get("rule_id", ""))
         if prop.tool == "reserve":
-            return t.reserve(a["quote_id"])
+            return t.reserve(a.get("quote_id", ""))
         if prop.tool == "decline":
             return ToolResult(ok=False, tool="decline", reason=a.get("reason", "request declined"))
         if prop.tool == "clarify":
@@ -131,17 +168,27 @@ class SellerAgent:
     def handle(self, message: str, ctx: BuyerContext, state: dict[str, Any] | None = None) -> AgentResponse:
         state = dict(state or {})
         state.setdefault("segment", ctx.segment.value)
-        prop = propose(self.llm, self.m, message, state)
-        lang = prop.language or "en"
-        checks = self.verify(prop, ctx, state)
-        failed = [c for c in checks if not c.passed]
-        if failed:
-            reason = "; ".join(f"{c.name}" + (f" ({c.detail})" if c.detail else "") for c in failed)
-            aid = self.audit.record({"session": ctx.session_id, "proposal": prop.model_dump(), "checks": [c.model_dump() for c in checks], "outcome": "declined"})
-            return AgentResponse(ok=False, action=prop.tool, explanation=explain.decline_text(reason, lang), policy_checks=checks, audit_id=aid, language=lang, state=state)
-
-        res = self.execute(prop)
-        aid = self.audit.record({"session": ctx.session_id, "proposal": prop.model_dump(), "checks": [c.model_dump() for c in checks], "outcome": "ok" if res.ok else "failed", "tool_result": res.model_dump(mode="json")})
+        state.pop("observations", None)
+        # agentic loop: read-only tools may run first (observe), then the model proposes again;
+        # side-effect tools end the turn. Bounded so a looping model cannot spin.
+        for step in range(MAX_STEPS):
+            prop = propose(self.llm, self.m, message, state)
+            prop.args = normalize_args(prop.tool, prop.args, state)
+            lang = prop.language or "en"
+            checks = self.verify(prop, ctx, state)
+            failed = [c for c in checks if not c.passed]
+            if failed:
+                reason = "; ".join(f"{c.name}" + (f" ({c.detail})" if c.detail else "") for c in failed)
+                aid = self.audit.record({"session": ctx.session_id, "proposal": prop.model_dump(), "checks": [c.model_dump() for c in checks], "outcome": "declined"})
+                state.pop("observations", None)
+                return AgentResponse(ok=False, action=prop.tool, explanation=explain.decline_text(reason, lang), policy_checks=checks, audit_id=aid, language=lang, state=state)
+            res = self.execute(prop, state)
+            aid = self.audit.record({"session": ctx.session_id, "proposal": prop.model_dump(), "checks": [c.model_dump() for c in checks], "outcome": "ok" if res.ok else "failed", "tool_result": res.model_dump(mode="json"), "step": step})
+            observe = prop.tool in READ_ONLY_TOOLS and res.ok and step < MAX_STEPS - 1 and self._worth_continuing(prop, res, message)
+            if not observe:
+                break
+            state.setdefault("observations", []).append({"tool": prop.tool, "args": prop.args, "result": res.result})
+        state.pop("observations", None)
         text = self._explain(prop, res, lang)
         # carry forward what the next turn needs
         if res.ok and prop.tool in ("quote", "apply_offer"):
@@ -161,6 +208,17 @@ class SellerAgent:
         if res.ok and prop.tool == "reserve":
             state["reservation_id"] = res.result["reservation_id"]
         return AgentResponse(ok=res.ok, action=prop.tool, result=res.result, explanation=text, policy_checks=checks, audit_id=aid, language=lang, state=state)
+
+    def _worth_continuing(self, prop: Proposal, res: ToolResult, message: str) -> bool:
+        """After a read-only tool, should the model get another step this turn?"""
+        if prop.tool == "check_serviceability":
+            # a delivery question with a quantity is really a quote request; a negative answer ends the turn
+            return bool(res.result.get("serves")) and bool(_QTY_RX.search(message))
+        if prop.tool == "get_availability":
+            return bool(res.result.get("sufficient")) and bool(_QTY_RX.search(message))
+        if prop.tool == "search_products":
+            return bool(res.result.get("products")) and bool(_QTY_RX.search(message))
+        return False
 
     def _explain(self, prop: Proposal, res: ToolResult, lang: str) -> str:
         from bazaar.seller_agent.offer_engine import Quote
