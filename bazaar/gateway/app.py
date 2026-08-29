@@ -446,7 +446,27 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
     app.include_router(ucp_router)
     app.include_router(beckn_router)
     app.include_router(playground_router)
+    _mount_console(app)
     return app
+
+
+def _mount_console(app: FastAPI) -> None:
+    """Serve the built merchant console (console/dist) from the gateway so one process = one URL.
+    API routes are registered first, so they take precedence; anything else falls back to the SPA."""
+    from fastapi.staticfiles import StaticFiles
+    from starlette.responses import FileResponse
+
+    dist = Path(__file__).resolve().parents[2] / "console" / "dist"
+    if not (dist / "index.html").exists():
+        return
+    app.mount("/assets", StaticFiles(directory=dist / "assets"), name="console-assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def console_spa(path: str):
+        target = dist / path
+        if path and target.is_file():
+            return FileResponse(target)
+        return FileResponse(dist / "index.html")
 
 
 def default_app() -> FastAPI:

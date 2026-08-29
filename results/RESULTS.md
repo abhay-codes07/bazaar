@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-08-28T00:12:07Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-08-29T11:48:22Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -16,28 +16,28 @@ Generated 2026-08-28T00:12:07Z by `python -m bazaar.simulator.run` (v0.1.0, llm=
 
 Review rate 0.217 (items queued for the merchant instead of guessed) · injections neutralised **26/26** · readiness mean 96.5 (min 91).
 
-## Transactions (200 buyer tasks, 112 possible / 88 impossible by construction)
+## Transactions (200 buyer tasks, 111 possible / 89 impossible by construction)
 
 | metric | Bazaar | baseline: static price list (same-city only, no serviceability answers, no offers) |
 |---|---|---|
-| orders | **129** | 121 |
-| task → order | 64.5% | 60.5% |
-| completion on possible tasks | 100.0% | 92.9% |
-| GMV | **₹375,694** | ₹366,112 |
-| discounts given (all rule-bounded) | ₹9,060 | — |
-| negotiation rounds | 54 | 0 |
+| orders | **127** | 121 |
+| task → order | 63.5% | 60.5% |
+| completion on possible tasks | 100.0% | 94.6% |
+| GMV | **₹368,596** | ₹371,276 |
+| discounts given (all rule-bounded) | ₹8,885 | — |
+| negotiation rounds | 59 | 0 |
 
-Lift: **+8 orders, +₹9,583 GMV (1.03×)**.
+Lift: **+6 orders, +₹-2,680 GMV (0.99×)**.
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 100.0%. Errors: 0.
 
-By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 80.1 ms · p95 122.3 ms (in-process, offline backend).
+By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 40.7 ms · p95 52.1 ms (in-process, offline backend).
 
 ## Trust
 
-- Audit entries 1018, hash chain intact: **True**, Merkle root `bb60a128030e79a7…`
+- Audit entries 1016, hash chain intact: **True**, Merkle root `b4f5f5098bee96cd…`
 - Explanations present on 100.0% of agent turns
-- Grants issued 129, used 129; fairness-ledger entries 48, inconsistencies **0**
+- Grants issued 127, used 127; fairness-ledger entries 50, inconsistencies **0**
 
 ## Red team — 17/17 passed (100.0%)
 
@@ -65,4 +65,4 @@ By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 80.1 ms · p95 12
 
 ## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 37.9 s._
+_Elapsed 19.1 s._
