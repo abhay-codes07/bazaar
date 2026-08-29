@@ -98,3 +98,10 @@ def test_readiness_score_rewards_complete_catalogs(merchants):
     bare = merchants[0].model_copy(update={"offer_rules": [], "serviceability": merchants[0].serviceability.model_copy(update={"pincode_prefixes": []})})
     r = readiness_score(bare)
     assert r.score <= truth.score - 25 and len(r.fixes) >= 2
+
+
+def test_model_unit_hint_spellings_are_coerced():
+    from bazaar.compiler.normalize import coerce_unit
+
+    assert coerce_unit("litre") == Unit.LITRE and coerce_unit("Kg") == Unit.KG and coerce_unit("pieces") == Unit.PIECE
+    assert coerce_unit("packet") == Unit.PACK and coerce_unit("l") == Unit.LITRE and coerce_unit("") is None and coerce_unit("banana") is None

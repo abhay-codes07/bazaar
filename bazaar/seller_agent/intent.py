@@ -26,7 +26,9 @@ _UNIT_WORDS = {
     "pack": Unit.PACK, "packs": Unit.PACK, "packet": Unit.PACK, "पैकेट": Unit.PACK, "dozen": Unit.DOZEN, "दर्जन": Unit.DOZEN, "box": Unit.BOX, "boxes": Unit.BOX,
 }
 _UNIT_RX = "|".join(sorted(map(re.escape, _UNIT_WORDS), key=len, reverse=True))
-_QTY_RX = re.compile(rf"(?i)(\d+(?:\.\d+)?|{'|'.join(map(re.escape, _HI_NUM))})\s*(?:x\s*)?({_UNIT_RX})?\b")
+# NB: no trailing \b — Devanagari vowel signs (e.g. the ो in किलो) are combining marks, which Python's
+# \w does not cover, so a word boundary would never match after a Hindi unit. Use an explicit lookahead.
+_QTY_RX = re.compile(rf"(?i)(\d+(?:\.\d+)?|{'|'.join(map(re.escape, _HI_NUM))})\s*(?:x\s*)?({_UNIT_RX})?(?=[\s,.;:!?)]|$)")
 _PIN_RX = re.compile(r"(?<!\d)(\d{6})(?!\d)")
 _BUDGET_RX = re.compile(r"(?i)(?:budget|bajat|बजट|under|below|max|within|upto|up to|₹|rs\.?|inr)\s*(\d{2,7})|(\d{2,7})\s*(?:rupees|rupaye|rs|₹|ke andar|ke under|se kam|tak ka|तक|के अंदर|रुपये)")
 _DEADLINE_RX = re.compile(r"(?i)\b(today|aaj|आज|tonight)\b|\b(tomorrow|kal|कल)\b|\b(\d{1,2})\s*(?:hours?|hrs|ghante|घंटे)\b|\b(\d)\s*(?:days?|din|दिन)\b")

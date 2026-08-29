@@ -10,6 +10,11 @@ from bazaar.schemas.models import Merchant
 FIELDS = ("name", "price", "unit", "pack_size", "category", "gst", "stock")
 
 
+def _norm(s: str) -> str:
+    """Case/punctuation-insensitive comparison: "Men's T-Shirt" == "men's t shirt"."""
+    return " ".join("".join(ch if ch.isalnum() else " " for ch in s.casefold()).split())
+
+
 class EvalReport(BaseModel):
     merchants: int = 0
     products: int = 0
@@ -35,11 +40,11 @@ def evaluate(pairs: list[tuple[CompiledCatalog, Merchant]]) -> EvalReport:
             if t is None:
                 continue
             total += 1
-            hits["name"] += p.name == t.name
+            hits["name"] += _norm(p.name) == _norm(t.name)
             hits["price"] += p.price_paise == t.price_paise
             hits["unit"] += p.unit == t.unit
             hits["pack_size"] += p.pack_size == t.pack_size
-            hits["category"] += p.category == t.category
+            hits["category"] += _norm(p.category) == _norm(t.category)
             hits["gst"] += p.gst_rate_bp == t.gst_rate_bp
             hits["stock"] += p.stock == t.stock
             if "poisoned_source" in t.flags:
