@@ -24,6 +24,13 @@ class OpenAILLM(LLM):
         self._task_models = dict(task_models or {})  # e.g. {"normalize_product": "gpt-4o-mini"}
 
     def complete_json(self, task: str, system: str, user: str, schema: dict[str, Any]) -> dict[str, Any]:
+        return self._call(task, system, user, schema)
+
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        content = [{"type": "text", "text": user}, {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{image_b64}", "detail": "high"}}]
+        return self._call(task, system, content, schema)
+
+    def _call(self, task: str, system: str, user: Any, schema: dict[str, Any]) -> dict[str, Any]:
         fn_name = f"answer_{task}"
         tool = {"type": "function", "function": {"name": fn_name, "description": f"Return the structured answer for task '{task}'.", "parameters": schema}}
         try:

@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-09-03T17:36:05Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`openai`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-09-03T18:28:58Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`openai`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -31,13 +31,24 @@ Lift: **+6 orders, −₹2,680 GMV (0.99×)**. The extra completions were bought
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 99.0%. Errors: 0.
 
-By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 117.2 ms · p95 3231.0 ms (in-process, llm=`openai`).
+By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 51.3 ms · p95 2972.5 ms (in-process, llm=`openai`).
 
 ## Trust
 
-- Audit entries 1267, hash chain intact: **True**, Merkle root `c7debaf9e3111f01…`
+- Audit entries 1267, hash chain intact: **True**, Merkle root `e6a481dea9bd4e0d…`
 - Explanations present on 100.0% of agent turns
 - Grants issued 127, used 127; fairness-ledger entries 50, inconsistencies **0**
+
+## False-positive cost — policy strictness sweep
+
+Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks the gate refused; lost GMV is the main-run value of every order the tighter cap prevented (reroutes included). The first row is the default cap and must match the table above.
+
+| per-order cap | orders | wrong declines on possible tasks | lost GMV | wrong orders on impossible tasks |
+|---|---|---|---|---|
+| ₹50,000 (default) | 127 | **0** | ₹0 | 0 |
+| ₹10,000 (Reserve Pay block) | 120 | **5** | ₹142,278 | 0 |
+| ₹5,000 | 105 | **15** | ₹241,882 | 0 |
+| ₹2,000 | 84 | **35** | ₹299,366 | 0 |
 
 ## Red team — 17/17 passed (100.0%)
 
@@ -65,4 +76,4 @@ By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 117.2 ms · p95 323
 
 ## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 233.3 s._
+_Elapsed 1086.6 s._

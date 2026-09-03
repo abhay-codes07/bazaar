@@ -48,6 +48,21 @@ class CachedLLM(LLM):
             self._db.commit()
         return out
 
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        digest = hashlib.sha256(image_b64.encode("ascii")).hexdigest()
+        key = self._key(task, system, f"{user}\x1fimage:{mime}:{digest}", schema)
+        with self._lock:
+            row = self._db.execute("SELECT response FROM calls WHERE key = ?", (key,)).fetchone()
+        if row:
+            self.hits += 1
+            return json.loads(row[0])
+        out = self.inner.complete_json_image(task, system, user, image_b64, mime, schema)
+        self.misses += 1
+        with self._lock:
+            self._db.execute("INSERT OR REPLACE INTO calls (key, task, model, response) VALUES (?, ?, ?, ?)", (key, task, getattr(self.inner, "_model", ""), json.dumps(out, ensure_ascii=False)))
+            self._db.commit()
+        return out
+
     def stats(self) -> dict[str, int]:
         with self._lock:
             n = self._db.execute("SELECT COUNT(*) FROM calls").fetchone()[0]

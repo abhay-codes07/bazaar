@@ -78,6 +78,9 @@ class PolicyEngine:
             cs.append(Check(name="agent_order_cap", passed=quote.total_paise <= ident.max_order_paise, detail=f"₹{quote.total_paise / 100:.0f} ≤ ₹{ident.max_order_paise / 100:.0f}"))
             cs.append(Check(name="agent_rate_limit", passed=self.rate.hit(f"chk:{agent_keyid}", ident.rate_limit_per_min, 60), detail=f"{ident.rate_limit_per_min}/min"))
         cs.append(Check(name="merchant_order_cap", passed=quote.total_paise <= pol.max_order_paise, detail=f"₹{quote.total_paise / 100:.0f} ≤ ₹{pol.max_order_paise / 100:.0f}"))
+        if quote.total_paise > pol.human_present_above_paise:
+            # RBI e-mandate framework (Apr 2026): no AFA-free debit above ₹15,000; CERT-In: human-in-the-loop above a threshold
+            cs.append(Check(name="human_present_above_threshold", passed=human_confirmation, detail=f"₹{quote.total_paise / 100:.0f} > ₹{pol.human_present_above_paise / 100:.0f}: a person must confirm this amount"))
         cs.append(Check(name="pincode_serviceable", passed=bool(quote.pincode) and m.serviceability.serves(quote.pincode), detail=quote.pincode or "missing"))
         cs.append(Check(name="items_in_stock", passed=all((m.product(ln.sku) or None) is not None and m.product(ln.sku).stock >= ln.qty for ln in quote.lines)))  # type: ignore[union-attr]
 

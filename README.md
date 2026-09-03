@@ -35,7 +35,7 @@ flowchart TB
     REG[agent registry · tiers T0–T3]
     SIG[HTTP signatures]
     MAN[mandates · grants<br/>Reserve-Pay mandate ledger]
-    POL[policy gate · 24 checks]
+    POL[policy gate · 25 checks]
     LED[fairness ledger + auditor]
     AUD[hash-chained audit · replay]
   end
@@ -74,7 +74,7 @@ sequenceDiagram
   B->>G: POST /grants (agent-pay) → Scoped Payment Grant
   B->>B: sign Checkout + Payment mandates (closed to this quote)
   B->>G: POST /sessions/{id}/complete + Idempotency-Key
-  G->>T: 24 checks: tier · caps · stock · pincode · grant · both mandates · human confirmation
+  G->>T: 25 checks: tier · caps · stock · pincode · grant · both mandates · human confirmation
   alt allowed
     G->>R: UPI payment link
     R->>G: payment.captured
@@ -130,7 +130,7 @@ flowchart LR
   M --> B["/acp<br/>checkout_sessions · delegate_payment"]
   M --> C["/ucp<br/>checkout-sessions · AP2"]
   M --> D["/beckn<br/>search · select · init · confirm"]
-  A & B & C --> P[same 24-check policy gate]
+  A & B & C --> P[same 25-check policy gate]
   D --> E[embedded checkout<br/>human buyer pays the link]
   P & E --> R[(Razorpay)]
 ```
@@ -144,7 +144,8 @@ NPCI's Unified Agent Protocol (spec lands at GFF, 9–11 Sept 2026) standardises
 | UPI Circle — delegate payment authority to an agent within a pre-set limit | **Scoped Payment Grant**: one merchant, amount-capped, time-boxed, revocable, every use evented |
 | Reserve Pay — blocked funds, multiple debits | **Reserve-Pay mandate ledger** (`razorpay_client/reserve_pay.py`, NPCI OC-228 defaults ₹10,000 / 90 days): issuing a grant blocks funds, using it debits the block, revoking releases — every transition on the audit chain. Sandbox implementation today; `trust/uap.py` is the seam where Razorpay's mandate API lands when test mode exposes one |
 | Agent onboarding & identity | **Agent Registry** — Ed25519 keys, RFC 9421-signed requests, trust tiers T0–T3 |
-| User-set spending rules | **Policy gate** — 24 named checks before any rupee moves, all auditable |
+| User-set spending rules | **Policy gate** — 25 named checks before any rupee moves, all auditable |
+| Human-in-the-loop above a threshold (RBI e-mandate framework, Apr 2026: no AFA-free debit above ₹15,000; CERT-In 2025-26) | **`human_present_above_threshold`** — above the merchant's threshold (default ₹15,000) a person must confirm, even inside an open human-not-present mandate |
 
 The mandate layer is deliberately isolated (`trust/`), so the UAP binding replaces the demo signing backend without touching sessions, adapters or the policy gate.
 
@@ -180,27 +181,28 @@ Real incidents from this build, kept because the fixes became the architecture:
 
 ## Measured (generated, not hand-written — `results/RESULTS.md` · `results/gpt4o/RESULTS.md`)
 
-**How these were produced.** The same 200-task suite runs on two backends: `fake` — the deterministic offline engine that doubles as the model-down fallback (reproducible, no keys) — and **live gpt-4o** (proposals + catalog normalisation, with gpt-4o-mini routed for compile work and an SQLite call cache). Payments are the sandbox client in both; `BAZAAR_RAZORPAY=razorpay` swaps in Razorpay test-mode APIs. One caveat stated plainly: the synthetic corpus is a closed loop (the generator writes both the messy CSVs and the truth labels), so offline compiler accuracy is the parsers' ceiling, not a model score. First gpt-4o run cost ≈ $1; re-runs are free (this one: 2,172 cache hits, 85 misses).
+**How these were produced.** The same 200-task suite runs on two backends: `fake` — the deterministic offline engine that doubles as the model-down fallback (reproducible, no keys) — and **live gpt-4o** (proposals + catalog normalisation, with gpt-4o-mini routed for compile work and an SQLite call cache). Payments are the sandbox client in both; `BAZAAR_RAZORPAY=razorpay` swaps in Razorpay test-mode APIs. One caveat stated plainly: the synthetic corpus is a closed loop (the generator writes both the messy CSVs and the truth labels), so offline compiler accuracy is the parsers' ceiling, not a model score. First gpt-4o run cost ≈ $1; re-runs are mostly free (this one: 2,844 cache hits, 427 misses — the new sweep sessions). The false-positive sweep re-runs the same tasks under three tighter per-order caps so the cost of over-gating is a number, not a reassuring zero. Attack classes, where each defence lives, and a like-for-like table against published attack rates: [`THREAT_MODEL.md`](THREAT_MODEL.md).
 
 | metric | offline `fake` | live gpt-4o |
 |---|---|---|
 | task accuracy (200 tasks, EN/HI/Hinglish, 89 impossible by construction) | **100%** | **99.0%** — both misses were impossible tasks it *still refused*, citing stock instead of budget |
 | wrong orders on impossible tasks | **0** | **0** |
 | wrong declines on possible tasks (false-positive cost) | **0** | **0** |
+| false-positive cost when the merchant tightens the per-order cap (same 200 tasks; default ₹50,000 reproduces the row above) | ₹10,000 cap: **5** wrong declines / ₹142,278 lost · ₹5,000 cap: **15** wrong declines / ₹241,882 lost · ₹2,000 cap: **35** wrong declines / ₹299,366 lost — 0 wrong orders at every notch | identical — the deterministic gate, not the model, decides what is declined |
 | orders / GMV vs static-price-list baseline | 127 / ₹368,596 vs 121 / ₹371,276 → **+6 orders, −₹2,680 (0.99×)**: the extra completions were bought with ₹8,885 of rule-bounded discounts | same |
 | red team (17 live probes) | **17/17** | **17/17** |
 | fairness audit | **52/52** merchants · 159,840 cohorts · 0 findings | same (deterministic engine) |
 | conformance | **24/24** | **24/24** |
 | compiler — price / GST / stock (parser-owned) | 1.000 / 0.916 / 0.900 | **1.000** / 0.916 / 0.900 — identical, because money fields never touch the model |
 | compiler — name / category (model-owned, exact match vs generator vocabulary) | 1.000 / 1.000 (the closed-loop ceiling) | 0.551 / 0.797 — the honest exact-string number; low-confidence fields go to the review queue, never guessed |
-| latency p50 / p95 | 88 / 130 ms | 117 ms / 3.2 s (cache hit / real call) |
+| latency p50 / p95 | 47 / 60 ms | 51 ms / 3.0 s (cache hit / real call) |
 | model failovers during the run | — | 0 |
 
 ## Run it
 
 ```bash
 pip install -e ".[dev]"            # Python 3.10+
-python -m pytest -q                # 69 tests, fully offline
+python -m pytest -q                # 76 tests, fully offline (incl. README-vs-results consistency)
 python -m bazaar.simulator.run     # regenerates results/
 uvicorn bazaar.gateway.app:default_app --factory --port 8000
 cd console && npm install && npm run dev   # http://localhost:5173
@@ -214,9 +216,9 @@ The gateway also mounts the **global `bazaar-catalog` MCP server at `/mcp`** (st
 
 With `console/dist` built, the gateway serves the console too — one process, one URL: `http://localhost:8000`.
 
-Backends are chosen in `.env` (see `.env.example`): `BAZAAR_LLM=fake|openai|anthropic`, `BAZAAR_RAZORPAY=fake|razorpay`. The offline backend is deterministic and doubles as the model-down fallback. Model calls are cached in SQLite, catalog work is routed to a small model, so a full 200-task run on gpt-4o costs about a dollar and re-runs are free.
+Backends are chosen in `.env` (see `.env.example`): `BAZAAR_LLM=fake|openai|anthropic`, `BAZAAR_RAZORPAY=fake|razorpay`. The offline backend is deterministic and doubles as the model-down fallback. A rate-card **photo** (`.png/.jpg/.webp`) compiles through the same pipeline via the model's vision entry point — the transcription is still normalised, confidence-scored and review-queued like a CSV cell, and the offline engine transcribes nothing rather than inventing rows. Model calls are cached in SQLite, catalog work is routed to a small model, so a full 200-task run on gpt-4o costs about a dollar and re-runs are free.
 
-**Deploy**: `docker build -t bazaar . && docker run -p 8000:8000 bazaar`, or `flyctl launch --copy-config --now` (Dockerfile and `fly.toml` included). Set `BAZAAR_LLM=openai` + `OPENAI_API_KEY` as secrets to run the Seller Agent on gpt-4o, and **always set `BAZAAR_ADMIN_TOKEN`** on anything public — it gates every merchant-control route.
+**Deploy**: `docker build -t bazaar . && docker run -p 8000:8000 bazaar`, or `flyctl launch --copy-config --now` (Dockerfile and `fly.toml` included). Set `BAZAAR_LLM=openai` + `OPENAI_API_KEY` as secrets to run the Seller Agent on gpt-4o, and **always set `BAZAAR_ADMIN_TOKEN`** on anything public — it gates every merchant-control route. `fly.toml` sets `BAZAAR_ENV=prod`, which makes the gateway refuse to boot on the dev admin token or webhook secret.
 
 ## Layout
 

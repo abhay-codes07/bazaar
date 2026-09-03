@@ -207,3 +207,37 @@ def test_registry_tiers_and_revocation(agent_key):
     r.revoke(a.keyid, "abuse")
     assert r.get(a.keyid).revoked and r.events[-1]["event"] == "revoked"
     assert datetime.now(timezone.utc) - a.registered_at < timedelta(minutes=1)
+
+
+def test_policy_requires_a_person_above_the_rbi_threshold(merchants, agent_key, registry):
+    """RBI e-mandate framework (Apr 2026): no AFA-free debit above ₹15,000. Even a human-not-present
+    mandate held by a verified agent must stop and ask a person above the merchant's threshold."""
+    priv, pub_raw = agent_key
+    keyid = keys.keyid_for(pub_raw)
+    m = _grocer(merchants)
+    rice = next(p for p in m.products if p.name == "Basmati Rice")
+    rice.stock = 10_000
+    qty = 15_000_00 // rice.price_paise + 2  # comfortably above ₹15,000
+    q = build_quote(m, [CartLine(sku=rice.sku, qty=qty)], m.base_pincode, Segment.NEW, [])
+    assert q.total_paise > m.policy.human_present_above_paise
+    m.policy.max_order_paise = q.total_paise + 1  # the amount cap alone would allow it
+    grants = GrantStore()
+    eng = PolicyEngine(registry, grants)
+    buyer_priv = keys.generate()
+    buyer_pub = keys.public_from_bytes(keys.public_bytes(buyer_priv))
+    lookup = lambda k: buyer_pub if k == "buyer-key" else None  # noqa: E731
+    cm = CheckoutMandate.open("b1", q.total_paise, pincode=m.base_pincode, human_present=False).close(q.quote_id, m.merchant_id, q.total_paise)
+    cm.sign(buyer_priv, "buyer-key")
+    pm = PaymentMandate.open("b1", q.total_paise).close(cm)
+    pm.sign(buyer_priv, "buyer-key")
+    g = grants.issue("b1", keyid, m.merchant_id, q.total_paise)
+
+    unattended = eng.check_checkout(m, q, keyid, g.grant_id, cm, pm, lookup, human_confirmation=False)
+    assert not unattended.allowed and "human_present_above_threshold" in unattended.reason
+    assert "human_confirmation" not in unattended.reason  # the mandate itself did not ask; the amount did
+    confirmed = eng.check_checkout(m, q, keyid, g.grant_id, cm, pm, lookup, human_confirmation=True)
+    assert all(c.passed for c in confirmed.checks if c.name == "human_present_above_threshold")
+    # below the threshold the check is not even emitted — small baskets stay frictionless
+    small = build_quote(m, [CartLine(sku=rice.sku, qty=1)], m.base_pincode, Segment.NEW, [])
+    names = {c.name for c in eng.check_checkout(m, small, keyid, g.grant_id, cm, pm, lookup, human_confirmation=False).checks}
+    assert "human_present_above_threshold" not in names

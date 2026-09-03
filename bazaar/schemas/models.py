@@ -185,6 +185,11 @@ class MerchantPolicy(BaseModel):
     min_tier_for_checkout: AgentTier = AgentTier.T2_VERIFIED
     max_negotiation_rounds: int = Field(default=2, ge=0, le=5)
     max_order_paise: int = Field(default=50_000_00, ge=0)  # ₹50,000 default cap per agent order
+    # Above this amount a human must confirm even inside an open mandate. Default mirrors the
+    # RBI Digital Payments E-mandate Framework (21 Apr 2026): recurring debits without
+    # additional-factor authentication only up to ₹15,000; CERT-In's 2025-26 threat report asks
+    # for mandatory human-in-the-loop above a financial threshold with a full audit trail.
+    human_present_above_paise: int = Field(default=15_000_00, ge=0)
     refunds_per_hour: int = Field(default=5, ge=0)
     allowed_languages: list[str] = Field(default_factory=lambda: ["en", "hi"])
 

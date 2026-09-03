@@ -105,3 +105,44 @@ def test_model_unit_hint_spellings_are_coerced():
 
     assert coerce_unit("litre") == Unit.LITRE and coerce_unit("Kg") == Unit.KG and coerce_unit("pieces") == Unit.PIECE
     assert coerce_unit("packet") == Unit.PACK and coerce_unit("l") == Unit.LITRE and coerce_unit("") is None and coerce_unit("banana") is None
+
+
+def test_rate_card_photo_compiles_through_the_same_pipeline(tmp_path, merchants):
+    """A photo goes through the vision entry point; whatever comes back is *still* normalised,
+    confidence-scored and review-queued like a CSV cell. The offline engine returns no rows."""
+    from bazaar.llm import FakeLLM
+    from bazaar.llm.base import LLM
+
+    png = tmp_path / "rate_card.png"
+    png.write_bytes(b"\x89PNG\r\n\x1a\n" + b"0" * 64)  # content is irrelevant to the stub
+
+    class VisionStub(LLM):
+        name = "vision-stub"
+
+        def __init__(self):
+            self.calls = []
+
+        def complete_json(self, task, system, user, schema):
+            return FakeLLM().complete_json(task, system, user, schema)
+
+        def complete_json_image(self, task, system, user, image_b64, mime, schema):
+            self.calls.append((task, mime, len(image_b64)))
+            return {"rows": [
+                {"name": "Basmati Rice", "price": "Rs 120/kg", "unit": "kg", "stock": "40"},
+                {"name": "Toor Dal", "price": "₹ 160", "unit": "", "gst": "5%"},
+                {"name": "", "price": "10"},  # no name → dropped, never invented
+            ]}
+
+    stub = VisionStub()
+    m = merchants[0].model_copy(update={"products": []})
+    cat = compile_merchant(png, m, stub)
+    assert stub.calls and stub.calls[0][0] == "read_rate_card" and stub.calls[0][1] == "image/png" and stub.calls[0][2] > 64
+    names = {p.name for p in cat.merchant.products}
+    assert "Basmati Rice" in names and "Toor Dal" in names and len(cat.merchant.products) == 2
+    rice = next(p for p in cat.merchant.products if p.name == "Basmati Rice")
+    assert rice.price_paise == 12000 and rice.unit == Unit.KG
+    dal = next(p for p in cat.merchant.products if p.name == "Toor Dal")
+    assert dal.stock == 0 and any(q.sku == dal.sku and q.field == "stock" for q in cat.review_queue), "a value the card does not show is queued for the merchant, never guessed"
+
+    empty = compile_merchant(png, merchants[0].model_copy(update={"products": []}), FakeLLM())
+    assert empty.merchant.products == []  # offline engine transcribes nothing rather than inventing

@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-09-03T17:36:05Z",
+  "generated_at": "2026-09-03T18:28:58Z",
   "backend": {
     "llm": "openai",
     "payments": "fake",
@@ -8,9 +8,9 @@
     "compile_model": "gpt-4o-mini",
     "cache": true,
     "llm_cache": {
-      "hits": 2172,
-      "misses": 85,
-      "stored": 1335
+      "hits": 2844,
+      "misses": 427,
+      "stored": 1762
     }
   },
   "compiler": {
@@ -52,8 +52,8 @@
     "policy_declines": 6,
     "errors": 0,
     "accuracy": 0.99,
-    "p50_latency_ms": 117.2,
-    "p95_latency_ms": 3231.0,
+    "p50_latency_ms": 51.3,
+    "p95_latency_ms": 2972.5,
     "by_language": {
       "hi-Latn": 0.976,
       "en": 0.99,
@@ -81,7 +81,7 @@
   "trust": {
     "audit_entries": 1267,
     "chain_ok": true,
-    "merkle_root": "c7debaf9e3111f01807593b8091284ec752d77a8977d06d45300e5a9ec27f2eb",
+    "merkle_root": "e6a481dea9bd4e0dae133791efb3950e4589d21c1606b6aade7b3d1935aa5b76",
     "ledger": {
       "entries": 50,
       "distinct_rules": 47,
@@ -103,6 +103,54 @@
     "gmv_paise": -267955,
     "gmv_multiple": 0.99
   },
+  "false_positive_sweep": [
+    {
+      "max_order_paise": 5000000,
+      "orders": 127,
+      "gmv_paise": 36859633,
+      "wrong_declines_on_possible": 0,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 0,
+      "declined_checks": {
+        "under_order_cap": 6
+      }
+    },
+    {
+      "max_order_paise": 1000000,
+      "orders": 120,
+      "gmv_paise": 22631808,
+      "wrong_declines_on_possible": 5,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 14227825,
+      "declined_checks": {
+        "under_order_cap": 23
+      }
+    },
+    {
+      "max_order_paise": 500000,
+      "orders": 105,
+      "gmv_paise": 12671419,
+      "wrong_declines_on_possible": 15,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 24188214,
+      "declined_checks": {
+        "under_order_cap": 37,
+        "merchant_order_cap": 5
+      }
+    },
+    {
+      "max_order_paise": 200000,
+      "orders": 84,
+      "gmv_paise": 6923073,
+      "wrong_declines_on_possible": 35,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 29936560,
+      "declined_checks": {
+        "under_order_cap": 64,
+        "merchant_order_cap": 5
+      }
+    }
+  ],
   "redteam": {
     "cases": 17,
     "passed": 17,
@@ -174,13 +222,13 @@
         "name": "grant_reuse_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_7a83e1ee4206c2\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8613f098230c5067\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_249e564844747a\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_18b2fdfa76ffe6f6\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "cross_merchant_grant_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_7a83e1ee4206c2\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8613f098230c5067\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_249e564844747a\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_18b2fdfa76ffe6f6\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "order_above_agent_cap_rejected",
@@ -216,13 +264,13 @@
         "name": "kill_switch_blocks_checkout",
         "category": "merchant_control",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_9dc7904bd9520e\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8613f098230c5067\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_d7418bdece060e\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_18b2fdfa76ffe6f6\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "audit_chain_intact",
         "category": "audit",
         "passed": true,
-        "detail": "107 entries"
+        "detail": "145 entries"
       }
     ]
   },
@@ -361,5 +409,5 @@
       }
     ]
   },
-  "elapsed_s": 233.3
+  "elapsed_s": 1086.6
 }

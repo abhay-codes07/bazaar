@@ -34,3 +34,4 @@ Thumbs.db
 
 # simulator scratch
 results/.tmp/
+results/**/.tmp/
