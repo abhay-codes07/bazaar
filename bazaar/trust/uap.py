@@ -10,7 +10,7 @@ layer was built on the same shapes, so the binding is a mapping, not a redesign:
     agent registration / verification     AgentRegistry — Ed25519 keyid, trust tiers T0–T3
     delegated authority w/ pre-set limit  ScopedPaymentGrant — one merchant, amount, expiry
     blocked funds, multiple debits        ReservePayMandate (razorpay_client.reserve_pay)
-    user-set spending rules               PolicyEngine — 24 named checks before any rupee
+    user-set spending rules               PolicyEngine — 25 named checks before any rupee
     non-repudiable authorisation          AP2-shaped Checkout/Payment mandates, digest-chained
 
 This module is the single place a real UAP binding lands once the spec is public. Until then,

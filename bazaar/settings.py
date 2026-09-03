@@ -32,6 +32,7 @@ class Settings(BaseSettings):
     bazaar_db_url: str = f"sqlite:///{(ROOT / 'data' / 'runtime' / 'bazaar.db').as_posix()}"
     bazaar_api_version: str = "2026-08-28"
     bazaar_admin_token: str = "dev-admin-token"
+    bazaar_env: str = "dev"  # "prod" refuses to boot with the dev admin token / webhook secret
     bazaar_cors_origins: str = "http://localhost:5173"  # dev console only; the served console is same-origin
 
     @property

@@ -104,18 +104,48 @@ def read_shopify_json(path: Path) -> list[RawRow]:
     return out
 
 
-def read_image(path: Path, llm) -> list[RawRow]:  # pragma: no cover - needs a vision model
-    """Photo of a rate card → rows, via the model's ``read_rate_card`` task.
+IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif")
+_IMAGE_MIME = {".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".webp": "image/webp", ".gif": "image/gif"}
 
-    The fake backend returns nothing here; real deployments use a vision-capable model.
+RATE_CARD_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "rows": {
+            "type": "array",
+            "items": {"type": "object", "properties": {k: {"type": "string"} for k in CANONICAL}, "required": ["name", "price"]},
+        }
+    },
+    "required": ["rows"],
+}
+
+
+def read_image(path: Path, llm) -> list[RawRow]:
+    """Photo of a rate card -> rows, via the model's vision entry point.
+
+    The model only *transcribes*: every value it returns is still a string that goes through
+    the same normaliser, confidence scoring and review queue as a CSV cell, so the merchant
+    sees anything low-confidence before it is published. A backend without vision (the
+    offline engine) returns no rows rather than inventing any.
     """
     import base64
 
-    b64 = base64.b64encode(path.read_bytes()).decode()
-    out = llm.complete_json(
+    mime = _IMAGE_MIME.get(path.suffix.lower())
+    if mime is None:
+        raise ValueError(f"unsupported image type: {path.suffix}")
+    b64 = base64.b64encode(path.read_bytes()).decode("ascii")
+    out = llm.complete_json_image(
         "read_rate_card",
-        "Transcribe the price list in the image into rows. Do not invent items.",
-        f'<image base64="{b64[:64]}..."/>',
-        {"type": "object", "properties": {"rows": {"type": "array"}}, "required": ["rows"]},
+        "You transcribe a merchant's printed or handwritten price list. Copy each line into a row with the item name, price as written, unit or pack size if shown, stock if shown, and GST if shown. Never invent items, prices or stock that are not visible. Leave a field empty if it is not on the card.",
+        "Transcribe every product line in this rate card into rows.",
+        b64,
+        mime,
+        RATE_CARD_SCHEMA,
     )
-    return [dict(r, _row=i + 1) for i, r in enumerate(out.get("rows", []))]  # type: ignore[return-value]
+    rows: list[RawRow] = []
+    for i, r in enumerate(out.get("rows", []) or [], 1):
+        if not isinstance(r, dict) or not str(r.get("name", "")).strip():
+            continue
+        row: RawRow = {k: str(r.get(k, "") or "").strip() for k in CANONICAL if r.get(k) not in (None, "")}  # type: ignore[misc]
+        row["_row"] = i
+        rows.append(row)
+    return rows

@@ -18,6 +18,13 @@ class AnthropicLLM(LLM):
         self._model = model
 
     def complete_json(self, task: str, system: str, user: str, schema: dict[str, Any]) -> dict[str, Any]:
+        return self._call(task, system, user, schema)
+
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        content = [{"type": "image", "source": {"type": "base64", "media_type": mime, "data": image_b64}}, {"type": "text", "text": user}]
+        return self._call(task, system, content, schema)
+
+    def _call(self, task: str, system: str, user: Any, schema: dict[str, Any]) -> dict[str, Any]:
         tool = {
             "name": f"answer_{task}",
             "description": f"Return the structured answer for task '{task}'.",

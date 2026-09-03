@@ -82,7 +82,24 @@ class ResilientLLM(LLM):
             self.consecutive_failures = 0
         return out
 
-    def _failover(self, task: str, system: str, user: str, schema: dict[str, Any], reason: str) -> dict[str, Any]:
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        if self.force_down or time.monotonic() < self._open_until:
+            return self._failover(task, system, user, schema, "forced down (chaos)" if self.force_down else "circuit open", image=(image_b64, mime))
+        try:
+            out = self.inner.complete_json_image(task, system, user, image_b64, mime, schema)
+        except Exception as e:  # noqa: BLE001
+            with self._lock:
+                self.consecutive_failures += 1
+                self.total_failures += 1
+                self.last_error = f"{type(e).__name__}: {e}"[:300]
+                if self.consecutive_failures >= self.threshold:
+                    self._open_until = time.monotonic() + self.cooldown_s
+            return self._failover(task, system, user, schema, self.last_error, image=(image_b64, mime))
+        with self._lock:
+            self.consecutive_failures = 0
+        return out
+
+    def _failover(self, task: str, system: str, user: str, schema: dict[str, Any], reason: str, image: tuple[str, str] | None = None) -> dict[str, Any]:
         with self._lock:
             self.total_failovers += 1
             self.last_failover_at = datetime.now(timezone.utc).isoformat()
@@ -92,6 +109,8 @@ class ResilientLLM(LLM):
                 cb({"task": task, "reason": reason})
             except Exception:  # noqa: BLE001 — an audit hiccup must not block the answer
                 pass
+        if image is not None:
+            return self.fallback.complete_json_image(task, system, user, image[0], image[1], schema)
         return self.fallback.complete_json(task, system, user, schema)
 
     def __getattr__(self, item: str) -> Any:

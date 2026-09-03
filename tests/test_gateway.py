@@ -226,3 +226,17 @@ def test_merchant_mutations_require_admin_token(env):
     assert bare.post(f"/bazaar/v1/merchants/{mid}/compile", json={"csv": "a,b"}).status_code == 403
     assert bare.post("/bazaar/v1/dev/chaos", json={"model_down": True}).status_code == 403
     assert st.merchants[mid].policy.kill_switch is False, "the unauthenticated kill-switch attempt must not stick"
+
+
+def test_prod_refuses_to_boot_on_dev_secrets(tmp_path):
+    import pytest
+
+    from bazaar.gateway.app import refuse_default_secrets
+    from bazaar.settings import Settings
+
+    refuse_default_secrets(Settings(bazaar_env="dev"))  # dev: fine
+    with pytest.raises(RuntimeError, match="BAZAAR_ADMIN_TOKEN"):
+        refuse_default_secrets(Settings(bazaar_env="prod"))
+    with pytest.raises(RuntimeError, match="RAZORPAY_WEBHOOK_SECRET"):
+        refuse_default_secrets(Settings(bazaar_env="prod", bazaar_admin_token="s3cret-" * 4))
+    refuse_default_secrets(Settings(bazaar_env="prod", bazaar_admin_token="s3cret-" * 4, razorpay_webhook_secret="whsec-" * 4))

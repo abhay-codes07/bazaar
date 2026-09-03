@@ -51,7 +51,45 @@ def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True, llm=None) -> tu
     return st, client, buyer
 
 
-def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True, max_merchants: int = 0) -> dict[str, Any]:
+# Per-order caps the sweep tightens the merchant policy to. ₹50,000 is the default (a control row that
+# must reproduce the main run); ₹10,000 is the Reserve Pay block per NPCI OC-228; the last two are
+# deliberately too tight so the cost of over-gating is visible instead of a reassuring zero.
+SWEEP_CAPS_PAISE = (50_000_00, 10_000_00, 5_000_00, 2_000_00)
+
+
+def run_false_positive_sweep(sim_merchants, tasks, main_results, tmp: Path, llm, log) -> list[dict[str, Any]]:
+    """The judging bar asks for "honest metrics including false-positive cost". A single 0 wrong
+    declines says nothing about the trade-off, so this re-runs the same tasks under tighter
+    merchant policies and reports what each notch of strictness costs: possible tasks wrongly
+    declined and the GMV those orders carried in the main run."""
+    ordered = {r.task_id: r.gmv_paise for r in main_results if r.outcome == "order"}
+    rows: list[dict[str, Any]] = []
+    for cap in SWEEP_CAPS_PAISE:
+        ms = []
+        for m in sim_merchants:
+            mm = m.model_copy(deep=True)
+            mm.policy.max_order_paise = cap
+            ms.append(mm)
+        st_s, _, buyer_s = _fresh_state(ms, tmp / f"sweep_{cap}", fresh_stock=False, llm=llm)
+        rs = [run_task(buyer_s, t, st_s) for t in tasks]
+        summ = summarize(rs)
+        lost = sum(gmv for tid, gmv in ordered.items() if next(r for r in rs if r.task_id == tid).outcome != "order")
+        rows.append(
+            {
+                "max_order_paise": cap,
+                "orders": summ["orders"],
+                "gmv_paise": summ["gmv_paise"],
+                "wrong_declines_on_possible": summ["declines"]["wrong_declines_on_possible"],
+                "wrong_orders_on_impossible": summ["declines"]["wrong_orders_on_impossible"],
+                "lost_gmv_paise": lost,
+                "declined_checks": dict(Counter(c for r in rs for c in r.declined_checks)),
+            }
+        )
+        log(f"sweep cap {_rs(cap)}: orders {summ['orders']}, wrong declines {summ['declines']['wrong_declines_on_possible']}, lost {_rs(lost)}")
+    return rows
+
+
+def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True, max_merchants: int = 0, sweep: bool = True) -> dict[str, Any]:
     import logging
 
     logging.getLogger("httpx").setLevel(logging.WARNING)  # the MCP import turns on request logging
@@ -120,6 +158,10 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     report["baseline_no_bazaar"] = {k: base[k] for k in ("orders", "task_to_order_rate", "possible_completion_rate", "gmv_paise")}
     report["baseline_no_bazaar"]["definition"] = "buyer reads a static price list: proceeds only for same-city merchants, cannot ask serviceability, gets no offers; without Bazaar these merchants are not agent-transactable at all (0 agent-originated orders)"
     report["lift"] = {"orders": summ["orders"] - base["orders"], "gmv_paise": summ["gmv_paise"] - base["gmv_paise"], "gmv_multiple": round(summ["gmv_paise"] / max(1, base["gmv_paise"]), 2)}
+
+    # ---- false-positive cost: what each notch of policy strictness wrongly declines, and what it costs
+    if sweep:
+        report["false_positive_sweep"] = run_false_positive_sweep(sim_merchants, tasks, results, tmp, llm, log)
 
     # ---- red team (fresh state so the transaction numbers stay clean)
     if redteam:
@@ -196,6 +238,17 @@ def render_markdown(r: dict[str, Any]) -> str:
         f"- Explanations present on {tr['explanations_present']:.1%} of agent turns",
         f"- Grants issued {tr['grants_issued']}, used {tr['grants_used']}; fairness-ledger entries {tr['ledger']['entries']}, inconsistencies **{tr['ledger']['inconsistencies']}**",
     ]
+    if "false_positive_sweep" in r:
+        lines += [
+            "",
+            "## False-positive cost — policy strictness sweep",
+            "",
+            "Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks the gate refused; lost GMV is the main-run value of every order the tighter cap prevented (reroutes included). The first row is the default cap and must match the table above.",
+            "",
+            "| per-order cap | orders | wrong declines on possible tasks | lost GMV | wrong orders on impossible tasks |",
+            "|---|---|---|---|---|",
+            *[f"| {_rs(w['max_order_paise'])}{' (default)' if w['max_order_paise'] == SWEEP_CAPS_PAISE[0] else ' (Reserve Pay block)' if w['max_order_paise'] == 10_000_00 else ''} | {w['orders']} | **{w['wrong_declines_on_possible']}** | {_rs(w['lost_gmv_paise'])} | {w['wrong_orders_on_impossible']} |" for w in r["false_positive_sweep"]],
+        ]
     if "redteam" in r:
         rt = r["redteam"]
         lines += ["", f"## Red team — {rt['passed']}/{rt['cases']} passed ({rt['pass_rate']:.1%})", "", "| case | category | result |", "|---|---|---|", *[f"| {d['name']} | {d['category']} | {'✅' if d['passed'] else '❌ ' + d['detail']} |" for d in rt["detail"]]]
@@ -216,9 +269,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--no-redteam", action="store_true")
     p.add_argument("--no-fairness", action="store_true")
     p.add_argument("--no-conformance", action="store_true")
+    p.add_argument("--no-sweep", action="store_true", help="skip the false-positive cost sweep (4 extra task runs)")
     p.add_argument("--merchants", type=int, default=0, help="limit the corpus (cheap trial runs on paid backends)")
     a = p.parse_args(argv)
-    rep = run_all(a.tasks, Path(a.out), redteam=not a.no_redteam, fairness=not a.no_fairness, conformance=not a.no_conformance, max_merchants=a.merchants)
+    rep = run_all(a.tasks, Path(a.out), redteam=not a.no_redteam, fairness=not a.no_fairness, conformance=not a.no_conformance, max_merchants=a.merchants, sweep=not a.no_sweep)
     t = rep["transactions"]
     print(f"tasks={t['tasks']} orders={t['orders']} gmv={t['gmv_paise'] / 100:.0f} accuracy={t['accuracy']} errors={t['errors']}")
     if "redteam" in rep:

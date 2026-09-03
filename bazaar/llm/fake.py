@@ -32,6 +32,10 @@ def _extract_data_blocks(user: str) -> dict[str, str]:
 class FakeLLM(LLM):
     name = "fake"
 
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        # the offline engine cannot read pictures; it returns nothing rather than inventing rows
+        return {"rows": []}
+
     def complete_json(self, task: str, system: str, user: str, schema: dict[str, Any]) -> dict[str, Any]:
         fn = _HANDLERS.get(task)
         if fn is None:

@@ -26,6 +26,12 @@ class LLM(ABC):
         """
 
 
+    def complete_json_image(self, task: str, system: str, user: str, image_b64: str, mime: str, schema: dict[str, Any]) -> dict[str, Any]:
+        """Structured answer about one image (rate-card photos). Backends without vision raise
+        ``LLMError`` so the compiler can queue the source for the merchant instead of guessing."""
+        raise LLMError(f"{self.name} backend has no vision support for task '{task}'")
+
+
 def wrap_untrusted(label: str, text: str) -> str:
     """Render untrusted text as *data* for a prompt. Instruction-like lines are neutralised upstream
     by the compiler; this is the last line of defence."""

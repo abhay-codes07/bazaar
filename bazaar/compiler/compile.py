@@ -15,7 +15,7 @@ from pathlib import Path
 from pydantic import BaseModel, Field
 
 from bazaar.compiler.enrich import enrich_with_llm, normalize_with_llm
-from bazaar.compiler.ingest import RawRow, read_csv, read_shopify_json
+from bazaar.compiler.ingest import IMAGE_SUFFIXES, RawRow, read_csv, read_image, read_shopify_json
 from bazaar.compiler.normalize import coerce_unit, parse_gst, parse_price, parse_stock, parse_unit
 from bazaar.compiler.sanitize import sanitize_text
 from bazaar.llm import LLM, get_llm
@@ -138,6 +138,8 @@ def compile_merchant(source: Path, merchant: Merchant, llm: LLM | None = None, w
         rows = read_csv(source)
     elif source.suffix.lower() == ".json":
         rows = read_shopify_json(source)
+    elif source.suffix.lower() in IMAGE_SUFFIXES:
+        rows = read_image(source, llm or get_llm())
     else:
         raise ValueError(f"unsupported source type: {source.suffix}")
     return compile_rows(rows, merchant, llm, workers)

@@ -123,8 +123,23 @@ def _idem_key(request: Request, body: bytes) -> str | None:
     return f"{request.method}:{request.url.path}:{k}:{hashlib.sha256(body).hexdigest()[:16]}"
 
 
+DEV_ADMIN_TOKEN = "dev-admin-token"
+DEV_WEBHOOK_SECRET = "bazaar-dev-webhook-secret"
+
+
+def refuse_default_secrets(settings) -> None:
+    """A public deployment must never run on the dev secrets: with ``BAZAAR_ENV=prod`` the
+    gateway refuses to start rather than exposing every merchant-control route."""
+    if settings.bazaar_env != "prod":
+        return
+    bad = [n for n, v, d in (("BAZAAR_ADMIN_TOKEN", settings.bazaar_admin_token, DEV_ADMIN_TOKEN), ("RAZORPAY_WEBHOOK_SECRET", settings.razorpay_webhook_secret, DEV_WEBHOOK_SECRET)) if v == d or not v]
+    if bad:
+        raise RuntimeError(f"BAZAAR_ENV=prod but {', '.join(bad)} still default/empty — set real secrets before exposing the gateway")
+
+
 def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> FastAPI:
     st = state or BazaarState()
+    refuse_default_secrets(st.settings)
     if load_corpus and not st.merchants:
         from bazaar.synthetic import load_corpus as _load
 
