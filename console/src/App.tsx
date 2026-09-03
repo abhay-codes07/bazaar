@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { NavLink, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { StoreProvider, useStore } from "./store";
 import Overview from "./pages/Overview";
 import Catalog from "./pages/Catalog";
@@ -30,7 +31,25 @@ function Mark() {
 function Shell() {
   const { merchants, merchantId, setMerchantId, theme, toggleTheme, toasts, online } = useStore();
   const loc = useLocation();
+  const nav = useNavigate();
   const current = merchants.find((m) => m.merchant_id === merchantId);
+
+  useEffect(() => {
+    const label = NAV.find((n) => loc.pathname.startsWith(n.to))?.label;
+    document.title = label ? `Bazaar — ${label}` : "Bazaar Console";
+  }, [loc.pathname]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      const hit = NAV.find((n) => n.k === e.key);
+      if (hit) nav(hit.to);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [nav]);
   return (
     <div className="min-h-full flex">
       <aside className="hidden md:flex w-[232px] shrink-0 flex-col border-r hairline sticky top-0 h-screen">
@@ -88,9 +107,9 @@ function Shell() {
             ))}
           </select>
         </div>
-        <div className="md:hidden flex gap-1 px-2 py-2 overflow-x-auto border-b hairline">
+        <div className="md:hidden flex gap-1 px-2 py-2 overflow-x-auto no-scrollbar border-b hairline">
           {NAV.map((n) => (
-            <NavLink key={n.to} to={n.to} className={({ isActive }) => `chip whitespace-nowrap ${isActive ? "chip-accent" : ""}`}>
+            <NavLink key={n.to} to={n.to} className={({ isActive }) => `chip ${isActive ? "chip-accent" : ""}`}>
               {n.label}
             </NavLink>
           ))}
@@ -106,12 +125,13 @@ function Shell() {
                 <Route path="/sessions" element={<Sessions />} />
                 <Route path="/audit" element={<Audit />} />
                 <Route path="/playground" element={<Playground />} />
+                <Route path="*" element={<Navigate to="/overview" replace />} />
               </Routes>
             </ErrorBoundary>
           </motion.div>
         </AnimatePresence>
       </main>
-      <div className="fixed bottom-5 right-5 flex flex-col gap-2 z-50">
+      <div className="fixed bottom-5 right-5 flex flex-col gap-2 z-50 max-w-[min(92vw,420px)]" role="status" aria-live="polite">
         <AnimatePresence>
           {toasts.map((t) => (
             <motion.div key={t.id} initial={{ opacity: 0, y: 8, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 8 }} className={`card px-4 py-2.5 text-[13px] ${t.kind === "ok" ? "border-ok/40" : t.kind === "danger" ? "border-danger/40" : ""}`}>

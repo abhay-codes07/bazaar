@@ -26,7 +26,7 @@ export default function Audit() {
         <Stat label="Money events" value={d?.entries.filter((e) => e.kind === "money").length ?? "—"} accent sub="payment links, captures, refunds" />
       </div>
       <Card pad={false} title="Entries" aside={
-        <div className="flex gap-1">
+        <div className="flex gap-1 flex-wrap justify-end">
           {kinds.map((k) => <button key={k} className={`chip ${kind === k ? "chip-accent" : ""}`} onClick={() => setKind(k)}>{k}</button>)}
         </div>
       }>
@@ -35,7 +35,7 @@ export default function Audit() {
         ) : (
           <div className="overflow-auto max-h-[65vh]">
             <table className="w-full text-[12.5px]">
-              <thead className="text-[11px] uppercase tracking-[0.12em] text-muted sticky top-0 bg-paper">
+              <thead className="text-[11px] uppercase tracking-[0.12em] text-muted sticky top-0 thead-bg">
                 <tr>
                   <th className="text-left font-medium px-5 py-2">#</th>
                   <th className="text-left font-medium px-2 py-2">When</th>
