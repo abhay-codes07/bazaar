@@ -343,6 +343,17 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"session_id": sid, "chain_ok": ok, "first_bad_seq": bad, "timeline": st.audit.replay(sid)}
 
     # ------------------------------------------------------------------ webhooks
+    def _normalize_webhook_payload(payload: dict) -> dict:
+        """Real Razorpay wraps each object as {'entity': {...}} and sends raw ``amount``;
+        the sandbox client sends the normalized shape directly. Accept both."""
+        out: dict[str, Any] = {}
+        for k, v in (payload or {}).items():
+            e = v.get("entity", v) if isinstance(v, dict) else v
+            if isinstance(e, dict) and "amount" in e and "amount_paise" not in e:
+                e = {**e, "amount_paise": int(e["amount"])}
+            out[k] = e
+        return out
+
     @app.post("/webhooks/razorpay")
     async def razorpay_webhook(request: Request):
         raw = await request.body()
@@ -350,7 +361,10 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         if not verify_webhook_signature(raw, sig, st.settings.razorpay_webhook_secret):
             raise HTTPException(400, detail={"error": "bad_webhook_signature"})
         ev = json.loads(raw)
-        return st.handle_webhook_event(ev["event"], ev["payload"])
+        event = ev["event"]
+        if event == "payment_link.paid":  # real payment-link flow; the payment entity rides along
+            event = "payment.captured"
+        return st.handle_webhook_event(event, _normalize_webhook_payload(ev.get("payload", {})))
 
     # ------------------------------------------------------------------ merchant console
     @app.get("/bazaar/v1/merchants/{mid}")

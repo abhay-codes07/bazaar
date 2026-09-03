@@ -137,13 +137,24 @@ class BazaarState:
         self.audit.record({"session": s.session_id, "kind": "money", "action": "payment_link_created", "outcome": "ok", "money": {"order_id": link.order_id, "payment_link_id": link.id, "amount_paise": q.total_paise, "currency": "INR"}, "note": "awaiting buyer payment"})
         return s
 
+    def _session_for_webhook(self, pay: dict[str, Any], payload: dict[str, Any]):
+        """Real payment links don't return an order id at creation, so the session may hold
+        none — fall back to the session id we planted in the link's reference/notes."""
+        s = self.session_by_order(pay.get("order_id") or "")
+        if s is None:
+            sid = (pay.get("notes") or {}).get("session_id") or (payload.get("payment_link") or {}).get("reference_id") or ""
+            s = self.session(sid) if sid else None
+        if s is not None and not s.order_id and pay.get("order_id"):
+            s.order_id = pay["order_id"]  # learn the real order id for the audit trail
+        return s
+
     def handle_webhook_event(self, event: str, payload: dict[str, Any]) -> dict[str, Any]:
         with self._lock:
             if event == "payment.captured":
                 pay = payload["payment"]
                 if pay["id"] in self.processed_payments:
                     return {"status": "duplicate"}
-                s = self.session_by_order(pay["order_id"])
+                s = self._session_for_webhook(pay, payload)
                 if s is None:
                     return {"status": "unknown_order"}
                 self.processed_payments.add(pay["id"])
@@ -165,7 +176,7 @@ class BazaarState:
                 return {"status": "completed", "session_id": s.session_id}
             if event == "payment.failed":
                 pay = payload["payment"]
-                s = self.session_by_order(pay["order_id"])
+                s = self._session_for_webhook(pay, payload)
                 if s is None:
                     return {"status": "unknown_order"}
                 self.audit.record({"session": s.session_id, "kind": "money", "action": "payment_failed", "outcome": "failed", "money": {"order_id": s.order_id, "payment_id": pay["id"]}, "note": "buyer may retry the same payment link; no silent retry"})

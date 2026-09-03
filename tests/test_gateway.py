@@ -240,3 +240,50 @@ def test_prod_refuses_to_boot_on_dev_secrets(tmp_path):
     with pytest.raises(RuntimeError, match="RAZORPAY_WEBHOOK_SECRET"):
         refuse_default_secrets(Settings(bazaar_env="prod", bazaar_admin_token="s3cret-" * 4))
     refuse_default_secrets(Settings(bazaar_env="prod", bazaar_admin_token="s3cret-" * 4, razorpay_webhook_secret="whsec-" * 4))
+
+
+def test_real_razorpay_webhook_shape_and_link_fallback_matching(env):
+    """Real Razorpay wraps entities, sends raw `amount`, and payment links carry no order id
+    at creation — the webhook must still find the session via reference/notes."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "2 kg toor dal to 560034"})
+    sid, quote = r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    grant = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "bw", "merchant_id": mid, "max_amount_paise": 100000}).json()["grant_id"]
+    cm, pm = buyer.mandates_for(quote, mid, "bw", 100000)
+    r = buyer.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": grant, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+    assert r.status_code == 200
+    s = st.session(sid)
+    s.order_id = ""  # what a real payment link leaves behind at creation
+    ev = {
+        "event": "payment_link.paid",
+        "payload": {
+            "payment": {"entity": {"id": "pay_realshape1", "order_id": "order_realshape1", "amount": quote["total_paise"], "status": "captured", "method": "upi", "notes": {"session_id": sid}}},
+            "payment_link": {"entity": {"id": "plink_realshape1", "reference_id": sid}},
+        },
+    }
+    raw = json.dumps(ev).encode()
+    r = c.post("/webhooks/razorpay", content=raw, headers={"x-razorpay-signature": webhook_signature(raw, st.settings.razorpay_webhook_secret), "content-type": "application/json"})
+    assert r.json()["status"] == "completed"
+    assert s.status == "completed" and s.payment_id == "pay_realshape1" and s.order_id == "order_realshape1"
+
+
+def test_upi_link_fallback_on_fresh_account():
+    import razorpay as rzp_sdk
+
+    from bazaar.razorpay_client.real import RazorpayClient
+
+    calls = []
+
+    class StubLinks:
+        def create(self, body):
+            calls.append(body)
+            if body.get("upi_link"):
+                raise rzp_sdk.errors.BadRequestError("UPI payment links are not enabled")
+            return {"id": "plink_std1", "short_url": "https://rzp.io/l/x", "amount": body["amount"], "status": "created", "notes": body["notes"]}
+
+    cl = RazorpayClient("rzp_test_dummy", "secret")
+    cl._c = type("C", (), {"payment_link": StubLinks()})()
+    link = cl.create_upi_payment_link(54300, "test", reference_id="sess_x", notes={"session_id": "sess_x"})
+    assert link.id == "plink_std1" and link.order_id == ""
+    assert calls[0].get("upi_link") is True and "upi_link" not in calls[1]

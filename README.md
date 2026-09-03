@@ -202,7 +202,7 @@ Real incidents from this build, kept because the fixes became the architecture:
 
 ```bash
 pip install -e ".[dev]"            # Python 3.10+
-python -m pytest -q                # 76 tests, fully offline (incl. README-vs-results consistency)
+python -m pytest -q                # 78 tests, fully offline (incl. README-vs-results consistency)
 python -m bazaar.simulator.run     # regenerates results/
 uvicorn bazaar.gateway.app:default_app --factory --port 8000
 cd console && npm install && npm run dev   # http://localhost:5173
