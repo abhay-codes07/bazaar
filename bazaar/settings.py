@@ -20,6 +20,8 @@ class Settings(BaseSettings):
     bazaar_openai_model_compile: str = "gpt-4o-mini"  # catalog normalisation/enrichment: high volume, low stakes
     bazaar_llm_cache: bool = True
     bazaar_llm_workers: int = 8
+    bazaar_llm_fail_threshold: int = 3  # consecutive failures before the circuit opens
+    bazaar_llm_cooldown_s: float = 60.0  # how long the primary is skipped once open
 
     bazaar_razorpay: str = "fake"
     razorpay_key_id: str = ""

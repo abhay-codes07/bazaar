@@ -32,7 +32,12 @@ export default function Overview() {
   const row = merchants.find((x) => x.merchant_id === merchantId);
 
   return (
-    <Page kicker={m ? `${m.vertical.replaceAll("_", " ")} · ${m.city} · ${m.base_pincode}` : "loading"} title={m?.name ?? "…"} actions={row?.kill_switch ? <Chip kind="danger">agent disabled</Chip> : <Chip kind="ok">agent live</Chip>}>
+    <Page kicker={m ? `${m.vertical.replaceAll("_", " ")} · ${m.city} · ${m.base_pincode}` : "loading"} title={m?.name ?? "…"} actions={
+      <span className="flex items-center gap-2">
+        {stats?.llm?.degraded && <Chip kind="warn">model down · deterministic fallback answering</Chip>}
+        {row?.kill_switch ? <Chip kind="danger">agent disabled</Chip> : <Chip kind="ok">agent live</Chip>}
+      </span>
+    }>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <Stat label="Agent orders" value={completed.length} sub={`${mine.length} sessions with agents`} />
         <Stat label="Agent GMV" value={rupees(gmv)} accent sub="captured via Razorpay" />

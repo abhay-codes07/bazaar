@@ -35,6 +35,11 @@ class BazaarState:
         self.payments = payments or get_payments_client(self.settings.bazaar_razorpay)
         self.llm = llm or get_llm(self.settings.bazaar_llm)
         self.audit = AuditLog(audit_path)
+        if hasattr(self.llm, "on_failover"):
+            # degraded mode is never silent: every model failover lands on the audit chain
+            self.llm.on_failover = lambda info: self.audit.record(
+                {"kind": "ops", "action": "llm_failover", "outcome": "degraded", "note": f"model call failed ({info['reason']}); deterministic fallback answered task '{info['task']}'"}
+            )
         self.registry = AgentRegistry()
         self.grants = GrantStore()
         self.policy = PolicyEngine(self.registry, self.grants)

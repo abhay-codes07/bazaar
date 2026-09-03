@@ -2,7 +2,8 @@
 
 A grant lets an agent pay *one merchant*, *up to an amount*, *until a time*, and can be revoked
 at any moment. Every use is recorded and emitted as an event. In production the grant maps to a
-UPI Reserve Pay / Autopay mandate; here it is backed by a buyer key + Razorpay test customer.
+UPI Reserve Pay / Autopay mandate — the blocked-funds + delegated-limit primitives that NPCI's
+Unified Agent Protocol (UAP) is built on — so a UAP binding is an adapter, not a redesign.
 """
 
 from __future__ import annotations
