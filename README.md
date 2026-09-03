@@ -163,6 +163,20 @@ Failure handling is designed, tested and visible — not an apology:
 
 Try it live: `POST /bazaar/v1/dev/chaos {"model_down": true}` mid-conversation — the buyer never sees a 500.
 
+## What broke while building it
+
+Real incidents from this build, kept because the fixes became the architecture:
+
+| What broke | The fix that stuck |
+|---|---|
+| gpt-4o crashed the compiler by emitting `"litre"` against a strict unit enum — the offline backend had never produced it | `coerce_unit()` accepts real-model variants **and** the enum now lives in the JSON schema itself; found by running the full 52-merchant corpus, not a happy-path row |
+| gpt-4o answered a quote request by calling `check_serviceability` with a `product_id` arg — a tool-contract shape no prompt fully prevents | The turn became a **bounded observe→re-propose loop** (max 3 steps) with `normalize_args()` mapping model arg aliases **before** the policy gate — the gate judges intent, not spelling |
+| "10 किलो" parsed as no quantity: regex `\b` never matches after Devanagari vowel signs (they're combining marks) | Explicit lookahead `(?=[\s,.;:!?)]|$)` instead of `\b` in the intent parser |
+| First full paid run: 23 minutes, ~$3, ~2,000 sequential model calls | SQLite call cache keyed on (backend, model, task, prompt, schema) + gpt-4o-mini routing for catalog work + parallel rows + a no-LLM baseline — trial run now 37 s / ~110 calls, re-runs free |
+| The simulator blamed the agent for its own wrong labels ("2 kg atta" priced as 2 × 5 kg packs) | Task generator states quantities in whole packs and computes expected totals with the **real** offer engine — labels and agent share one source of truth |
+| Console crashed in ways `npm run build` can't see (audit rows without `action`, a framer-motion variant swallowing the session detail) | Every page now verified with scripted-browser screenshots in both themes; API normalises audit rows; an ErrorBoundary contains the blast radius |
+| A dead OpenAI key mid-session meant a 500 — the README *claimed* a fallback that wasn't wired | The circuit breaker above (`llm/resilience.py`), plus this section, so the claim is now a test (`tests/test_resilience.py`) |
+
 ## Measured (generated, not hand-written — `results/RESULTS.md`)
 
 | | |
