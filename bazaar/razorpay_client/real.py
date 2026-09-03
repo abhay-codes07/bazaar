@@ -50,16 +50,19 @@ class RazorpayClient(PaymentsClient):
     def create_upi_payment_link(
         self, amount_paise: int, description: str, reference_id: str, notes: dict[str, str] | None = None
     ) -> PaymentLink:
-        d = self._c.payment_link.create(
-            {
-                "upi_link": True,
-                "amount": amount_paise,
-                "currency": "INR",
-                "description": description,
-                "reference_id": reference_id,
-                "notes": notes or {},
-            }
-        )
+        body = {
+            "amount": amount_paise,
+            "currency": "INR",
+            "description": description,
+            "reference_id": reference_id,
+            "notes": notes or {},
+        }
+        try:
+            d = self._c.payment_link.create({**body, "upi_link": True})
+        except razorpay.errors.BadRequestError:
+            # fresh test accounts often don't have UPI payment links enabled — fall back to a
+            # standard link (the hosted page still offers UPI among its methods)
+            d = self._c.payment_link.create(body)
         return PaymentLink(
             id=d["id"],
             short_url=d["short_url"],
