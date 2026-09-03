@@ -48,3 +48,31 @@ def build_mcp(merchant: Merchant, tools: SellerTools | None = None) -> FastMCP:
         return t.reserve(quote_id).model_dump(mode="json")
 
     return mcp
+
+
+def main(argv: list[str] | None = None) -> int:
+    """``python -m bazaar.seller_agent.mcp_server <merchant_id>`` — stdio MCP server for one
+    merchant, the standard way a desktop agent (e.g. Claude Desktop) mounts a seller."""
+    import argparse
+    import sys
+
+    from bazaar.settings import get_settings
+    from bazaar.synthetic import load_corpus
+
+    p = argparse.ArgumentParser(prog="bazaar-merchant-mcp")
+    p.add_argument("merchant_id")
+    p.add_argument("--corpus", default=str(get_settings().data_dir / "synthetic"))
+    a = p.parse_args(argv)
+    from pathlib import Path
+
+    merchants = {m.merchant_id: m for m in load_corpus(Path(a.corpus))}
+    m = merchants.get(a.merchant_id)
+    if m is None:
+        print(f"unknown merchant {a.merchant_id!r}; have: {', '.join(list(merchants)[:5])}…", file=sys.stderr)
+        return 2
+    build_mcp(m).run()  # stdio transport
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

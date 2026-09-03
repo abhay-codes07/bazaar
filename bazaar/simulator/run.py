@@ -42,7 +42,9 @@ def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True, llm=None) -> tu
                 p.stock = max(p.stock, 25)
         st.add_merchant(mm)
     app = create_app(st)
-    client = TestClient(app)
+    # the harness client doubles as the merchant console (review-first approvals), so it
+    # carries the admin token the way the real console does
+    client = TestClient(app, headers={"x-admin-token": st.settings.bazaar_admin_token})
     buyer = BuyerAgentClient(client, operator="bazaar-simulator")
     buyer.register()
     client.post(f"/bazaar/v1/agents/{buyer.keyid}/tier", json={"tier": 2, "reason": "simulator"}, headers={"x-admin-token": st.settings.bazaar_admin_token})
@@ -50,6 +52,9 @@ def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True, llm=None) -> tu
 
 
 def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True, max_merchants: int = 0) -> dict[str, Any]:
+    import logging
+
+    logging.getLogger("httpx").setLevel(logging.WARNING)  # the MCP import turns on request logging
     t0 = time.time()
     corpus_dir = corpus_dir or get_settings().data_dir / "synthetic"
     out_dir = out_dir or ROOT / "results"
@@ -148,6 +153,10 @@ def _rs(paise: int) -> str:
     return f"₹{paise / 100:,.0f}"
 
 
+def _signed_rs(paise: int) -> str:
+    return f"{'−' if paise < 0 else '+'}₹{abs(paise) / 100:,.0f}"
+
+
 def render_markdown(r: dict[str, Any]) -> str:
     c, t, b, lf, tr = r["compiler"], r["transactions"], r["baseline_no_bazaar"], r["lift"], r["trust"]
     lines = [
@@ -174,11 +183,12 @@ def render_markdown(r: dict[str, Any]) -> str:
         f"| discounts given (all rule-bounded) | {_rs(t['discount_paise'])} | — |",
         f"| negotiation rounds | {t['negotiation_rounds']} | 0 |",
         "",
-        f"Lift: **+{lf['orders']} orders, +{_rs(lf['gmv_paise'])} GMV ({lf['gmv_multiple']}×)**.",
+        f"Lift: **{lf['orders']:+d} orders, {_signed_rs(lf['gmv_paise'])} GMV ({lf['gmv_multiple']}×)**."
+        + (f" The extra completions were bought with {_rs(t['discount_paise'])} of rule-bounded discounts — conversion up, GMV per order slightly down, exactly what bounded offers are for." if lf["gmv_paise"] < 0 <= lf["orders"] else ""),
         "",
         f"Declines on impossible tasks — precision {t['declines']['precision']:.3f}, recall {t['declines']['recall']:.3f}; wrong orders on impossible tasks: **{t['declines']['wrong_orders_on_impossible']}**; wrong declines on possible tasks: {t['declines']['wrong_declines_on_possible']}. Overall task accuracy {t['accuracy']:.1%}. Errors: {t['errors']}.",
         "",
-        "By language: " + ", ".join(f"{k} {v:.1%}" for k, v in t["by_language"].items()) + f". Latency p50 {t['p50_latency_ms']} ms · p95 {t['p95_latency_ms']} ms (in-process, offline backend).",
+        "By language: " + ", ".join(f"{k} {v:.1%}" for k, v in t["by_language"].items()) + f". Latency p50 {t['p50_latency_ms']} ms · p95 {t['p95_latency_ms']} ms (in-process, llm=`{r['backend']['llm']}`).",
         "",
         "## Trust",
         "",

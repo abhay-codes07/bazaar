@@ -87,7 +87,7 @@ def chaos_client(merchants):
     st = BazaarState(llm=ResilientLLM(FakeLLM(), threshold=3, cooldown_s=60))
     for m in merchants[:2]:
         st.add_merchant(m)
-    return TestClient(create_app(st)), st
+    return TestClient(create_app(st), headers={"x-admin-token": st.settings.bazaar_admin_token}), st
 
 
 def test_chaos_endpoint_and_visible_degraded_status(chaos_client):

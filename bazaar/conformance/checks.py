@@ -23,7 +23,7 @@ class Check(BaseModel):
     detail: str = ""
 
 
-def run_conformance(http, merchant_id: str | None = None) -> list[Check]:
+def run_conformance(http, merchant_id: str | None = None, authority: str = "testserver") -> list[Check]:
     out: list[Check] = []
 
     def add(name: str, passed: bool, detail: str = ""):
@@ -55,7 +55,7 @@ def run_conformance(http, merchant_id: str | None = None) -> list[Check]:
     add("beckn_search_ack_and_callback", r.status_code == 200 and r.json().get("message", {}).get("ack", {}).get("status") == "ACK" and r.json().get("callback", {}).get("context", {}).get("action") == "on_search")
 
     # session state machine
-    agent = BuyerAgentClient(http, operator="conformance")
+    agent = BuyerAgentClient(http, authority=authority, operator="conformance")
     agent.register()
     r = agent.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid})
     add("session_create_201", r.status_code == 201)

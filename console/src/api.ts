@@ -2,10 +2,28 @@
 
 const BASE = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
 
+// Merchant-mutating routes require the gateway's admin token (BAZAAR_ADMIN_TOKEN).
+// The local default matches the gateway's dev default so the sandbox works out of the box;
+// on a real deploy the merchant pastes their token once (sidebar) and it sticks.
+export function adminToken(): string {
+  try {
+    return localStorage.getItem("bazaar-admin-token") ?? "dev-admin-token";
+  } catch {
+    return "dev-admin-token";
+  }
+}
+export function setAdminToken(t: string) {
+  try {
+    localStorage.setItem("bazaar-admin-token", t);
+  } catch {
+    /* ignore */
+  }
+}
+
 async function req<T>(method: string, path: string, body?: unknown, headers: Record<string, string> = {}): Promise<T> {
   const r = await fetch(BASE + path, {
     method,
-    headers: { "content-type": "application/json", ...headers },
+    headers: { "content-type": "application/json", "x-admin-token": adminToken(), ...headers },
     body: body === undefined ? undefined : JSON.stringify(body),
   });
   const text = await r.text();

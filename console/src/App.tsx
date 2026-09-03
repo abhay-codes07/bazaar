@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { adminToken, setAdminToken } from "./api";
 import { StoreProvider, useStore } from "./store";
 import Overview from "./pages/Overview";
 import Catalog from "./pages/Catalog";
@@ -93,6 +94,18 @@ function Shell() {
             </button>
           </div>
           {current?.kill_switch && <div className="chip chip-danger mt-3 w-full justify-center">agent disabled</div>}
+          <details className="mt-3">
+            <summary className="text-[10.5px] uppercase tracking-[0.16em] text-muted cursor-pointer select-none">Admin token</summary>
+            <input
+              type="password"
+              className="input h-8 mt-1.5 mono text-[12px]"
+              defaultValue={adminToken()}
+              onChange={(e) => setAdminToken(e.target.value)}
+              placeholder="BAZAAR_ADMIN_TOKEN"
+              autoComplete="off"
+            />
+            <div className="text-[10.5px] text-muted mt-1">gates compile, publish, rules, policy, kill switch</div>
+          </details>
         </div>
       </aside>
       <main className="flex-1 min-w-0">

@@ -11,7 +11,7 @@ def _client(merchants, tmp_path):
             p.stock = 30
         mm.policy.review_first = False
         st.add_merchant(mm)
-    return st, TestClient(create_app(st))
+    return st, TestClient(create_app(st), headers={"x-admin-token": st.settings.bazaar_admin_token})
 
 
 def test_playground_full_flow_and_tamper(merchants, tmp_path):
