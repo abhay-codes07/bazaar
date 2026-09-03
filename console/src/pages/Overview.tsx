@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { api, rupees, type MerchantDetail, type Stats } from "../api";
-import { Bar, Card, Chip, Empty, Page, Ring, Stat, StatusChip } from "../components/ui";
+import { Bar, Card, Chip, Empty, Page, Ring, Spinner, Stat, StatusChip } from "../components/ui";
 import { useStore } from "../store";
 
 const LABELS: Record<string, string> = { prices_trusted: "Prices trusted", units_clear: "Units clear", stock_known: "Stock known", gst_known: "GST known", serviceability: "Serviceability", offer_rules: "Offer rules", descriptions: "Descriptions", clean_text: "Clean text" };
@@ -75,7 +75,7 @@ export default function Overview() {
               )}
             </div>
           ) : (
-            <Empty title="Loading" />
+            <div className="flex items-center justify-center gap-2 py-16 text-[13px] text-muted"><Spinner /> loading…</div>
           )}
         </Card>
         <div className="flex flex-col gap-4 min-w-0">

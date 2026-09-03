@@ -76,7 +76,7 @@ export default function Offers() {
           <p className="text-[13px] text-ink-2 mb-4">The agent can only <em>select</em> one of these by id. It never sets a price or invents a discount. Every publish runs a fairness audit: identical carts in the same segment must get identical outcomes regardless of agent, language, time or buyer.</p>
           <div className="space-y-3">
             {rules.map((r, i) => (
-              <div key={i} className="rounded-lg border hairline p-3 grid grid-cols-2 md:grid-cols-[1.4fr_1fr_0.8fr_0.9fr_1fr_1.1fr] gap-3 items-end">
+              <div key={i} className="rounded-lg border hairline p-3 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-[1.4fr_1fr_0.8fr_0.9fr_1fr_1.1fr] gap-3 items-end">
                 <Field label="Rule id"><input className="input h-8 mono text-[12px]" value={r.rule_id} onChange={(e) => upd(i, { rule_id: e.target.value.toUpperCase().replace(/\s+/g, "_") })} /></Field>
                 <Field label="Type">
                   <select className="input h-8" value={r.type} onChange={(e) => upd(i, { type: e.target.value as OfferRule["type"] })}>

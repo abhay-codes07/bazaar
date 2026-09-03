@@ -53,11 +53,11 @@ export default function Sessions() {
           ) : (
             <div className="divide-y hairline max-h-[70vh] overflow-auto">
               {list.map((x) => (
-                <button key={x.session_id} onClick={() => setParams({ s: x.session_id })} className={`row-hover w-full text-left px-5 py-3 flex items-center gap-3 text-[13px] ${sel === x.session_id ? "bg-paper-2" : ""}`}>
-                  <span className="mono text-[11.5px] text-muted w-[120px] truncate">{x.session_id}</span>
+                <button key={x.session_id} onClick={() => setParams({ s: x.session_id })} className={`row-hover w-full text-left px-5 py-3 flex items-center gap-2.5 text-[13px] ${sel === x.session_id ? "bg-paper-2" : ""}`}>
+                  <span className="mono text-[11.5px] text-muted w-[96px] shrink-0 truncate">{x.session_id}</span>
                   <StatusChip status={x.status} />
-                  <span className="text-muted text-[11.5px]">T{x.tier} · {x.source}</span>
-                  <span className="ml-auto num">{x.quote ? rupees(x.quote.total_paise) : "—"}</span>
+                  <span className="text-muted text-[11.5px] whitespace-nowrap truncate min-w-0">T{x.tier} · {x.source}</span>
+                  <span className="ml-auto num shrink-0">{x.quote ? rupees(x.quote.total_paise) : "—"}</span>
                 </button>
               ))}
             </div>

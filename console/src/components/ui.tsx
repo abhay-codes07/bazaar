@@ -27,9 +27,9 @@ export function Card({ children, className = "", title, aside, pad = true }: { c
   return (
     <motion.section variants={rise} className={`card min-w-0 ${pad ? "p-5" : ""} ${className}`}>
       {(title || aside) && (
-        <div className={`flex items-center justify-between gap-3 ${pad ? "mb-4" : "px-5 pt-5 pb-3"}`}>
-          {title && <h3 className="text-[17px]">{title}</h3>}
-          {aside}
+        <div className={`flex flex-wrap items-center justify-between gap-x-3 gap-y-2 ${pad ? "mb-4" : "px-5 pt-5 pb-3"}`}>
+          {title && <h3 className="text-[17px] min-w-0">{title}</h3>}
+          {aside && <div className="flex flex-wrap items-center gap-2 min-w-0 ml-auto justify-end">{aside}</div>}
         </div>
       )}
       {children}
@@ -142,7 +142,7 @@ export function Field({ label, children, hint }: { label: string; children: Reac
 
 export function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label?: string }) {
   return (
-    <button type="button" onClick={() => onChange(!on)} className="flex items-center gap-3 group" aria-pressed={on}>
+    <button type="button" onClick={() => onChange(!on)} className="flex items-center gap-3 group text-left rounded-md" aria-pressed={on}>
       <span className={`relative inline-block w-10 h-6 rounded-full transition-colors duration-200 ${on ? "bg-accent" : "bg-paper-3 border border-line-strong"}`}>
         <motion.span layout className="absolute top-[3px] w-[18px] h-[18px] rounded-full bg-paper shadow" style={{ left: on ? 19 : 3 }} transition={{ type: "spring", stiffness: 500, damping: 32 }} />
       </span>

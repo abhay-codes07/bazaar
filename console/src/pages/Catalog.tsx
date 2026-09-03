@@ -111,7 +111,7 @@ export default function Catalog() {
         <Card title={compiled ? "Compiled preview" : `Live catalog · ${live.length} products`} pad={false}>
           <div className="overflow-auto max-h-[460px]">
             <table className="w-full text-[13px]">
-              <thead className="text-[11px] uppercase tracking-[0.12em] text-muted sticky top-0 bg-paper">
+              <thead className="text-[11px] uppercase tracking-[0.12em] text-muted sticky top-0 thead-bg">
                 <tr>
                   <th className="text-left font-medium px-5 py-2">Product</th>
                   <th className="text-left font-medium px-2 py-2">Pack</th>
@@ -141,7 +141,7 @@ export default function Catalog() {
           </div>
         </Card>
         <Card title="What agents see" aside={
-          <div className="flex gap-1">
+          <div className="flex gap-1 flex-wrap justify-end">
             {(["llms_txt", "well_known_bazaar", "acp_feed", "beckn_on_search"] as const).map((t) => (
               <button key={t} className={`chip ${tab === t ? "chip-accent" : ""}`} onClick={() => setTab(t)}>{{ llms_txt: "llms.txt", well_known_bazaar: "manifest", acp_feed: "ACP feed", beckn_on_search: "Beckn" }[t]}</button>
             ))}
