@@ -27,6 +27,7 @@ from bazaar.trust.http_sig import NonceCache
 from bazaar.trust.ledger import FairnessLedger, LedgerEntry
 from bazaar.trust.policy import PolicyEngine
 from bazaar.trust.registry import AgentRegistry
+from bazaar.trust.uap import SandboxUAPBinding
 
 
 class BazaarState:
@@ -58,8 +59,28 @@ class BazaarState:
         self.processed_payments: set[str] = set()
         self._lock = threading.RLock()
         self.grants.on_event(lambda ev, d: self.grant_events.append({"event": ev, **d}))
+        # every grant is backed by a Reserve-Pay-shaped mandate (UAP shape, see trust/uap.py):
+        # issue blocks funds, use debits the block, revoke releases the remainder — all audited
+        self.uap = SandboxUAPBinding()
+        self.reserve_pay = self.uap.reserve_pay
+        self.grants.on_event(self._reserve_pay_sink)
         if isinstance(self.payments, FakeRazorpay):
             self.payments.on_webhook(lambda ev, body, sig: self.handle_webhook_event(ev.event, ev.payload))
+
+    def _reserve_pay_sink(self, event: str, data: dict[str, Any]) -> None:
+        g = self.grants.get(data.get("grant_id", ""))
+        if g is None:
+            return
+        if event == "grant.issued":
+            m = self.uap.block_funds(g.buyer_ref, g.merchant_id, g.max_amount_paise)
+            g.payment_mandate_id = m.mandate_id
+            self.audit.record({"session": "", "kind": "mandate", "action": "reserve_pay_blocked", "outcome": "ok", "note": f"{m.mandate_id}: ₹{m.blocked_paise / 100:.0f} blocked for {g.merchant_id}" + ("" if m.within_npci_defaults else " (above NPCI OC-228 defaults)")})
+        elif event == "grant.used" and g.payment_mandate_id:
+            m = self.uap.debit(g.payment_mandate_id, int(data.get("amount_paise", 0)), str(data.get("order_id", "")))
+            self.audit.record({"session": "", "kind": "mandate", "action": "reserve_pay_debit", "outcome": "ok", "note": f"{m.mandate_id}: ₹{int(data.get('amount_paise', 0)) / 100:.0f} debited, ₹{m.remaining_paise / 100:.0f} remains"})
+        elif event == "grant.revoked" and g.payment_mandate_id:
+            m = self.uap.release(g.payment_mandate_id)
+            self.audit.record({"session": "", "kind": "mandate", "action": "reserve_pay_released", "outcome": "ok", "note": f"{m.mandate_id}: ₹{m.remaining_paise / 100:.0f} released"})
 
     # ------------------------------------------------------------------ merchants
     def add_merchant(self, m: Merchant) -> None:

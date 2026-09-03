@@ -86,7 +86,7 @@ export default function Overview() {
                 ["UCP profile", `/bazaar/v1/merchants/${merchantId}/ucp`],
                 ["ACP product feed", `/bazaar/v1/merchants/${merchantId}/acp/feed`],
                 ["llms.txt", `/bazaar/v1/merchants/${merchantId}/llms.txt`],
-                ["MCP server", `/mcp/${merchantId}`],
+                ["MCP server", `/mcp`],
                 ["All exports", `/bazaar/v1/merchants/${merchantId}/exports`],
               ].map(([l, u]) => (
                 <a key={u} href={u} target="_blank" rel="noreferrer" className="row-hover rounded-md border hairline px-3 py-2 flex items-center justify-between gap-3 group min-w-0">

@@ -42,7 +42,7 @@ def well_known_bazaar(m: Merchant, base_url: str) -> dict[str, Any]:
             "services": {
                 "catalog": f"{base_url}/bazaar/v1/merchants/{m.merchant_id}/catalog",
                 "sessions": f"{base_url}/bazaar/v1/sessions",
-                "mcp": f"{base_url}/mcp/{m.merchant_id}",
+                "mcp": f"{base_url}/mcp",
             },
             "capabilities": [
                 {"name": "dev.bazaar.discover", "version": BAZAAR_VERSION},
@@ -81,7 +81,7 @@ def well_known_ucp(m: Merchant, base_url: str) -> dict[str, Any]:
                     "version": "2026-01-11",
                     "spec": "https://ucp.dev/specification/overview",
                     "rest_endpoint": f"{base_url}/ucp/{m.merchant_id}",
-                    "mcp_endpoint": f"{base_url}/mcp/{m.merchant_id}",
+                    "mcp_endpoint": f"{base_url}/mcp",
                 }
             },
             "capabilities": [
@@ -167,7 +167,7 @@ def llms_txt(m: Merchant, base_url: str) -> str:
         "",
         "## Agent endpoints",
         f"- Manifest: {base_url}/.well-known/bazaar (merchant {m.merchant_id})",
-        f"- MCP: {base_url}/mcp/{m.merchant_id}",
+        f"- MCP: {base_url}/mcp (bazaar-catalog server; pass merchant_id={m.merchant_id})",
         f"- Sessions: {base_url}/bazaar/v1/sessions",
         "",
         "## Delivery",

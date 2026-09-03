@@ -20,7 +20,7 @@ def env(merchants, tmp_path):
         mm.policy.review_first = False
         st.add_merchant(mm)
     app = create_app(st)
-    client = TestClient(app)
+    client = TestClient(app, headers={"x-admin-token": st.settings.bazaar_admin_token})
     buyer = BuyerAgentClient(client)
     buyer.register()
     client.post(f"/bazaar/v1/agents/{buyer.keyid}/tier", json={"tier": 2, "reason": "test"}, headers={"x-admin-token": st.settings.bazaar_admin_token})
@@ -164,7 +164,7 @@ def test_merchant_console_compile_review_publish_and_fairness_gate(env, corpus_d
     r = c.post(f"/bazaar/v1/merchants/{mid}/review/apply", json={"sku": item["sku"], "field": item["field"], "value": val})
     assert r.status_code == 200 and r.json()["remaining"] == len(q) - 1
     r = c.post(f"/bazaar/v1/merchants/{mid}/publish")
-    assert r.status_code == 200 and r.json()["readiness"]["score"] > 60 and r.json()["endpoints"]["mcp"] == f"/mcp/{mid}"
+    assert r.status_code == 200 and r.json()["readiness"]["score"] > 60 and r.json()["endpoints"]["mcp"] == "/mcp"
     # rules must pass the fairness audit to be published
     good = [{"rule_id": "FEST5", "type": "percent", "value": 5, "min_cart_paise": 50000}]
     assert c.put(f"/bazaar/v1/merchants/{mid}/rules", json={"rules": good}).status_code == 200
@@ -214,3 +214,15 @@ def test_tier_gate_on_checkout(env):
     cm, pm = low.mandates_for(quote, mid, "b", 100000)
     r = low.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
     assert r.status_code == 422 and "agent_tier_sufficient" in r.json()["reason"]
+
+
+def test_merchant_mutations_require_admin_token(env):
+    st, c, _ = env
+    mid = _grocer_id(st)
+    bare = TestClient(c.app)  # a visitor with no admin token
+    assert bare.post(f"/bazaar/v1/merchants/{mid}/kill-switch?on=true").status_code == 403
+    assert bare.put(f"/bazaar/v1/merchants/{mid}/rules", json={"rules": []}).status_code == 403
+    assert bare.post(f"/bazaar/v1/merchants/{mid}/publish").status_code == 403
+    assert bare.post(f"/bazaar/v1/merchants/{mid}/compile", json={"csv": "a,b"}).status_code == 403
+    assert bare.post("/bazaar/v1/dev/chaos", json={"model_down": True}).status_code == 403
+    assert st.merchants[mid].policy.kill_switch is False, "the unauthenticated kill-switch attempt must not stick"

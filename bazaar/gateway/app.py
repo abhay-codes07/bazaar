@@ -131,9 +131,32 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         for m in _load(st.settings.data_dir / "synthetic"):
             st.add_merchant(m)
 
-    app = FastAPI(title="Bazaar Gateway", version=__version__, docs_url="/docs")
+    # global bazaar-catalog MCP (mounted at /mcp; its session manager needs the app lifespan)
+    from contextlib import asynccontextmanager
+
+    from bazaar.gateway.catalog_mcp import build_catalog_mcp
+
+    catalog_mcp = build_catalog_mcp(st)
+    catalog_mcp_app = catalog_mcp.streamable_http_app()
+
+    @asynccontextmanager
+    async def _lifespan(_app: FastAPI):
+        async with catalog_mcp.session_manager.run():
+            yield
+
+    app = FastAPI(title="Bazaar Gateway", version=__version__, docs_url="/docs", lifespan=_lifespan)
     app.state.bazaar = st
-    app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"], expose_headers=["Request-Id", "API-Version"])
+
+    @app.api_route("/mcp", methods=["GET", "POST", "DELETE"], include_in_schema=False)
+    def _mcp_slash():  # MCP clients that omit the trailing slash
+        from fastapi.responses import RedirectResponse
+
+        return RedirectResponse("/mcp/", status_code=307)
+
+    app.mount("/mcp", catalog_mcp_app)
+    # cross-origin access is only for the dev console; the served console is same-origin
+    origins = [o.strip() for o in st.settings.bazaar_cors_origins.split(",") if o.strip()]
+    app.add_middleware(CORSMiddleware, allow_origins=origins, allow_methods=["*"], allow_headers=["*"], expose_headers=["Request-Id", "API-Version"])
 
     @app.middleware("http")
     async def _headers(request: Request, call_next):
@@ -322,7 +345,8 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"merchant": m.model_dump(mode="json", exclude={"products"}), "products": len(m.products), "readiness": rd.model_dump(), "review_queue": st.review_queues.get(mid, []), "pending_products": len(st.pending_catalogs.get(mid, [])), "sessions": [session_summary(s) for s in st.sessions.values() if s.merchant_id == mid][-50:]}
 
     @app.put("/bazaar/v1/merchants/{mid}/policy")
-    def put_policy(mid: str, body: MerchantPolicy):
+    def put_policy(mid: str, body: MerchantPolicy, request: Request):
+        require_admin(request, st)
         m = _m(mid)
         m.policy = body
         st.invalidate_readiness(mid)
@@ -330,14 +354,16 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return m.policy.model_dump(mode="json")
 
     @app.post("/bazaar/v1/merchants/{mid}/kill-switch")
-    def kill_switch(mid: str, on: bool = True):
+    def kill_switch(mid: str, request: Request, on: bool = True):
+        require_admin(request, st)
         m = _m(mid)
         m.policy.kill_switch = on
         st.audit.record({"session": "", "kind": "merchant", "action": "kill_switch", "outcome": "on" if on else "off", "note": mid})
         return {"merchant_id": mid, "kill_switch": on}
 
     @app.put("/bazaar/v1/merchants/{mid}/rules")
-    def put_rules(mid: str, body: RulesIn):
+    def put_rules(mid: str, body: RulesIn, request: Request):
+        require_admin(request, st)
         m = _m(mid)
         candidate = m.model_copy(update={"offer_rules": body.rules})
         rep = audit_merchant(candidate)
@@ -354,7 +380,8 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {**rep.model_dump(), "passed": rep.passed, "ledger": st.ledger.summary()}
 
     @app.post("/bazaar/v1/merchants/{mid}/compile")
-    def compile_ep(mid: str, body: CompileIn):
+    def compile_ep(mid: str, body: CompileIn, request: Request):
+        require_admin(request, st)
         m = _m(mid)
         try:
             rows = read_csv_text(body.csv)
@@ -368,7 +395,8 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"products": len(compiled.merchant.products), "review_queue": st.review_queues[mid], "stripped_injections": compiled.stripped_injections, "readiness": rd.model_dump(), "preview": st.pending_catalogs[mid][:20]}
 
     @app.post("/bazaar/v1/merchants/{mid}/review/apply")
-    def review_apply(mid: str, body: ReviewApply):
+    def review_apply(mid: str, body: ReviewApply, request: Request):
+        require_admin(request, st)
         _m(mid)
         pend = st.pending_catalogs.get(mid)
         if not pend:
@@ -401,7 +429,8 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         raise HTTPException(404, detail={"error": "sku_not_pending"})
 
     @app.post("/bazaar/v1/merchants/{mid}/publish")
-    def publish(mid: str):
+    def publish(mid: str, request: Request):
+        require_admin(request, st)
         m = _m(mid)
         pend = st.pending_catalogs.pop(mid, None)
         if pend is None:
@@ -411,10 +440,11 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         st.add_merchant(m)  # rebuilds the seller agent on the new catalog
         rd = readiness_score(m)
         st.audit.record({"session": "", "kind": "merchant", "action": "published", "outcome": "ok", "note": f"{mid}: {len(m.products)} products, readiness {rd.score}"})
-        return {"merchant_id": mid, "products": len(m.products), "readiness": rd.model_dump(), "endpoints": {"manifest": f"/bazaar/v1/merchants/{mid}/manifest", "mcp": f"/mcp/{mid}", "llms": f"/bazaar/v1/merchants/{mid}/llms.txt"}}
+        return {"merchant_id": mid, "products": len(m.products), "readiness": rd.model_dump(), "endpoints": {"manifest": f"/bazaar/v1/merchants/{mid}/manifest", "mcp": "/mcp", "mcp_stdio": f"python -m bazaar.seller_agent.mcp_server {mid}", "llms": f"/bazaar/v1/merchants/{mid}/llms.txt"}}
 
     @app.post("/bazaar/v1/merchants/{mid}/review-sessions/{sid}/approve")
-    def approve(mid: str, sid: str):
+    def approve(mid: str, sid: str, request: Request):
+        require_admin(request, st)
         s = st.session(sid)
         if s is None or s.merchant_id != mid:
             raise HTTPException(404, detail={"error": "session_not_found"})
@@ -448,9 +478,10 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary(), "llm": llm}
 
     @app.post("/bazaar/v1/dev/chaos")
-    def chaos(body: ChaosIn):
+    def chaos(body: ChaosIn, request: Request):
         """Demo/testing: simulate a model outage. The Seller Agent keeps answering via the
         deterministic fallback — same tools, same policy gate — and the switch is audited."""
+        require_admin(request, st)
         if not hasattr(st.llm, "force_down"):
             raise HTTPException(400, detail={"error": "offline backend is already deterministic; nothing to take down"})
         st.llm.force_down = body.model_down
