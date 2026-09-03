@@ -67,6 +67,10 @@ class MessageIn(BaseModel):
     message: str
 
 
+class ChaosIn(BaseModel):
+    model_down: bool = False
+
+
 class CompleteIn(BaseModel):
     grant_id: str = ""
     checkout_mandate: dict[str, Any] | None = None
@@ -440,7 +444,18 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
     @app.get("/bazaar/v1/stats")
     def stats():
         ss = list(st.sessions.values())
-        return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary()}
+        llm = st.llm.status() if hasattr(st.llm, "status") else {"backend": st.llm.name, "degraded": False}
+        return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary(), "llm": llm}
+
+    @app.post("/bazaar/v1/dev/chaos")
+    def chaos(body: ChaosIn):
+        """Demo/testing: simulate a model outage. The Seller Agent keeps answering via the
+        deterministic fallback — same tools, same policy gate — and the switch is audited."""
+        if not hasattr(st.llm, "force_down"):
+            raise HTTPException(400, detail={"error": "offline backend is already deterministic; nothing to take down"})
+        st.llm.force_down = body.model_down
+        st.audit.record({"kind": "ops", "action": "chaos_model_down", "outcome": "on" if body.model_down else "off", "note": "simulated model outage toggled"})
+        return {"model_down": st.llm.force_down, "llm": st.llm.status()}
 
     app.include_router(acp_router)
     app.include_router(ucp_router)

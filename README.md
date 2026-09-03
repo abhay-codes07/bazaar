@@ -4,6 +4,8 @@
 
 Agentic Payments lets an AI agent *pay*. Bazaar makes the long tail of merchants — a kirana with a Google Sheet, a saree seller on WhatsApp, a packaging distributor — *discoverable, quotable, negotiable and buyable* by agents on Claude, ChatGPT (ACP), Gemini/Shopify (UCP) and ONDC (Beckn), from one compile of whatever catalog they already have.
 
+**Why now:** NPCI is unveiling the **Unified Agent Protocol (UAP)** at GFF 2026 — national rails for AI-led UPI payments, built on UPI Circle delegation and Reserve Pay blocked funds. Those are exactly the primitives Bazaar's Trust Fabric already models ([mapping below](#uap-ready-by-construction)). The pay side is being standardised this month; the supply side — whom an agent can buy from — is still empty. That's Bazaar.
+
 > Razorpay AI Buildathon 2026 · Track 1: AI Growth & Agentic Commerce
 
 ---
@@ -132,6 +134,35 @@ flowchart LR
   P & E --> R[(Razorpay)]
 ```
 
+## UAP-ready by construction
+
+NPCI's Unified Agent Protocol (spec lands at GFF, 9–11 Sept 2026) standardises how an AI agent is allowed to pay over UPI. Bazaar's money layer was shaped on the same primitives, so binding to UAP when the spec publishes is an adapter — the same way ACP, UCP and Beckn were:
+
+| UAP builds on | Bazaar already has |
+|---|---|
+| UPI Circle — delegate payment authority to an agent within a pre-set limit | **Scoped Payment Grant**: one merchant, amount-capped, time-boxed, revocable, every use evented |
+| Reserve Pay — blocked funds, multiple debits | **Payment Mandate** binding (`trust/mandates.py`), prod hook already targets Reserve Pay/Autopay |
+| Agent onboarding & identity | **Agent Registry** — Ed25519 keys, RFC 9421-signed requests, trust tiers T0–T3 |
+| User-set spending rules | **Policy gate** — 24 named checks before any rupee moves, all auditable |
+
+The mandate layer is deliberately isolated (`trust/`), so the UAP binding replaces the demo signing backend without touching sessions, adapters or the policy gate.
+
+## What breaks, and what happens
+
+Failure handling is designed, tested and visible — not an apology:
+
+| What breaks | What happens |
+|---|---|
+| Model down / key dead / provider outage | **Circuit breaker** (`llm/resilience.py`): after 3 consecutive failures the primary is skipped and the deterministic offline backend answers — quotes, serviceability, checkout all keep working; negotiation degrades to the best pre-approved rule. Every failover lands on the audit chain and the console shows a *degraded* badge. Fallback answers are never written to the model cache. |
+| Payment fails | Session stays `ready_for_payment`; the buyer retries the **same** link — no silent retry, the failure is audited |
+| Stock race at checkout | Reservation fails → re-quote; nothing charged |
+| Tampered / expired mandate, over-cap grant | Named check fails → graceful decline **with reason**; decline is non-terminal, retry with corrected credentials |
+| Duplicate `complete` | `Idempotency-Key` returns the original result |
+| Forged webhook | HMAC verification rejects it |
+| Merchant pulls the kill switch mid-session | New actions refused instantly; nothing in flight is charged |
+
+Try it live: `POST /bazaar/v1/dev/chaos {"model_down": true}` mid-conversation — the buyer never sees a 500.
+
 ## Measured (generated, not hand-written — `results/RESULTS.md`)
 
 | | |
@@ -146,7 +177,7 @@ flowchart LR
 
 ```bash
 pip install -e ".[dev]"            # Python 3.10+
-python -m pytest -q                # 56 tests, fully offline
+python -m pytest -q                # 68 tests, fully offline
 python -m bazaar.simulator.run     # regenerates results/
 uvicorn bazaar.gateway.app:default_app --factory --port 8000
 cd console && npm install && npm run dev   # http://localhost:5173
