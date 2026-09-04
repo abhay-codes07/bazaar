@@ -19,4 +19,11 @@ Audit-chain money events for this session (from `/replay`):
 #142 payment_captured ok {"order_id": "order_TXkUiwOPKhZxiQ", "payment_id": "pay_TXkgZDVbhR09Kg", "amount_paise": 59850, "method": "netbanking"}
 ```
 
-Dashboard screenshot: `results/razorpay_dashboard.png` (Payments view showing the captured test payment).
+Both payments, fetched back from the live Razorpay API (`payment.fetch`) after the run:
+
+```
+pay_TXkgZDVbhR09Kg | status=captured | method=netbanking | amount=59850 paise | order=order_TXkUiwOPKhZxiQ
+pay_TXkX8IJ6b1nkn4 | status=failed   | method=card       | amount=59850 paise | order=order_TXkUiwOPKhZxiQ
+```
+
+Screenshot: [`razorpay_payment_success.png`](razorpay_payment_success.png) — Razorpay's hosted test-mode page confirming "Payment Completed · INR 598.50 · Payment ID: TXkgZDVbhR09Kg".
