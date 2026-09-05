@@ -170,17 +170,19 @@ export default function Catalog() {
 function ReviewRow({ item, onApply }: { item: ReviewItem; onApply: (i: ReviewItem, v: string) => void }) {
   const [v, setV] = useState(item.proposed_value);
   return (
-    <div className="px-5 py-3 flex items-center gap-3 text-[13px]">
-      <div className="w-[110px] shrink-0">
-        <div className="mono text-[11.5px] text-muted">{item.sku}</div>
-        <div className="uppercase tracking-[0.1em] text-[11px] text-accent">{item.field}</div>
+    <div className="px-5 py-3 text-[13px]">
+      <div className="flex items-baseline gap-2 mb-1.5">
+        <span className="mono text-[11.5px] text-muted">{item.sku}</span>
+        <span className="uppercase tracking-[0.1em] text-[11px] text-accent">{item.field}</span>
+        <span className="ml-auto text-[11px] text-muted shrink-0">confidence {Math.round(item.confidence * 100)}%</span>
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="truncate">“{item.source_value || "—"}”</div>
-        <div className="text-[11.5px] text-muted">{item.reason} · confidence {Math.round(item.confidence * 100)}%</div>
+      <div className="text-[12.5px] text-ink-2 mb-2">
+        <span className="text-muted">“{item.source_value || "—"}”</span> · {item.reason}
       </div>
-      <input className="input w-[150px] h-8 text-[13px]" value={v} onChange={(e) => setV(e.target.value)} />
-      <button className="btn h-8" onClick={() => onApply(item, v)}>Apply</button>
+      <div className="flex items-center gap-2">
+        <input className="input flex-1 min-w-0 h-8 text-[13px]" value={v} onChange={(e) => setV(e.target.value)} />
+        <button className="btn h-8 shrink-0" onClick={() => onApply(item, v)}>Apply</button>
+      </div>
     </div>
   );
 }
