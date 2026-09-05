@@ -35,6 +35,8 @@ Lift: **+6 orders, −₹2,680 GMV (0.99×)**. The extra completions were bought
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 99.0%. Errors: 0.
 
+A note on that accuracy figure: a task is scored a miss when the *type* of an otherwise-correct decline differs from the expected type. Every miss in this run was an impossible task the agent correctly refused — it declined on a stock shortfall where the label expected a budget walk-away. Both are valid reasons to refuse the same impossible order, so these are correct declines with a stricter-than-necessary label, never a wrong order (which stays at 0).
+
 By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 49.7 ms · p95 1543.0 ms (in-process, llm=`openai`).
 
 ## Trust

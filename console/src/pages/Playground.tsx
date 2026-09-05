@@ -30,6 +30,7 @@ export default function Playground() {
   const [intent, setIntent] = useState("5 kg basmati rice");
   const [pin, setPin] = useState("560034");
   const [modelDown, setModelDown] = useState(false);
+  const [canChaos, setCanChaos] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const merchant = merchants.find((m) => m.merchant_id === merchantId);
 
@@ -38,6 +39,11 @@ export default function Playground() {
     setSession(null);
     setSteps([]);
   }, [merchantId]);
+  useEffect(() => {
+    // the outage toggle only means something on a real backend; the deterministic offline
+    // engine has nothing to take down, so hide the control there rather than error on click.
+    api.stats().then((s) => setCanChaos(!!s.llm && s.llm.backend !== "fake")).catch(() => {});
+  }, []);
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, steps]);
@@ -116,7 +122,7 @@ export default function Playground() {
                 </select>
               </div>
               <div className="flex items-center gap-2">
-                <Toggle on={modelDown} onChange={toggleOutage} label="Model down" />
+                {canChaos && <Toggle on={modelDown} onChange={toggleOutage} label="Model down" />}
                 {session && <Chip kind="accent">{session.status.replaceAll("_", " ")}</Chip>}
               </div>
             </div>

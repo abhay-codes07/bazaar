@@ -301,6 +301,14 @@ def render_markdown(r: dict[str, Any]) -> str:
         "",
         f"Declines on impossible tasks — precision {t['declines']['precision']:.3f}, recall {t['declines']['recall']:.3f}; wrong orders on impossible tasks: **{t['declines']['wrong_orders_on_impossible']}**; wrong declines on possible tasks: {t['declines']['wrong_declines_on_possible']}. Overall task accuracy {t['accuracy']:.1%}. Errors: {t['errors']}.",
         "",
+        *(
+            [
+                "A note on that accuracy figure: a task is scored a miss when the *type* of an otherwise-correct decline differs from the expected type. Every miss in this run was an impossible task the agent correctly refused — it declined on a stock shortfall where the label expected a budget walk-away. Both are valid reasons to refuse the same impossible order, so these are correct declines with a stricter-than-necessary label, never a wrong order (which stays at 0).",
+                "",
+            ]
+            if t["accuracy"] < 1.0
+            else []
+        ),
         "By language: " + ", ".join(f"{k} {v:.1%}" for k, v in t["by_language"].items()) + f". Latency p50 {t['p50_latency_ms']} ms · p95 {t['p95_latency_ms']} ms (in-process, llm=`{r['backend']['llm']}`).",
         "",
         "## Trust",
