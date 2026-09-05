@@ -13,10 +13,10 @@ from bazaar.seller_agent.intent import match_products, parse_intent
 
 
 class DiscoverRequest(BaseModel):
-    intent: str
-    pincode: str = ""
-    budget_paise: int = 0
-    vertical: str = ""
+    intent: str = Field(max_length=2000)
+    pincode: str = Field(default="", max_length=12)
+    budget_paise: int = Field(default=0, ge=0)
+    vertical: str = Field(default="", max_length=48)
     limit: int = Field(default=5, ge=1, le=20)
 
 

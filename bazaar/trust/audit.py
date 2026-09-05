@@ -35,9 +35,14 @@ class AuditLog:
                     self._last = e["hash"]
 
     # ------------------------------------------------------------------ write
+    _RESERVED = frozenset({"audit_id", "seq", "at", "prev", "hash"})
+
     def record(self, entry: dict[str, Any]) -> str:
         with self._lock:
-            e = {"audit_id": "aud_" + secrets.token_hex(6), "seq": len(self._entries), "at": datetime.now(timezone.utc).isoformat(), "prev": self._last, **entry}
+            # the chain fields are ours — a caller must not be able to set seq/prev/hash and
+            # corrupt the chain, so strip them from the payload before spreading it
+            payload = {k: v for k, v in entry.items() if k not in self._RESERVED}
+            e = {"audit_id": "aud_" + secrets.token_hex(6), "seq": len(self._entries), "at": datetime.now(timezone.utc).isoformat(), "prev": self._last, **payload}
             e["hash"] = hashlib.sha256(_canon({k: v for k, v in e.items() if k != "hash"})).hexdigest()
             self._entries.append(e)
             self._last = e["hash"]

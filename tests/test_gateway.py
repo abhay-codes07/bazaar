@@ -365,3 +365,61 @@ def test_mandate_must_bind_grant_buyer(env):
     r = buyer.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
     assert r.status_code == 422 and "mandate_binds_grant_buyer" in r.json()["reason"]
     assert r.json()["payment"] is None
+
+
+def test_single_use_grant_cannot_back_two_links(env):
+    """P0-2: a single-use grant reserved by one in-flight checkout is refused to a second
+    session before the first is captured."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    def session():
+        r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "1 kg toor dal to 560034"})
+        return r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    s1, q1 = session()
+    s2, q2 = session()
+    g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "one", "merchant_id": mid, "max_amount_paise": 500000}).json()["grant_id"]
+    cm1, pm1 = buyer.mandates_for(q1, mid, "one", 500000)
+    r1 = buyer.pay_call("POST", f"/bazaar/v1/sessions/{s1}/complete", {"grant_id": g, "checkout_mandate": cm1, "payment_mandate": pm1, "human_confirmation": True})
+    assert r1.json()["allowed"], r1.text
+    cm2, pm2 = buyer.mandates_for(q2, mid, "one", 500000)
+    r2 = buyer.pay_call("POST", f"/bazaar/v1/sessions/{s2}/complete", {"grant_id": g, "checkout_mandate": cm2, "payment_mandate": pm2, "human_confirmation": True})
+    assert r2.status_code == 422 and "grant_usable" in r2.json()["reason"], "single-use grant double-spent"
+
+
+def test_unsigned_caller_cannot_drive_signed_session(env):
+    """P1-1: an anonymous caller cannot message a signed agent's session or inherit its tier."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    sid = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "hi"}).json()["session"]["session_id"]
+    r = c.post(f"/bazaar/v1/sessions/{sid}/messages", json={"message": "yes book it"})
+    assert r.status_code == 403 and "another_agent" in r.json()["detail"]["error"]
+
+
+def test_reregistering_key_does_not_reset_identity(env):
+    """P1-4: re-posting an existing public key is idempotent — tier/operator are not overwritten."""
+    st, c, buyer = env
+    st.registry.set_tier(buyer.keyid, AgentTier.T3_VETTED, "promoted")
+    import base64
+    pub = base64.urlsafe_b64encode(buyer.agent_pub_raw).rstrip(b"=").decode()
+    r = c.post("/bazaar/v1/agents/register", json={"public_key_b64u": pub, "operator": "evil"})
+    assert r.status_code == 201
+    a = st.registry.get(buyer.keyid)
+    assert int(a.tier) == int(AgentTier.T3_VETTED) and a.operator != "evil", "re-register reset the identity"
+
+
+def test_webhook_ignores_capture_for_canceled_session(env):
+    """P0-3: a capture on a canceled session must not complete it."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "2 kg toor dal to 560034"})
+    sid, quote = r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "cx", "merchant_id": mid, "max_amount_paise": 100000}).json()["grant_id"]
+    cm, pm = buyer.mandates_for(quote, mid, "cx", 100000)
+    buyer.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+    order_id = st.session(sid).order_id
+    buyer.call("POST", f"/bazaar/v1/sessions/{sid}/cancel?reason=changed_mind")
+    ev = {"event": "payment.captured", "payload": {"payment": {"id": "pay_late", "order_id": order_id, "amount_paise": quote["total_paise"], "status": "captured", "method": "upi"}}}
+    raw = json.dumps(ev).encode()
+    r = c.post("/webhooks/razorpay", content=raw, headers={"x-razorpay-signature": webhook_signature(raw, st.settings.razorpay_webhook_secret), "content-type": "application/json"})
+    assert r.json()["status"] == "inactive_session"
+    assert st.session(sid).status == "canceled"

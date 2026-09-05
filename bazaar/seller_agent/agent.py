@@ -153,7 +153,10 @@ class SellerAgent:
         if prop.tool == "check_serviceability":
             return t.check_serviceability(a.get("pincode", ""), a.get("sku", ""))
         if prop.tool == "quote":
-            return t.quote(a.get("lines", []), a.get("pincode", ""), a.get("segment", "any"), a.get("rule_ids"))
+            # a plain quote never carries offers — a rule may only be applied through apply_offer,
+            # which runs the tier / round-cap / allowlist checks. Otherwise quote is a side door
+            # around negotiation policy.
+            return t.quote(a.get("lines", []), a.get("pincode", ""), a.get("segment", "any"), None)
         if prop.tool == "apply_offer":
             return t.apply_offer(a.get("quote_id", ""), prop.rule_id or a.get("rule_id", ""))
         if prop.tool == "reserve":

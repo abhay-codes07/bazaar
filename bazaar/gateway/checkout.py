@@ -43,6 +43,11 @@ def complete_session(state: BazaarState, s: Session, agent_keyid: str, grant_id:
             state.audit.record({"session": s.session_id, "kind": "checkout", "action": "complete", "outcome": "declined", "checks": s.last_checks, "note": f"reservation failed: {r.reason}"})
             return res, s
         s.reservation_id = r.result["reservation_id"]
+    # reserve the amount on the grant for the payment window so a concurrent checkout on the
+    # same single-use grant is refused (the use is only recorded at capture, so without this a
+    # second complete between checkout and capture would double-spend the grant)
+    if grant_id and state.grants.get(grant_id):
+        state.grants.reserve_pending(grant_id, q.total_paise, s.session_id)
     if res.needs_merchant_review:
         s.status = "awaiting_merchant_review"
         s.touch()
@@ -53,11 +58,41 @@ def complete_session(state: BazaarState, s: Session, agent_keyid: str, grant_id:
     return res, s
 
 
-def approve_review(state: BazaarState, s: Session) -> Session:
+def approve_review(state: BazaarState, s: Session) -> tuple[bool, Session]:
     if s.status != "awaiting_merchant_review":
         raise ValueError("session is not awaiting review")
+    m = state.merchants[s.merchant_id]
+    q = Quote.model_validate(s.quote)
+    # anything can have changed between park and approve — re-verify the mutable state (the
+    # signed mandates were checked at park time and are immutable, so we re-check what is not:
+    # kill switch, grant still usable, stock still held/available, quote still fresh)
+    from datetime import datetime, timezone
+
+    from bazaar.trust.policy import Check
+
+    g = state.grants.get(s.grant_id) if s.grant_id else None
+    grant_ok = g is not None and g.usable_for(m.merchant_id, s.agent_keyid, q.total_paise, session_id=s.session_id)[0]
+    tools = state.agent(m.merchant_id).tools
+    stock_ok = bool(s.reservation_id) or all((m.product(ln.sku).stock if m.product(ln.sku) else 0) - tools._reserved_qty(ln.sku) >= ln.qty for ln in q.lines)
+    checks = [
+        Check(name="kill_switch_off", passed=not m.policy.kill_switch),
+        Check(name="quote_fresh", passed=datetime.now(timezone.utc) <= q.valid_until),
+        Check(name="grant_usable", passed=grant_ok, detail="" if grant_ok else "grant revoked/exhausted since review"),
+        Check(name="items_in_stock", passed=stock_ok),
+    ]
+    if not all(c.passed for c in checks):
+        s.status = "declined"
+        s.last_checks = [c.model_dump() for c in checks]
+        if s.reservation_id:
+            tools.release(s.reservation_id)
+            s.reservation_id = ""
+        if s.grant_id:
+            state.grants.release_pending(s.grant_id, s.session_id)
+        s.touch()
+        state.audit.record({"session": s.session_id, "kind": "checkout", "action": "merchant_approved", "outcome": "declined", "checks": s.last_checks, "note": "state changed since review; approval rejected"})
+        return False, s
     state.audit.record({"session": s.session_id, "kind": "checkout", "action": "merchant_approved", "outcome": "ok"})
-    return state.issue_payment(s)
+    return True, state.issue_payment(s)
 
 
 def cancel_session(state: BazaarState, s: Session, reason: str) -> Session:
@@ -66,6 +101,8 @@ def cancel_session(state: BazaarState, s: Session, reason: str) -> Session:
     if s.reservation_id:
         state.agent(s.merchant_id).tools.release(s.reservation_id)
         s.reservation_id = ""
+    if s.grant_id:
+        state.grants.release_pending(s.grant_id, s.session_id)
     s.status = "canceled"
     s.touch()
     state.audit.record({"session": s.session_id, "kind": "checkout", "action": "cancel", "outcome": "ok", "note": reason})

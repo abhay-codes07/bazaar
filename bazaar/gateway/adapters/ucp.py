@@ -129,12 +129,20 @@ def get(merchant_id: str, sid: str, request: Request):
     return _render(s, str(request.base_url).rstrip("/"))
 
 
+async def _require_owner(request, st, s):
+    if s.agent_keyid:
+        caller = await identify(request, st)
+        if caller.keyid != s.agent_keyid:
+            raise HTTPException(403, detail={"error": "session_belongs_to_another_agent"})
+
+
 @router.put("/{merchant_id}/checkout-sessions/{sid}")
 async def update(merchant_id: str, sid: str, body: UpdateIn, request: Request):
     st = _state(request)
     s = st.session(sid)
     if s is None or s.merchant_id != merchant_id:
         raise HTTPException(404, detail={"error": "session_not_found"})
+    await _require_owner(request, st, s)
     if s.status not in ("open", "ready_for_payment"):
         raise HTTPException(409, detail={"error": f"session_{_status(s)}"})
     items = body.line_items or ([LineItem(item={"id": ln["sku"]}, quantity=ln["qty"]) for ln in s.quote["lines"]] if s.quote else [])
@@ -171,11 +179,12 @@ async def complete(merchant_id: str, sid: str, body: CompleteIn, request: Reques
 
 
 @router.post("/{merchant_id}/checkout-sessions/{sid}/cancel")
-def cancel(merchant_id: str, sid: str, request: Request):
+async def cancel(merchant_id: str, sid: str, request: Request):
     st = _state(request)
     s = st.session(sid)
     if s is None or s.merchant_id != merchant_id:
         raise HTTPException(404, detail={"error": "session_not_found"})
+    await _require_owner(request, st, s)
     try:
         cancel_session(st, s, "ucp cancel")
     except ValueError as e:
