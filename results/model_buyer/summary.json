@@ -1,17 +1,67 @@
 {
- "backend": "groq",
- "model": "openai/gpt-oss-120b",
- "tasks": 20,
- "orders": 9,
- "accuracy": 0.45,
- "accuracy_excl_rate_limited": 1.0,
- "rate_limited": 11,
- "reached_the_system": 9,
- "wrong_orders": 0,
- "gmv_paise": 5920880,
+ "backend": "openai",
+ "model": "gpt-4o",
+ "tasks": 40,
+ "orders": 30,
+ "orders_at_named_merchant": 14,
+ "orders_via_network_reroute": 16,
+ "model_walk_aways_or_declines": 9,
+ "accuracy": 0.925,
+ "accuracy_excl_rate_limited": 0.925,
+ "rate_limited": 0,
+ "reached_the_system": 40,
+ "wrong_orders_the_gate_should_have_blocked": 0,
+ "reroutes_on_impossible_at_named": [
+  {
+   "task_id": "t001",
+   "expected": "decline_stock",
+   "from": "m_001_annapurna_kirana",
+   "to": "m_006_om_sai_kirana",
+   "gmv_paise": 2230000
+  },
+  {
+   "task_id": "t004",
+   "expected": "decline_unserviceable",
+   "from": "m_004_nandini_daily_needs",
+   "to": "m_008_patel_provision_mart",
+   "gmv_paise": 2300
+  },
+  {
+   "task_id": "t008",
+   "expected": "decline_stock",
+   "from": "m_008_patel_provision_mart",
+   "to": "m_003_gupta_groceries",
+   "gmv_paise": 3311280
+  },
+  {
+   "task_id": "t024",
+   "expected": "decline_unserviceable",
+   "from": "m_024_pixel_mobile_point",
+   "to": "m_023_chargeup_store",
+   "gmv_paise": 483800
+  },
+  {
+   "task_id": "t036",
+   "expected": "decline_unserviceable",
+   "from": "m_036_kitchen_kahani",
+   "to": "m_040_ghar_sajja",
+   "gmv_paise": 655200
+  },
+  {
+   "task_id": "t039",
+   "expected": "decline_budget",
+   "from": "m_039_pune_home_store",
+   "to": "m_034_anand_utensils",
+   "gmv_paise": 620540
+  }
+ ],
+ "gmv_paise": 17283097,
  "outcomes": {
-  "error": 11,
-  "order": 9
+  "buyer_walked_budget": 5,
+  "order": 30,
+  "unserviceable": 2,
+  "declined_by_policy": 2,
+  "error": 1
  },
- "note": "The 11 errors are all HTTP 429 free-tier daily-quota limits on gpt-oss-120b, exhausted by repeated dev runs; they never reached the gateway. Of the 9 tasks that ran, the agent handled all 9 correctly with 0 wrong orders. Reproducible in full on a paid tier or fresh key."
+ "errors": []
 }

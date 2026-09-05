@@ -25,9 +25,9 @@ The diagrams live in the [README](README.md) (system, order sequence, compile pi
 | 200 buyer tasks | 100% accuracy | 99.0% — both misses were impossible tasks it still refused |
 | wrong orders / wrong declines | 0 / 0 | 0 / 0 |
 | red team · fairness · conformance | 19/19 hand-written + 190/190 generated · 159,840 cohorts clean · 24/24 | same |
-| latency p50 / p95 | 47 / 62 ms | 54 ms / 4.0 s |
+| latency p50 / p95 | 47 / 62 ms (deterministic) | cache hit ≈ offline; a live gpt-4o proposal adds ~1.5–4 s |
 
-84 tests, fully offline, green in CI.
+91 tests, fully offline, green in CI.
 
 ## Honest limitations
 

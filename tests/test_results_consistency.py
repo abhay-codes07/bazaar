@@ -61,3 +61,24 @@ def test_readme_quotes_the_sweep_row():
     # the README must show the *cost* row, not only the comfortable zero
     pat = re.compile(rf"{re.escape(_rs(tight['max_order_paise']))}.*?\*\*{tight['wrong_declines_on_possible']}\*\*.*?{re.escape(_rs(tight['lost_gmv_paise']))}")
     assert pat.search(readme), f"README false-positive row stale; expected cap {_rs(tight['max_order_paise'])} → {tight['wrong_declines_on_possible']} wrong declines, {_rs(tight['lost_gmv_paise'])} lost"
+
+
+def test_generated_redteam_number_matches_readme():
+    p = ROOT / "results" / "redteam_generated" / "results.json"
+    if not p.exists():
+        pytest.skip("no generated red team")
+    r = json.loads(p.read_text(encoding="utf-8"))
+    defended = sum(1 for x in r if x["passed"])
+    readme = README.read_text(encoding="utf-8")
+    assert f"{defended}/{len(r)} defended" in readme, f"README generated-redteam number stale; results say {defended}/{len(r)}"
+
+
+def test_model_buyer_claim_matches_summary():
+    p = ROOT / "results" / "model_buyer" / "summary.json"
+    if not p.exists():
+        pytest.skip("no model buyer run")
+    s = json.loads(p.read_text(encoding="utf-8"))
+    # the README asserts 0 gate-violating orders and states the reroute count — both must be true
+    assert s.get("wrong_orders_the_gate_should_have_blocked", 1) == 0, "model buyer had orders the gate should have blocked; README claim is false"
+    readme = README.read_text(encoding="utf-8")
+    assert f"{s['orders_via_network_reroute']} via network reroute" in readme, "README reroute count is stale vs the model-buyer summary"

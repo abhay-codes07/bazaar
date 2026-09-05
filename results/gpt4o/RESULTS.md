@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-09-05T07:44:18Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`openai`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-09-05T09:19:37Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`openai`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -35,11 +35,11 @@ Lift: **+6 orders, −₹2,680 GMV (0.99×)**. The extra completions were bought
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 99.0%. Errors: 0.
 
-By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 54.0 ms · p95 3982.4 ms (in-process, llm=`openai`).
+By language: hi-Latn 97.6%, en 99.0%, hi 100.0%. Latency p50 49.7 ms · p95 1543.0 ms (in-process, llm=`openai`).
 
 ## Trust
 
-- Audit entries 1350, hash chain intact: **True**, Merkle root `78d9abc1d2f96e3a…`
+- Audit entries 1267, hash chain intact: **True**, Merkle root `8695d8b358cfd69c…`
 - Explanations present on 100.0% of agent turns
 - Grants issued 127, used 127; fairness-ledger entries 50, inconsistencies **0**
 
@@ -82,4 +82,8 @@ Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks 
 
 ## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 1018.0 s._
+## Provenance
+
+Backend `openai` (model `gpt-4o`). Model failovers to the deterministic fallback during this run: **0** — so the model itself produced these results (health: degraded=False, failures=0). LLM cache: 2965 hits / 371 misses (371 real model calls this run; the rest replayed from cache).
+
+_Elapsed 543.3 s._
