@@ -28,11 +28,21 @@ def complete_session(state: BazaarState, s: Session, agent_keyid: str, grant_id:
         state.audit.record({"session": s.session_id, "kind": "checkout", "action": "complete", "outcome": "declined", "checks": s.last_checks, "note": res.reason})
         return res, s
     s.grant_id = grant_id
-    # hold stock for the payment window if not already held
+    # hold stock for the payment window if not already held. A failed reservation means another
+    # in-flight checkout already holds the last units — decline rather than oversell (the policy
+    # gate reads raw stock; the reservation is the atomic claim two buyers cannot both win).
     if not s.reservation_id:
         r = state.agent(s.merchant_id).tools.reserve(q.quote_id)
-        if r.ok:
-            s.reservation_id = r.result["reservation_id"]
+        if not r.ok:
+            from bazaar.trust.policy import Check
+
+            res.checks.append(Check(name="stock_reserved", passed=False, detail=r.reason))
+            res.allowed = False
+            s.last_checks = [c.model_dump() for c in res.checks]
+            s.touch()
+            state.audit.record({"session": s.session_id, "kind": "checkout", "action": "complete", "outcome": "declined", "checks": s.last_checks, "note": f"reservation failed: {r.reason}"})
+            return res, s
+        s.reservation_id = r.result["reservation_id"]
     if res.needs_merchant_review:
         s.status = "awaiting_merchant_review"
         s.touch()

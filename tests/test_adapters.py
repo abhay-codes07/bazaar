@@ -35,7 +35,7 @@ def test_ucp_profile_and_checkout_with_ap2_mandates(merchants, tmp_path):
     quote = st.session(cs["id"]).quote
     g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "u1", "merchant_id": mid, "max_amount_paise": total + 100}).json()["grant_id"]
     cm, pm = buyer.mandates_for(quote, mid, "u1", total + 100)
-    r = buyer.pay_call("POST", f"/ucp/{mid}/checkout-sessions/{cs['id']}/complete", {"payment": {"handler": "razorpay", "grant_id": g}, "checkout_mandate": cm, "payment_mandate": pm}, idempotency_key="u-1")
+    r = buyer.pay_call("POST", f"/ucp/{mid}/checkout-sessions/{cs['id']}/complete", {"payment": {"handler": "razorpay", "grant_id": g}, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True}, idempotency_key="u-1")
     assert r.status_code == 200, r.text
     out = r.json()
     assert out["status"] == "complete" and out["order"]["payment_url"].startswith("https://") and out["policy"]["allowed"]

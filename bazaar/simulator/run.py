@@ -173,7 +173,7 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     base_results = [run_task(buyer_b, t, st_b, baseline=True) for t in tasks]
     base = summarize(base_results)
     report["baseline_no_bazaar"] = {k: base[k] for k in ("orders", "task_to_order_rate", "possible_completion_rate", "gmv_paise")}
-    report["baseline_no_bazaar"]["definition"] = "buyer reads a static price list: proceeds only for same-city merchants, cannot ask serviceability, gets no offers; without Bazaar these merchants are not agent-transactable at all (0 agent-originated orders)"
+    report["baseline_no_bazaar"]["definition"] = "same compiled catalog and index, but with negotiation OFF and a same-city-only filter, and no serviceability answers — an honest ablation of Bazaar's agent features, not a no-Bazaar world. The orders-unlocked metric below counts what this ablation cannot complete at all."
     report["lift"] = {"orders": summ["orders"] - base["orders"], "gmv_paise": summ["gmv_paise"] - base["gmv_paise"], "gmv_multiple": round(summ["gmv_paise"] / max(1, base["gmv_paise"]), 2)}
     # the honest growth number: orders the baseline could not complete AT ALL — because the
     # buyer needed a serviceability answer, or a bounded offer to fit the budget
@@ -265,7 +265,7 @@ def render_markdown(r: dict[str, Any]) -> str:
         "",
         f"## Transactions ({t['tasks']} buyer tasks, {t['possible_tasks']} possible / {t['declines']['impossible_tasks']} impossible by construction)",
         "",
-        "| metric | Bazaar | baseline: static price list (same-city only, no serviceability answers, no offers) |",
+        "| metric | Bazaar | ablation: same catalog & index, negotiation off, same-city filter, no serviceability answers |",
         "|---|---|---|",
         f"| orders | **{t['orders']}** | {b['orders']} |",
         f"| task → order | {t['task_to_order_rate']:.1%} | {b['task_to_order_rate']:.1%} |",

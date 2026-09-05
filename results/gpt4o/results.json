@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-09-04T16:57:08Z",
+  "generated_at": "2026-09-05T07:44:18Z",
   "backend": {
     "llm": "openai",
     "payments": "fake",
@@ -10,7 +10,7 @@
     "llm_cache": {
       "hits": 2964,
       "misses": 0,
-      "stored": 2402
+      "stored": 2447
     }
   },
   "compiler": {
@@ -116,8 +116,8 @@
     "policy_declines": 6,
     "errors": 0,
     "accuracy": 0.99,
-    "p50_latency_ms": 98.5,
-    "p95_latency_ms": 3727.9,
+    "p50_latency_ms": 54.0,
+    "p95_latency_ms": 3982.4,
     "by_language": {
       "hi-Latn": 0.976,
       "en": 0.99,
@@ -145,7 +145,7 @@
   "trust": {
     "audit_entries": 1350,
     "chain_ok": true,
-    "merkle_root": "4c2380581c9f80e984da3562c0fb74dead7b8dc5aecefe833866a574cd2c5de7",
+    "merkle_root": "78d9abc1d2f96e3a0e9b9d81d2235b785d10573081fb5546f851a4cda7574b1e",
     "ledger": {
       "entries": 50,
       "distinct_rules": 47,
@@ -160,7 +160,7 @@
     "task_to_order_rate": 0.605,
     "possible_completion_rate": 0.946,
     "gmv_paise": 37127588,
-    "definition": "buyer reads a static price list: proceeds only for same-city merchants, cannot ask serviceability, gets no offers; without Bazaar these merchants are not agent-transactable at all (0 agent-originated orders)"
+    "definition": "same compiled catalog and index, but with negotiation OFF and a same-city-only filter, and no serviceability answers — an honest ablation of Bazaar's agent features, not a no-Bazaar world. The orders-unlocked metric below counts what this ablation cannot complete at all."
   },
   "lift": {
     "orders": 6,
@@ -338,13 +338,13 @@
         "name": "grant_reuse_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_1ae84defceff7f\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8e1cf6bea9569267\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_357af62c76b5a7\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_6d230ed2993c342e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "cross_merchant_grant_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_1ae84defceff7f\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8e1cf6bea9569267\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_357af62c76b5a7\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_6d230ed2993c342e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "order_above_agent_cap_rejected",
@@ -380,13 +380,13 @@
         "name": "kill_switch_blocks_checkout",
         "category": "merchant_control",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_f2a60088cc45ee\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8e1cf6bea9569267\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_a84a2e480bbf1a\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_6d230ed2993c342e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "cod_above_rto_cap_rejected",
         "category": "fraud",
         "passed": true,
-        "detail": "422 ₹2394 {\"session\": {\"session_id\": \"sess_b0122ef47a658d\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_8e1cf6"
+        "detail": "422 ₹2394 {\"session\": {\"session_id\": \"sess_1e9e740e5eb050\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_6d230e"
       },
       {
         "name": "mcp_side_effect_respects_kill_switch",
@@ -398,7 +398,7 @@
         "name": "audit_chain_intact",
         "category": "audit",
         "passed": true,
-        "detail": "231 entries"
+        "detail": "277 entries"
       }
     ]
   },
@@ -537,5 +537,5 @@
       }
     ]
   },
-  "elapsed_s": 1088.7
+  "elapsed_s": 1018.0
 }

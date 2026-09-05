@@ -1,6 +1,6 @@
 {
   "version": "0.1.0",
-  "generated_at": "2026-09-04T16:55:47Z",
+  "generated_at": "2026-09-05T08:09:22Z",
   "backend": {
     "llm": "fake",
     "payments": "fake"
@@ -108,8 +108,8 @@
     "policy_declines": 6,
     "errors": 0,
     "accuracy": 1.0,
-    "p50_latency_ms": 49.0,
-    "p95_latency_ms": 68.2,
+    "p50_latency_ms": 56.1,
+    "p95_latency_ms": 73.3,
     "by_language": {
       "hi-Latn": 1.0,
       "en": 1.0,
@@ -137,7 +137,7 @@
   "trust": {
     "audit_entries": 1270,
     "chain_ok": true,
-    "merkle_root": "8f9c3736bab6747aac1a7673ee01f76672a6875d938cdaa2a69cd95f5c6a52f0",
+    "merkle_root": "8ff5231ec298de31baa9ec705981efecf06d3cfc2d49065915cee57275f186f8",
     "ledger": {
       "entries": 50,
       "distinct_rules": 47,
@@ -152,7 +152,7 @@
     "task_to_order_rate": 0.605,
     "possible_completion_rate": 0.946,
     "gmv_paise": 37127588,
-    "definition": "buyer reads a static price list: proceeds only for same-city merchants, cannot ask serviceability, gets no offers; without Bazaar these merchants are not agent-transactable at all (0 agent-originated orders)"
+    "definition": "same compiled catalog and index, but with negotiation OFF and a same-city-only filter, and no serviceability answers — an honest ablation of Bazaar's agent features, not a no-Bazaar world. The orders-unlocked metric below counts what this ablation cannot complete at all."
   },
   "lift": {
     "orders": 6,
@@ -330,13 +330,13 @@
         "name": "grant_reuse_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_2632ef86afb6dc\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_bc0561e18e22a484\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_4472860e2d4b41\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_b43ded99b6481e1e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "cross_merchant_grant_rejected",
         "category": "grants",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_2632ef86afb6dc\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_bc0561e18e22a484\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_4472860e2d4b41\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_b43ded99b6481e1e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "order_above_agent_cap_rejected",
@@ -372,13 +372,13 @@
         "name": "kill_switch_blocks_checkout",
         "category": "merchant_control",
         "passed": true,
-        "detail": "422 {\"session\": {\"session_id\": \"sess_688cc333388932\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_bc0561e18e22a484\", \"tier\": 2, \"segment\": \"any\""
+        "detail": "422 {\"session\": {\"session_id\": \"sess_608b1d00e0af63\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_b43ded99b6481e1e\", \"tier\": 2, \"segment\": \"any\""
       },
       {
         "name": "cod_above_rto_cap_rejected",
         "category": "fraud",
         "passed": true,
-        "detail": "422 ₹2394 {\"session\": {\"session_id\": \"sess_a8e6aca9084297\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_bc0561"
+        "detail": "422 ₹2394 {\"session\": {\"session_id\": \"sess_6ff093372219ee\", \"merchant_id\": \"m_000_sharma_general_store\", \"agent_keyid\": \"ak_b43ded"
       },
       {
         "name": "mcp_side_effect_respects_kill_switch",
@@ -390,7 +390,7 @@
         "name": "audit_chain_intact",
         "category": "audit",
         "passed": true,
-        "detail": "227 entries"
+        "detail": "313 entries"
       }
     ]
   },
@@ -529,5 +529,5 @@
       }
     ]
   },
-  "elapsed_s": 64.5
+  "elapsed_s": 133.3
 }

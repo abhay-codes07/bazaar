@@ -157,10 +157,17 @@ class BazaarState:
                 s = self._session_for_webhook(pay, payload)
                 if s is None:
                     return {"status": "unknown_order"}
+                q = Quote.model_validate(s.quote)
+                paid = int(pay.get("amount_paise", pay.get("amount", 0)))
+                if paid != q.total_paise:
+                    # underpayment/overpayment must not complete an order (a 1-paise webhook
+                    # cannot close a ₹598 quote); record it and leave the session open to retry
+                    self.processed_payments.add(pay["id"])
+                    self.audit.record({"session": s.session_id, "kind": "money", "action": "payment_amount_mismatch", "outcome": "rejected", "money": {"order_id": s.order_id, "payment_id": pay["id"], "paid_paise": paid, "expected_paise": q.total_paise}, "note": "captured amount != quote total; order not completed"})
+                    return {"status": "amount_mismatch", "expected_paise": q.total_paise, "paid_paise": paid}
                 self.processed_payments.add(pay["id"])
                 s.payment_id, s.status = pay["id"], "completed"
                 s.touch()
-                q = Quote.model_validate(s.quote)
                 if s.reservation_id:
                     self.agent(s.merchant_id).tools.commit_stock(s.reservation_id)
                 else:
