@@ -52,6 +52,7 @@ class ParsedIntent(BaseModel):
     deadline_hours: int = 0
     wants_cod: bool = False
     language: str = "en"  # en | hi | hi-Latn
+    lines: list[dict] = Field(default_factory=list)  # multi-SKU cart: [{sku, qty}] when >1 item parsed
 
 
 def detect_language(text: str) -> str:
@@ -90,6 +91,37 @@ def match_products(text: str, products: list[Product], limit: int = 5) -> list[P
             scored.append((best, p.stock > 0, p))
     scored.sort(key=lambda x: (-x[0], -int(x[1]), x[2].price_paise))
     return [p for _, _, p in scored[:limit]]
+
+
+_SEGMENT_SPLIT = re.compile(r"(?i)\s+(?:and|&|,|plus|as well as|और|तथा|aur)\s+")
+
+
+def _parse_multi_lines(text: str, merchant: Merchant) -> list[dict]:
+    """Parse a multi-item request ("5 kg rice and 2 kg dal") into cart lines. Returns [] unless
+    at least two segments each yield a distinct product with a quantity — so a single-item
+    request is left entirely to the existing single-SKU path."""
+    segments = _SEGMENT_SPLIT.split(text)
+    if len(segments) < 2:
+        return []
+    lines: list[dict] = []
+    seen: set[str] = set()
+    for seg in segments:
+        qm = _QTY_RX.search(seg)
+        if not qm or not re.fullmatch(r"\d+(?:\.\d+)?", qm.group(1) or ""):
+            return []  # a segment without a clear quantity → not a clean multi-item cart
+        matches = match_products(seg, merchant.products)
+        if not matches:
+            return []
+        p = matches[0]
+        if p.sku in seen:
+            return []  # same product twice → ambiguous, defer to single path
+        seen.add(p.sku)
+        qty = float(qm.group(1))
+        unit = _UNIT_WORDS.get((qm.group(2) or "").lower())
+        if unit is not None and unit == p.unit and unit in {Unit.KG, Unit.GRAM, Unit.LITRE, Unit.ML} and p.pack_size and p.pack_size > 1:
+            qty = max(1, round(qty / p.pack_size))
+        lines.append({"sku": p.sku, "qty": max(1, int(qty))})
+    return lines if len(lines) >= 2 else []
 
 
 def parse_intent(text: str, merchant: Merchant | None = None) -> ParsedIntent:
@@ -132,6 +164,7 @@ def parse_intent(text: str, merchant: Merchant | None = None) -> ParsedIntent:
     it.product_query = re.sub(r"\s+", " ", stripped).strip()
     if merchant is not None:
         it.matched_skus = [p.sku for p in match_products(it.product_query, merchant.products)]
+        it.lines = _parse_multi_lines(stripped, merchant)
 
     if _CONFIRM_RX.search(text_n):
         it.kind = "confirm"
@@ -141,7 +174,7 @@ def parse_intent(text: str, merchant: Merchant | None = None) -> ParsedIntent:
         it.kind = "negotiate"
     elif _SERVICE_RX.search(text_n) and not it.quantity:
         it.kind = "serviceability"
-    elif it.matched_skus and (it.quantity or it.pincode):
+    elif it.lines or (it.matched_skus and (it.quantity or it.pincode)):
         it.kind = "quote"
     else:
         it.kind = "search"
