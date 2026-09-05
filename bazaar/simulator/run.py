@@ -220,6 +220,13 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
 
     if hasattr(llm, "stats"):
         report["backend"]["llm_cache"] = llm.stats()
+    if hasattr(llm, "usage"):
+        # cost per completed order, measured from real token usage (cache hits cost nothing).
+        # On a warm-cache replay this is the marginal cost of the calls that ran live this time.
+        u = llm.usage()
+        orders = report["transactions"]["orders"]
+        u["inr_per_order"] = round(u["inr"] / orders, 4) if orders else 0.0
+        report["backend"]["llm_usage"] = u
     if hasattr(llm, "status"):
         # provenance: total_failovers=0 proves the real model answered (not the deterministic
         # fallback); on a cache replay misses=0 is expected and does not mean the model was skipped
@@ -335,6 +342,16 @@ def render_markdown(r: dict[str, Any]) -> str:
             misses = cache.get("misses", 0)
             prov += f" LLM cache: {cache.get('hits', 0)} hits / {misses} misses"
             prov += (" — every call served from a prior run's cache; a warm-cache replay costs nothing and re-bills nothing, and the failover count above proves the model, not the fallback, produced the cached answers." if misses == 0 else f" ({misses} real model calls this run; the rest replayed from cache).")
+        usage = b.get("llm_usage")
+        if usage and usage.get("prompt_tokens"):
+            per = usage["inr_per_order"]
+            prov += (
+                f"\n\n**Cost.** The live calls this run used {usage['prompt_tokens'] + usage['completion_tokens']:,} tokens "
+                f"(₹{usage['inr']:.2f} at listed {b.get('model', 'gpt-4o')} rates), which is **₹{per:.2f} per completed order** — "
+                f"quote maths, ranking and the policy gate never call a model, so only the seller's propose step costs anything, "
+                f"and it drops ~10–15× on gpt-4o-mini (or to zero on the free gpt-oss backend). "
+                f"(A warm-cache re-generation bills only the calls that changed, so its per-order figure is lower than this cold-cache measurement.)"
+            )
         lines += ["", prov]
     lines += ["", f"_Elapsed {r['elapsed_s']} s._", ""]
     return "\n".join(lines)

@@ -67,3 +67,8 @@ class CachedLLM(LLM):
         with self._lock:
             n = self._db.execute("SELECT COUNT(*) FROM calls").fetchone()[0]
         return {"hits": self.hits, "misses": self.misses, "stored": n}
+
+    def usage(self) -> dict[str, float]:
+        # token/cost accounting lives on the wrapped backend; cache hits never reach it, so
+        # this reports the cost of the real API calls this run (the misses)
+        return self.inner.usage() if hasattr(self.inner, "usage") else {}

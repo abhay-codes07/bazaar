@@ -10,6 +10,15 @@ from typing import Any
 
 from bazaar.llm.base import LLM, LLMError
 
+# USD per 1M tokens (input, output). Only the models we actually route to; extend as needed.
+_PRICE_PER_MTOK: dict[str, tuple[float, float]] = {
+    "gpt-4o": (2.50, 10.00),
+    "gpt-4o-mini": (0.15, 0.60),
+    "openai/gpt-oss-120b": (0.0, 0.0),  # Groq free tier
+    "qwen/qwen3.8-27b": (0.0, 0.0),
+}
+USD_TO_INR = 88.0
+
 
 class OpenAILLM(LLM):
     name = "openai"
@@ -22,6 +31,24 @@ class OpenAILLM(LLM):
         self._client = OpenAI(api_key=api_key, base_url=base_url or None)
         self._model = model
         self._task_models = dict(task_models or {})  # e.g. {"normalize_product": "gpt-4o-mini"}
+        # token/cost accounting — only real API calls reach here (cache hits never do), so this
+        # is a true measurement of what the run spent, not an estimate
+        self.prompt_tokens = 0
+        self.completion_tokens = 0
+        self.usd = 0.0
+
+    def usage(self) -> dict[str, float]:
+        return {"prompt_tokens": self.prompt_tokens, "completion_tokens": self.completion_tokens, "usd": round(self.usd, 4), "inr": round(self.usd * USD_TO_INR, 2)}
+
+    def _account(self, model: str, resp) -> None:
+        u = getattr(resp, "usage", None)
+        if u is None:
+            return
+        pt, ct = int(getattr(u, "prompt_tokens", 0) or 0), int(getattr(u, "completion_tokens", 0) or 0)
+        self.prompt_tokens += pt
+        self.completion_tokens += ct
+        pin, pout = _PRICE_PER_MTOK.get(model, (0.0, 0.0))
+        self.usd += pt / 1e6 * pin + ct / 1e6 * pout
 
     def complete_json(self, task: str, system: str, user: str, schema: dict[str, Any]) -> dict[str, Any]:
         return self._call(task, system, user, schema)
@@ -32,10 +59,11 @@ class OpenAILLM(LLM):
 
     def _call(self, task: str, system: str, user: Any, schema: dict[str, Any]) -> dict[str, Any]:
         fn_name = f"answer_{task}"
+        model = self._task_models.get(task, self._model)
         tool = {"type": "function", "function": {"name": fn_name, "description": f"Return the structured answer for task '{task}'.", "parameters": schema}}
         try:
             resp = self._client.chat.completions.create(
-                model=self._task_models.get(task, self._model),
+                model=model,
                 temperature=0,
                 messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
                 tools=[tool],
@@ -43,6 +71,7 @@ class OpenAILLM(LLM):
             )
         except Exception as e:  # noqa: BLE001
             raise LLMError(str(e)) from e
+        self._account(model, resp)
         choice = resp.choices[0] if resp.choices else None
         calls = getattr(choice.message, "tool_calls", None) if choice else None
         if not calls:
