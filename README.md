@@ -272,7 +272,7 @@ Backends are chosen in `.env` (see `.env.example`): `BAZAAR_LLM=fake|openai|groq
 
 **Run on real Razorpay test mode** (`BAZAAR_RAZORPAY=razorpay` + `rzp_test_…` keys): the full path has been exercised for real — signed agent → policy gate → review-first approval → live payment link → a failed card attempt → a captured retry, with every webhook HMAC-verified over a public tunnel. The ids are committed in [`results/razorpay_testmode.md`](results/razorpay_testmode.md).
 
-**Deploy**: `docker build -t bazaar . && docker run -p 8000:8000 bazaar`, or `flyctl launch --copy-config --now` (Dockerfile and `fly.toml` included). Set `BAZAAR_LLM=openai` + `OPENAI_API_KEY` as secrets to run the Seller Agent on gpt-4o, and **always set `BAZAAR_ADMIN_TOKEN`** on anything public — it gates every merchant-control route. `fly.toml` sets `BAZAAR_ENV=prod`, which makes the gateway refuse to boot on the dev admin token or webhook secret.
+**Deploy**: `docker build -t bazaar . && docker run -p 8000:8000 bazaar`, or `flyctl launch --copy-config --now` (Dockerfile and `fly.toml` included). Set `BAZAAR_LLM=openai` + `OPENAI_API_KEY` (or free `groq` + `GROQ_API_KEY`) as secrets to run the Seller Agent on a real model, and **always set `BAZAAR_ADMIN_TOKEN`** on anything public — it gates every merchant-control route. `fly.toml` sets `BAZAAR_ENV=prod`, which makes the gateway refuse to boot on the dev admin token or webhook secret. Full copy-paste steps (Fly + Docker, secrets, the free real-model demo, live-payment notes): **[DEPLOY.md](DEPLOY.md)**.
 
 ## Layout
 
