@@ -79,6 +79,9 @@ export const api = {
   manifest: (id: string) => req<unknown>("GET", `/bazaar/v1/merchants/${id}/manifest`),
   exports: (id: string) => req<Record<string, unknown>>("GET", `/bazaar/v1/merchants/${id}/exports`),
   compile: (id: string, csv: string) => req<{ products: number; review_queue: ReviewItem[]; stripped_injections: number; readiness: Readiness; preview: Product[] }>("POST", `/bazaar/v1/merchants/${id}/compile`, { csv }),
+  // Token-free stateless compile — the judge sandbox. Nothing is stored or published.
+  compilePreview: (csv: string) => req<{ products: number; review_queue: ReviewItem[]; stripped_injections: number; preview: Product[]; note: string }>("POST", `/bazaar/v1/dev/compile-preview`, { csv }),
+  chaos: (model_down: boolean) => req<{ model_down: boolean; llm: { backend: string; degraded: boolean } }>("POST", `/bazaar/v1/dev/chaos`, { model_down }),
   reviewApply: (id: string, sku: string, field: string, value: string) => req<{ remaining: number }>("POST", `/bazaar/v1/merchants/${id}/review/apply`, { sku, field, value }),
   publish: (id: string) => req<{ products: number; readiness: Readiness; endpoints: Record<string, string> }>("POST", `/bazaar/v1/merchants/${id}/publish`),
   putPolicy: (id: string, p: Policy) => req<Policy>("PUT", `/bazaar/v1/merchants/${id}/policy`, p),
