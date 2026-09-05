@@ -187,7 +187,7 @@ def test_acp_adapter_end_to_end(env):
     r = buyer.pay_call("POST", f"/acp/{mid}/delegate_payment", {"buyer_ref": "chatgpt-user-9", "allowance": {"max_amount": total + 1000, "expires_in_minutes": 30}})
     assert r.status_code == 201
     token = r.json()["id"]
-    r = buyer.pay_call("POST", f"/acp/{mid}/checkout_sessions/{cs['id']}/complete", {"payment_data": {"token": token, "provider": "razorpay"}}, idempotency_key="acp-1")
+    r = buyer.pay_call("POST", f"/acp/{mid}/checkout_sessions/{cs['id']}/complete", {"payment_data": {"token": token, "provider": "razorpay"}, "human_confirmation": True}, idempotency_key="acp-1")
     assert r.status_code == 200, r.text
     out = r.json()
     assert out["status"] == "in_progress" and out["order"]["permalink_url"].startswith("https://") and out["policy"]["allowed"]
@@ -311,3 +311,57 @@ def test_compile_preview_is_public_and_stateless(env):
     assert out["products"] == 2 and out["stripped_injections"] >= 1
     assert {m: len(st.merchants[m].products) for m in st.merchants} == products_before, "preview must not mutate any merchant"
     assert bare.post("/bazaar/v1/dev/compile-preview", json={"csv": "item,price\n" + "rice,10\n" * 100}).status_code == 413
+
+
+def test_webhook_amount_mismatch_does_not_complete(env):
+    """A signed webhook for the wrong amount must not complete the order (no 1-paise ₹598 close)."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "2 kg toor dal to 560034"})
+    sid, quote = r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "am", "merchant_id": mid, "max_amount_paise": 100000}).json()["grant_id"]
+    cm, pm = buyer.mandates_for(quote, mid, "am", 100000)
+    r = buyer.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+    assert r.status_code == 200
+    order_id = st.session(sid).order_id
+    ev = {"event": "payment.captured", "payload": {"payment": {"id": "pay_underpaid", "order_id": order_id, "amount_paise": 1, "status": "captured", "method": "upi"}}}
+    raw = json.dumps(ev).encode()
+    r = c.post("/webhooks/razorpay", content=raw, headers={"x-razorpay-signature": webhook_signature(raw, st.settings.razorpay_webhook_secret), "content-type": "application/json"})
+    assert r.json()["status"] == "amount_mismatch"
+    assert st.session(sid).status != "completed", "a 1-paise payment must not complete the order"
+    assert any(e.get("action") == "payment_amount_mismatch" for e in st.audit.entries)
+
+
+def test_no_oversell_two_buyers_last_units(env):
+    """Two checkouts for the last unit: exactly one gets a payment link; the other is declined
+    (reservation is the atomic claim the policy gate's raw-stock read cannot arbitrate)."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    p = next(x for x in st.merchants[mid].products if x.stock > 0)
+    p.stock = 1  # one unit left
+    def checkout(ref):
+        r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": f"1 {p.unit.value} {p.name} to 560034"})
+        s = r.json()["session"]
+        if not s.get("quote"):
+            return "no_quote"
+        g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": ref, "merchant_id": mid, "max_amount_paise": 500000}).json()["grant_id"]
+        cm, pm = buyer.mandates_for(s["quote"], mid, ref, 500000)
+        rr = buyer.pay_call("POST", f"/bazaar/v1/sessions/{s['session_id']}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+        return "ok" if rr.json().get("allowed") else "declined"
+    a, b = checkout("buyerA"), checkout("buyerB")
+    assert {a, b} <= {"ok", "declined", "no_quote"}
+    assert [a, b].count("ok") <= 1, f"oversold: A={a} B={b}"
+
+
+def test_mandate_must_bind_grant_buyer(env):
+    """A signed agent cannot spend buyer A's grant under a mandate signed for buyer B."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    r = buyer.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": "2 kg toor dal to 560034"})
+    sid, quote = r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    g = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "ownerA", "merchant_id": mid, "max_amount_paise": 100000}).json()["grant_id"]
+    # mandate signed for a DIFFERENT buyer_ref than the grant
+    cm, pm = buyer.mandates_for(quote, mid, "attackerB", 100000)
+    r = buyer.pay_call("POST", f"/bazaar/v1/sessions/{sid}/complete", {"grant_id": g, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+    assert r.status_code == 422 and "mandate_binds_grant_buyer" in r.json()["reason"]
+    assert r.json()["payment"] is None

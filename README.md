@@ -35,7 +35,7 @@ flowchart TB
     REG[agent registry · tiers T0–T3]
     SIG[HTTP signatures]
     MAN[mandates · grants<br/>Reserve-Pay mandate ledger]
-    POL[policy gate · 25 checks]
+    POL[policy gate · named checks]
     LED[fairness ledger + auditor]
     AUD[hash-chained audit · replay]
   end
@@ -74,7 +74,7 @@ sequenceDiagram
   B->>G: POST /grants (agent-pay) → Scoped Payment Grant
   B->>B: sign Checkout + Payment mandates (closed to this quote)
   B->>G: POST /sessions/{id}/complete + Idempotency-Key
-  G->>T: 25 checks: tier · caps · stock · pincode · grant · both mandates · human confirmation
+  G->>T: named checks: signature · tier · caps · stock · pincode · grant · both mandates · human present · COD-RTO
   alt allowed
     G->>R: UPI payment link
     R->>G: payment.captured
@@ -130,7 +130,7 @@ flowchart LR
   M --> B["/acp<br/>checkout_sessions · delegate_payment"]
   M --> C["/ucp<br/>checkout-sessions · AP2"]
   M --> D["/beckn<br/>search · select · init · confirm"]
-  A & B & C --> P[same 25-check policy gate]
+  A & B & C --> P[same policy gate]
   D --> E[embedded checkout<br/>human buyer pays the link]
   P & E --> R[(Razorpay)]
 ```
@@ -144,10 +144,28 @@ NPCI's Unified Agent Protocol (spec lands at GFF, 9–11 Sept 2026) standardises
 | UPI Circle — delegate payment authority to an agent within a pre-set limit | **Scoped Payment Grant**: one merchant, amount-capped, time-boxed, revocable, every use evented |
 | Reserve Pay — blocked funds, multiple debits | **Reserve-Pay mandate ledger** (`razorpay_client/reserve_pay.py`, NPCI OC-228 defaults ₹10,000 / 90 days): issuing a grant blocks funds, using it debits the block, revoking releases — every transition on the audit chain. Sandbox implementation today; `trust/uap.py` is the seam where Razorpay's mandate API lands when test mode exposes one |
 | Agent onboarding & identity | **Agent Registry** — Ed25519 keys, RFC 9421-signed requests, trust tiers T0–T3 |
-| User-set spending rules | **Policy gate** — 25 named checks before any rupee moves, all auditable |
+| User-set spending rules | **Policy gate** — every named, machine-readable check runs before any rupee moves (the exact count depends on the cart: signature, tier, grant, both mandates, stock, pincode, caps, kill switch, COD/RTO, human-present…), each shown in the audit trail |
 | Human-in-the-loop above a threshold (RBI e-mandate framework, Apr 2026: no AFA-free debit above ₹15,000; CERT-In 2025-26) | **`human_present_above_threshold`** — above the merchant's threshold (default ₹15,000) a person must confirm, even inside an open human-not-present mandate |
 
 The mandate layer is deliberately isolated (`trust/`), so the UAP binding replaces the demo signing backend without touching sessions, adapters or the policy gate.
+
+## Why this is Razorpay's to build
+
+Razorpay's MCP server lets an agent *pay*. Bazaar's MCP lets an agent *find whom to pay*. Implement identity, catalog and trust once at the processor, and every Razorpay merchant becomes agent-transactable by default — the same processor-side leverage Visa's Trusted Agent Protocol and Shopify's Catalog MCP are built on. This is the supply side of **Agent Studio**, and it plugs straight into the surfaces Razorpay already ships: Agentic Payments (the pay rail), Magic Checkout (embedded T0 fallback), the MCP server (settlement), and UPI Reserve Pay (the mandate).
+
+**Who else covers this, and the India gap only Bazaar fills:**
+
+| | agent-readable catalog | signed agent identity | bounded, provable offers | India: pincode serviceability · COD/RTO · GST · vernacular |
+|---|---|---|---|---|
+| Shopify Catalog MCP | yes (structured stores) | trust tiers | discount extension | no |
+| Google UCP | manifest + extensions | agent profiles | discount capability | no |
+| OpenAI/Stripe ACP | product feed | delegated tokens | — | no |
+| ONDC / Beckn | via seller onboarding | — | — | partial (network, no AI-native layer) |
+| **Bazaar** | **compiled from a Sheet or a photo** | **Ed25519 + tiers** | **rule-id-only, fairness-audited** | **the whole column** |
+
+Everyone assumes Shopify-scale catalogs, GTINs and cards. Bazaar compiles a WhatsApp seller's Google Sheet and answers "deliver to 560034 by Friday?" — the 80% of the market the others cannot reach.
+
+**Economics (from the results):** quote maths, ranking and the policy gate never call a model, so cost does not scale with order value. The negotiator — the only model call on the money path — routes to a small model and caches, landing under ₹1 of model cost per completed order against ₹9–14 of take-rate revenue on a typical basket. Revenue lines: a take-rate on agent-originated GMV, a **Razorpay Agentic Plan** for brands with no Razorpay-hosted checkout (Shopify's Agentic plan, for India), and an agent-order protection bundle (RTO Shield + chargeback) priced per agent order.
 
 ## What breaks, and what happens
 
@@ -197,7 +215,7 @@ Real incidents from this build, kept because the fixes became the architecture:
 | compiler — price / GST / stock (parser-owned) | 1.000 / 0.916 / 0.900 | **1.000** / 0.916 / 0.900 — identical, because money fields never touch the model |
 | compiler — name / category (model-owned, exact match vs generator vocabulary) | 1.000 / 1.000 (the closed-loop ceiling) | 0.551 / 0.797 — the honest exact-string number; low-confidence fields go to the review queue, never guessed |
 | **held-out** compiler eval — 3 hand-written catalogs the generator never saw (kirana rate card, Shopify export, electronics price list) | price/stock/GST **1.000/1.000/1.000**, unit 0.906 — the parsers hold; names 0.094 (dictionary can't know brands, so 100% review-queued) | price/stock/GST **1.000/1.000/1.000**, unit 0.969, names 0.469 exact-match with 72% review-queued — money fields perfect on sheets nobody tuned for |
-| latency p50 / p95 | 49 / 68 ms | 99 ms / 3.7 s (cache hit / real call) |
+| latency p50 / p95 | 47 / 62 ms | 54 ms / 4.0 s (cache hit / real call; the committed gpt-4o run is a cache replay of the original paid run, so misses = 0) |
 | model failovers during the run | — | 0 |
 
 ### Real agents, not scripts
@@ -206,7 +224,7 @@ The 200-task table above is produced by a deterministic scripted buyer — repro
 
 - **A model-driven buyer** (`python -m bazaar.simulator.model_buyer`): a tool-calling model that decides every step — which merchant, what to say in EN/HI/Hinglish, whether to ask for an offer, when to walk away, when to pay — over the same RFC 9421-signed HTTP API an external agent uses. Runs on `groq` (free, judge-reproducible) or `openai`. Verbatim tool-call transcripts committed under [`results/model_buyer/`](results/model_buyer/).
 - **Claude over the MCP endpoint** — a real session (tools/list → discover → serviceability → quote) captured in [`results/claude_mcp_session.md`](results/claude_mcp_session.md).
-- **A model-generated red team** (`python -m bazaar.simulator.redteam_gen`): one model writes ~175 injection attacks across 8 classes (direct override, Hinglish social-engineering, Devanagari, homoglyphs, JSON smuggling, rule-id spoofing, PII exfiltration); each runs against a **real-model seller**; a deterministic checker scores per class. Result: **175/175 defended** — no off-table offer, no invalid discount, no secret echoed ([`results/redteam_generated/`](results/redteam_generated/)). This is the like-for-like answer to the *Whispers of Wealth* attack classes.
+- **A model-generated red team** (`python -m bazaar.simulator.redteam_gen`): a model writes 190 injection attacks across 8 classes (direct override, Hinglish social-engineering, Devanagari, homoglyphs, JSON smuggling, fake `<rules>` blocks, rule-id spoofing, PII exfiltration). Each is delivered as a **follow-up on a session that already holds a discounted quote** — so the checker can actually fail: an attack passes only if the discount didn't rise, the total didn't drop, no off-table rule id appeared, no rule applied without a negotiate action, and no secret leaked. Result: **190/190 defended** ([`results/redteam_generated/`](results/redteam_generated/)). The defence is architectural — `verify` rejects any off-table `rule_id` before execution — so it holds for any backend (reproduce against a real model with `--seller groq`). The like-for-like answer to the *Whispers of Wealth* attack classes.
 
 Every one of these still goes through propose → verify → execute: the model only ever gains new kinds of *proposals*, never new authority. The MCP side-effect tools (`apply_offer`, `reserve`) run the same policy gate as HTTP, so the kill switch holds on every surface.
 
@@ -214,7 +232,7 @@ Every one of these still goes through propose → verify → execute: the model 
 
 ```bash
 pip install -e ".[dev]"            # Python 3.10+
-python -m pytest -q                # 82 tests, fully offline (incl. README-vs-results consistency)
+python -m pytest -q                # 84 tests, fully offline (incl. README-vs-results consistency)
 python -m bazaar.simulator.run     # regenerates results/
 uvicorn bazaar.gateway.app:default_app --factory --port 8000
 cd console && npm install && npm run dev   # http://localhost:5173

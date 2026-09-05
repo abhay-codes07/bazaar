@@ -110,6 +110,10 @@ class PolicyEngine:
             cs.append(Check(name="checkout_mandate_fresh", passed=not cm.is_expired(now)))
             cs.append(Check(name="checkout_mandate_binds_quote", passed=cm.quote_id == quote.quote_id and cm.merchant_id == m.merchant_id and cm.amount_paise == quote.total_paise, detail=f"mandate {cm.amount_paise} vs quote {quote.total_paise}"))
             cs.append(Check(name="checkout_within_max", passed=quote.total_paise <= cm.max_amount_paise, detail=f"₹{quote.total_paise / 100:.0f} ≤ ₹{cm.max_amount_paise / 100:.0f}"))
+            if g is not None:
+                # the mandate must be for the same buyer the grant was issued to — otherwise a
+                # signed agent could spend buyer A's grant under a mandate signed for buyer B
+                cs.append(Check(name="mandate_binds_grant_buyer", passed=cm.buyer_ref == g.buyer_ref, detail=f"{cm.buyer_ref} vs grant {g.buyer_ref}"))
             if cm.merchant_ids:
                 cs.append(Check(name="checkout_merchant_allowed", passed=m.merchant_id in cm.merchant_ids))
             if cm.allowed_categories:
@@ -132,6 +136,25 @@ class PolicyEngine:
             cs.append(Check(name="payment_binds_checkout", passed=checkout_mandate is not None and pm.checkout_mandate_digest == checkout_mandate.digest() and pm.amount_paise == quote.total_paise))
             cs.append(Check(name="payment_within_budget", passed=quote.total_paise <= pm.budget_paise))
 
+        allowed = all(c.passed for c in cs)
+        return PolicyResult(allowed=allowed, checks=cs, needs_merchant_review=allowed and pol.review_first)
+
+    def check_embedded_checkout(self, m: Merchant, quote: Quote, free_stock, now: datetime | None = None) -> PolicyResult:
+        """Merchant-authority checks for an embedded, human-paid checkout (Beckn/ONDC, T0):
+        the buyer is a person paying the link on their own device, so there is no agent grant
+        or AP2 mandate to verify — but the kill switch, serviceability, order cap and
+        reservation-aware stock still gate it, through the same engine, not a hand-rolled list.
+        ``free_stock(sku)`` returns stock minus active reservations."""
+        now = now or datetime.now(timezone.utc)
+        pol = m.policy
+        cs = [
+            Check(name="kill_switch_off", passed=not pol.kill_switch, detail="merchant disabled agent" if pol.kill_switch else ""),
+            Check(name="quote_fresh", passed=now <= quote.valid_until, detail="quote expired" if now > quote.valid_until else ""),
+            Check(name="quote_merchant_matches", passed=quote.merchant_id == m.merchant_id),
+            Check(name="pincode_serviceable", passed=bool(quote.pincode) and m.serviceability.serves(quote.pincode), detail=quote.pincode or "missing"),
+            Check(name="items_in_stock", passed=all(free_stock(ln.sku) >= ln.qty for ln in quote.lines)),
+            Check(name="merchant_order_cap", passed=quote.total_paise <= pol.max_order_paise, detail=f"₹{quote.total_paise / 100:.0f} ≤ ₹{pol.max_order_paise / 100:.0f}"),
+        ]
         allowed = all(c.passed for c in cs)
         return PolicyResult(allowed=allowed, checks=cs, needs_merchant_review=allowed and pol.review_first)
 

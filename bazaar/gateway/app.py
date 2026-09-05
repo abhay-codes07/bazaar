@@ -262,9 +262,16 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         return g.model_dump(mode="json")
 
     @app.post("/bazaar/v1/grants/{grant_id}/revoke")
-    def revoke_grant(grant_id: str):
-        if st.grants.get(grant_id) is None:
+    async def revoke_grant(grant_id: str, request: Request):
+        g = st.grants.get(grant_id)
+        if g is None:
             raise HTTPException(404, detail={"error": "grant_not_found"})
+        # only the agent that owns the grant (signed, pay tag) or an admin may revoke it —
+        # otherwise anyone could grief another agent's authorization by id
+        if request.headers.get("x-admin-token", "") != st.settings.bazaar_admin_token:
+            caller = await identify(request, st, required_tag=TAG_PAY)
+            if caller.keyid != g.agent_keyid:
+                raise HTTPException(403, detail={"error": "not_grant_owner"})
         st.grants.revoke(grant_id, "revoked via API")
         return {"grant_id": grant_id, "revoked": True}
 
@@ -330,6 +337,11 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         s = st.session(sid)
         if s is None:
             raise HTTPException(404, detail={"error": "session_not_found"})
+        # the session's own agent (signed) or an admin may cancel it — not any passer-by
+        if request.headers.get("x-admin-token", "") != st.settings.bazaar_admin_token and s.agent_keyid:
+            caller = await identify(request, st)
+            if caller.keyid != s.agent_keyid:
+                raise HTTPException(403, detail={"error": "not_session_owner"})
         try:
             return session_summary(cancel_session(st, s, reason))
         except ValueError as e:

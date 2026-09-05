@@ -143,22 +143,21 @@ def confirm(merchant_id: str, body: BecknMessage, request: Request):
         return {"message": {"ack": {"status": "NACK"}}, "error": {"type": "DOMAIN-ERROR", "code": "30016", "message": f"order is {s.status}"}}
     else:
         q = Quote.model_validate(s.quote)
-        problems = []
-        if m.policy.kill_switch:
-            problems.append("merchant disabled")
-        if datetime.now(timezone.utc) > q.valid_until:
-            problems.append("quote expired")
-        for ln in q.lines:
-            p = m.product(ln.sku)
-            if p is None or p.stock < ln.qty:
-                problems.append(f"insufficient stock for {ln.name}")
-        if problems:
-            st.audit.record({"session": sid, "kind": "beckn", "action": "confirm", "outcome": "declined", "note": "; ".join(problems)})
-            return {"message": {"ack": {"status": "NACK"}}, "error": {"type": "DOMAIN-ERROR", "code": "40002", "message": "; ".join(problems)}}
-        r = st.agent(merchant_id).tools.reserve(q.quote_id)
-        if r.ok:
-            s.reservation_id = r.result["reservation_id"]
-        st.audit.record({"session": sid, "kind": "beckn", "action": "confirm", "outcome": "ok", "note": "embedded checkout: buyer pays the Razorpay link (no agent-held funds)"})
+        # same policy engine as every other surface — merchant-authority subset for an
+        # embedded, human-paid checkout (no agent grant/mandate to verify)
+        tools = st.agent(merchant_id).tools
+        res = st.policy.check_embedded_checkout(m, q, lambda sku: (m.product(sku).stock if m.product(sku) else 0) - tools._reserved_qty(sku))
+        if not res.allowed:
+            st.audit.record({"session": sid, "kind": "beckn", "action": "confirm", "outcome": "declined", "checks": [c.model_dump() for c in res.checks], "note": res.reason})
+            return {"message": {"ack": {"status": "NACK"}}, "error": {"type": "DOMAIN-ERROR", "code": "40002", "message": res.reason}}
+        r = tools.reserve(q.quote_id)
+        if not r.ok:
+            # atomic claim lost to another in-flight confirm — decline rather than oversell
+            st.audit.record({"session": sid, "kind": "beckn", "action": "confirm", "outcome": "declined", "note": f"reservation failed: {r.reason}"})
+            return {"message": {"ack": {"status": "NACK"}}, "error": {"type": "DOMAIN-ERROR", "code": "40002", "message": r.reason}}
+        s.reservation_id = r.result["reservation_id"]
+        s.last_checks = [c.model_dump() for c in res.checks]
+        st.audit.record({"session": sid, "kind": "beckn", "action": "confirm", "outcome": "ok", "checks": s.last_checks, "note": "embedded checkout via policy gate: buyer pays the Razorpay link (no agent-held funds)"})
         st.issue_payment(s)
     q = Quote.model_validate(s.quote)
     order = {"id": sid, "state": "Created", "items": [{"id": ln.sku, "quantity": {"count": ln.qty}} for ln in q.lines], "quote": _quote_breakup(q), "payment": {"type": "ON-ORDER", "collected_by": "BPP", "status": "PAID" if s.payment_id else "NOT-PAID", "uri": s.payment_url, "params": {"amount": _rs(q.total_paise), "currency": "INR", "transaction_id": s.order_id}}}
