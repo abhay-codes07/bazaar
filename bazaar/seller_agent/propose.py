@@ -109,6 +109,9 @@ def _fake_propose(system: str, user: str, schema: dict) -> dict:
         if not pincode:
             return {"tool": "clarify", "args": {"question": "which pincode?"}, "language": lang, "rationale": "pincode missing"}
         return {"tool": "check_serviceability", "args": {"pincode": pincode, "sku": intent.matched_skus[0] if intent.matched_skus else ""}, "language": lang, "rationale": "delivery question"}
+    if intent.kind == "quote" and intent.lines:
+        # multi-item cart ("5 kg rice and 2 kg dal") — quote every line, same as the real model
+        return {"tool": "quote", "args": {"lines": intent.lines, "pincode": pincode, "segment": state.get("segment", "any")}, "language": lang, "rationale": "buyer named several items with quantities"}
     if intent.kind == "quote" and intent.matched_skus:
         sku = intent.matched_skus[0]
         qty = int(intent.quantity) if intent.quantity else 1

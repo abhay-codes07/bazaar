@@ -64,3 +64,30 @@ def test_loop_is_bounded(merchants):
     llm = ScriptedLLM([{"tool": "search_products", "args": {"query": "rice"}, "language": "en", "rationale": ""}] * 5)
     r = SellerAgent(m, llm=llm).handle("2 kg rice to 560034", BuyerContext(tier=AgentTier.T2_VERIFIED))
     assert r.ok and r.action == "search_products" and llm.calls == 3
+
+
+def test_offline_proposer_multi_sku_cart(merchants):
+    """The deterministic proposer (model-down path) quotes every line of a multi-item request,
+    matching what the real model does; a single-item request is unchanged."""
+    from bazaar.llm import FakeLLM
+    from bazaar.schemas.models import AgentTier, Segment, Unit
+    from bazaar.seller_agent.agent import BuyerContext, SellerAgent
+
+    m = next(x for x in merchants if x.vertical.value == "grocery").model_copy(deep=True)
+    for p in m.products:
+        p.stock = max(p.stock, 50)
+    # pick two products sold by the kg so units are unambiguous
+    kg = [p for p in m.products if p.unit == Unit.KG][:2]
+    if len(kg) < 2:
+        import pytest
+        pytest.skip("need two kg products")
+    a, b = kg[0], kg[1]
+    agent = SellerAgent(m, llm=FakeLLM())
+    ctx = BuyerContext(agent_keyid="ak", tier=AgentTier.T2_VERIFIED, segment=Segment.NEW, session_id="s")
+    r = agent.handle(f"I need {a.pack_size:g} {a.unit.value} {a.name} and {b.pack_size:g} {b.unit.value} {b.name} to {m.base_pincode}", ctx)
+    assert r.ok and r.action == "quote"
+    skus = {ln["sku"] for ln in r.result["lines"]}
+    assert a.sku in skus and b.sku in skus, f"multi-SKU cart missing a line: {r.result['lines']}"
+    # a single item still produces exactly one line
+    r2 = agent.handle(f"{a.pack_size:g} {a.unit.value} {a.name} to {m.base_pincode}", ctx)
+    assert r2.ok and len(r2.result["lines"]) == 1
