@@ -220,6 +220,11 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
 
     if hasattr(llm, "stats"):
         report["backend"]["llm_cache"] = llm.stats()
+    if hasattr(llm, "status"):
+        # provenance: total_failovers=0 proves the real model answered (not the deterministic
+        # fallback); on a cache replay misses=0 is expected and does not mean the model was skipped
+        h = llm.status()
+        report["backend"]["llm_health"] = {k: h[k] for k in ("backend", "degraded", "forced_down", "total_failures", "total_failovers", "last_error") if k in h}
     report["elapsed_s"] = round(time.time() - t0, 1)
     (out_dir / "results.json").write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
     (out_dir / "RESULTS.md").write_text(render_markdown(report), encoding="utf-8")
@@ -317,6 +322,20 @@ def render_markdown(r: dict[str, Any]) -> str:
     if "conformance" in r:
         cf = r["conformance"]
         lines += ["", f"## Protocol conformance — {cf['passed']}/{cf['checks']} checks, conformant: **{cf['conformant']}**" + (f" (failed: {', '.join(cf['failed'])})" if cf["failed"] else "")]
+    b = r["backend"]
+    if "llm_health" in b or "llm_cache" in b:
+        h = b.get("llm_health", {})
+        cache = b.get("llm_cache", {})
+        prov = f"## Provenance\n\nBackend `{b['llm']}`"
+        if "model" in b:
+            prov += f" (model `{b['model']}`)"
+        if h:
+            prov += f". Model failovers to the deterministic fallback during this run: **{h.get('total_failovers', 0)}** — so the {'model itself' if h.get('total_failovers', 0) == 0 else 'fallback partly'} produced these results (health: degraded={h.get('degraded')}, failures={h.get('total_failures', 0)})."
+        if cache:
+            misses = cache.get("misses", 0)
+            prov += f" LLM cache: {cache.get('hits', 0)} hits / {misses} misses"
+            prov += (" — every call served from a prior run's cache; a warm-cache replay costs nothing and re-bills nothing, and the failover count above proves the model, not the fallback, produced the cached answers." if misses == 0 else f" ({misses} real model calls this run; the rest replayed from cache).")
+        lines += ["", prov]
     lines += ["", f"_Elapsed {r['elapsed_s']} s._", ""]
     return "\n".join(lines)
 

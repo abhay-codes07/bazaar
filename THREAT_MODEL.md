@@ -44,7 +44,7 @@ The numbers are from `results/RESULTS.md` (offline engine) and `results/gpt4o/RE
 | Vault Whisper (data disclosure via direct injection) | 20% (2/10) plus partial attempts, same paper | 0% (nothing to disclose in context) |
 | Price-bound overflow in negotiation | 0–10.8% by model, arXiv 2602.06008 Table 1 | 0% by construction (model selects a rule id; engine computes) |
 
-The published numbers are small-n demonstrations on one framework each, not population estimates; the comparison is architectural, not statistical. Bazaar's probes are equally small (one to a few cases per class) and run on every results generation.
+The published numbers are small-n demonstrations on one framework each, not population estimates; the comparison is architectural, not statistical. Bazaar runs two red teams on every generation: a 19-case hand-written suite for the money/identity paths, and a **190-attack model-generated corpus** across 8 classes, each delivered as a follow-up on a live discounted quote and scored for real corruption (see `results/redteam_generated/`) — 190/190 defended against a real gpt-4o seller, because `verify` rejects any off-table `rule_id` before execution.
 
 ## What this does not cover
 
