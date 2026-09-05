@@ -1,0 +1,15 @@
+{
+  "vertical": "electronics_accessories",
+  "rows": [
+    {"name": "boAt Type-C Braided Cable", "price_paise": 29900, "unit": "pc", "pack_size": 1, "stock": 40, "gst_rate_bp": null},
+    {"name": "Mi 20000mAh Power Bank", "price_paise": 169900, "unit": "pc", "pack_size": 1, "stock": 15, "gst_rate_bp": null},
+    {"name": "JBL C100SI Wired Earphones", "price_paise": 74900, "unit": "pc", "pack_size": 1, "stock": 28, "gst_rate_bp": null},
+    {"name": "SanDisk Ultra 128 GB MicroSD Card", "price_paise": 109900, "unit": "pc", "pack_size": 1, "stock": 33, "gst_rate_bp": null},
+    {"name": "Portronics 4-Port USB Hub", "price_paise": 54500, "unit": "pc", "pack_size": 1, "stock": 12, "gst_rate_bp": null},
+    {"name": "Zebronics USB Keyboard", "price_paise": 44900, "unit": "pc", "pack_size": 1, "stock": 25, "gst_rate_bp": null},
+    {"name": "Ambrane 33W Wall Charger", "price_paise": 59900, "unit": "pc", "pack_size": 1, "stock": 30, "gst_rate_bp": null},
+    {"name": "Tempered Glass Redmi Note 13", "price_paise": 19900, "unit": "pc", "pack_size": 2, "stock": 55, "gst_rate_bp": null},
+    {"name": "HP V236W 64GB Pendrive", "price_paise": 47900, "unit": "pc", "pack_size": 1, "stock": 42, "gst_rate_bp": null},
+    {"name": "D-Link CAT6 Patch Cord", "price_paise": 16500, "unit": "pc", "pack_size": 1, "stock": 60, "gst_rate_bp": null}
+  ]
+}

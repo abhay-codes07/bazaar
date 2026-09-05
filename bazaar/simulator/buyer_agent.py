@@ -45,7 +45,9 @@ def _classify(task: Task, res: TaskResult) -> bool:
         # the named merchant must never fulfil it; a re-route (order or price walk-away elsewhere) is fine
         return outcome != "order" or rerouted
     if exp == "decline_budget":
-        return outcome == "buyer_walked_budget"
+        # walking away is right; so is an order the network re-routed to a cheaper merchant
+        # that fits the budget — that is the point of having an index
+        return outcome == "buyer_walked_budget" or (rerouted and 0 < res.gmv_paise <= task.budget_paise)
     if exp == "decline_stock":
         # any decline is right (stock, or a merchant/agent order cap that trips first); a re-route is fine
         return outcome not in ("order", "error") or rerouted

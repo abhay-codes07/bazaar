@@ -1,20 +1,42 @@
 """Per-merchant MCP server exposing the seller tools (read-only + quote/reserve).
 
 Money-moving actions (checkout, refund) are deliberately *not* MCP tools here — they live
-behind the gateway's session state machine where mandates and grants are verified.
+behind the gateway's session state machine where mandates and grants are verified. The
+side-effect tools (``apply_offer``, ``reserve``) run through the same deterministic
+``SellerAgent.verify`` gate as the HTTP path, so the kill switch, agent allowlist,
+negotiation-round cap and rule checks hold for MCP clients too — merchant authority is
+enforced on every surface, not just HTTP.
 """
 
 
 from typing import Any
 
-from mcp.server.fastmcp import FastMCP
-
-from bazaar.schemas.models import Merchant
+from bazaar.llm import FakeLLM
+from bazaar.schemas.models import AgentTier, Merchant
+from bazaar.seller_agent.agent import BuyerContext, SellerAgent
+from bazaar.seller_agent.propose import Proposal
 from bazaar.seller_agent.tools import SellerTools
 
+try:
+    from mcp.server.fastmcp import FastMCP
+except ImportError:  # pragma: no cover
+    FastMCP = None  # type: ignore[assignment]
 
-def build_mcp(merchant: Merchant, tools: SellerTools | None = None) -> FastMCP:
+
+def build_mcp(merchant: Merchant, tools: SellerTools | None = None, tier: AgentTier = AgentTier.T1_SIGNED, agent_keyid: str = "mcp-stdio-local"):
     t = tools or SellerTools(merchant)
+    # verify-only guard: the FakeLLM is never called — verify() is deterministic
+    guard = SellerAgent(merchant, llm=FakeLLM())
+    ctx = BuyerContext(agent_keyid=agent_keyid, tier=tier)
+    state: dict[str, Any] = {"negotiation_rounds": 0}
+
+    def _gate(tool_name: str, args: dict[str, Any], rule_id: str = "") -> dict[str, Any] | None:
+        prop = Proposal(tool=tool_name, args=args, rule_id=rule_id, rationale="mcp client request")
+        checks = guard.verify(prop, ctx, state)
+        if any(not c.passed for c in checks):
+            return {"ok": False, "declined": True, "reason": "; ".join(c.name for c in checks if not c.passed), "policy_checks": [c.model_dump() for c in checks]}
+        return None
+
     mcp = FastMCP(name=f"bazaar-{merchant.merchant_id}", instructions=f"Seller tools for {merchant.name} ({merchant.city}). All prices in paise; offers only by rule_id.")
 
     @mcp.tool()
@@ -39,12 +61,21 @@ def build_mcp(merchant: Merchant, tools: SellerTools | None = None) -> FastMCP:
 
     @mcp.tool()
     def apply_offer(quote_id: str, rule_id: str) -> dict[str, Any]:
-        """Apply a merchant pre-approved offer rule to an existing quote."""
-        return t.apply_offer(quote_id, rule_id).model_dump(mode="json")
+        """Apply a merchant pre-approved offer rule to an existing quote (policy-gated)."""
+        declined = _gate("apply_offer", {"quote_id": quote_id, "rule_id": rule_id}, rule_id=rule_id)
+        if declined:
+            return declined
+        res = t.apply_offer(quote_id, rule_id)
+        if res.ok:
+            state["negotiation_rounds"] = int(state.get("negotiation_rounds", 0)) + 1
+        return res.model_dump(mode="json")
 
     @mcp.tool()
     def reserve(quote_id: str) -> dict[str, Any]:
-        """Soft-hold stock for a quote (15 minutes)."""
+        """Soft-hold stock for a quote (15 minutes; policy-gated)."""
+        declined = _gate("reserve", {"quote_id": quote_id})
+        if declined:
+            return declined
         return t.reserve(quote_id).model_dump(mode="json")
 
     return mcp

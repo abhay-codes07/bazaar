@@ -241,3 +241,18 @@ def test_policy_requires_a_person_above_the_rbi_threshold(merchants, agent_key, 
     small = build_quote(m, [CartLine(sku=rice.sku, qty=1)], m.base_pincode, Segment.NEW, [])
     names = {c.name for c in eng.check_checkout(m, small, keyid, g.grant_id, cm, pm, lookup, human_confirmation=False).checks}
     assert "human_present_above_threshold" not in names
+
+
+def test_cod_gate_rules(merchants):
+    from bazaar.schemas.models import AgentTier
+    from bazaar.seller_agent.rto import COD_VALUE_CAP_PAISE, cod_gate
+
+    m = next(x for x in merchants if x.serviceability.cod_allowed)
+    ok = cod_gate(m, m.base_pincode, 50_000, AgentTier.T2_VERIFIED)
+    assert ok.allowed
+    assert not cod_gate(m, m.base_pincode, COD_VALUE_CAP_PAISE + 1, AgentTier.T2_VERIFIED).allowed
+    assert not cod_gate(m, m.base_pincode, 50_000, AgentTier.T0_UNSIGNED).allowed
+    assert not cod_gate(m, "110001", 50_000, AgentTier.T2_VERIFIED).allowed
+    no_cod = m.model_copy(deep=True)
+    no_cod.serviceability.cod_allowed = False
+    assert not cod_gate(no_cod, m.base_pincode, 50_000, AgentTier.T2_VERIFIED).allowed

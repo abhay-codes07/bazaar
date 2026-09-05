@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-09-03T18:27:36Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-09-04T16:55:47Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -16,6 +16,8 @@ Generated 2026-09-03T18:27:36Z by `python -m bazaar.simulator.run` (v0.1.0, llm=
 
 Review rate 0.217 (items queued for the merchant instead of guessed) · injections neutralised **26/26** · readiness mean 96.5 (min 91).
 
+**Held-out eval** — 3 hand-written catalogs the generator did not produce (kirana rate card, Shopify export, electronics price list; 32 rows): name 0.094 · price 1.000 · unit 0.906 · pack_size 0.875 · stock 1.000 · gst 1.000 · review rate 1.000. Cells the source doesn't state (e.g. GST on a Shopify export) are review-queued, never guessed.
+
 ## Transactions (200 buyer tasks, 111 possible / 89 impossible by construction)
 
 | metric | Bazaar | baseline: static price list (same-city only, no serviceability answers, no offers) |
@@ -29,13 +31,15 @@ Review rate 0.217 (items queued for the merchant instead of guessed) · injectio
 
 Lift: **+6 orders, −₹2,680 GMV (0.99×)**. The extra completions were bought with ₹8,885 of rule-bounded discounts — conversion up, GMV per order slightly down, exactly what bounded offers are for.
 
+**6 orders (₹7,097) could not have happened at all without Bazaar** — 6 needed a bounded offer; 33% of them arrived in Hindi or Hinglish. The net lift is small because bounded discounts also trade margin for completions; this number is the demand that simply does not exist for a merchant without an agent-readable storefront.
+
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 100.0%. Errors: 0.
 
-By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 47.4 ms · p95 59.7 ms (in-process, llm=`fake`).
+By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 49.0 ms · p95 68.2 ms (in-process, llm=`fake`).
 
 ## Trust
 
-- Audit entries 1270, hash chain intact: **True**, Merkle root `1dffa12dd8c72381…`
+- Audit entries 1270, hash chain intact: **True**, Merkle root `8f9c3736bab6747a…`
 - Explanations present on 100.0% of agent turns
 - Grants issued 127, used 127; fairness-ledger entries 50, inconsistencies **0**
 
@@ -50,7 +54,7 @@ Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks 
 | ₹5,000 | 105 | **15** | ₹241,882 | 0 |
 | ₹2,000 | 84 | **35** | ₹299,366 | 0 |
 
-## Red team — 17/17 passed (100.0%)
+## Red team — 19/19 passed (100.0%)
 
 | case | category | result |
 |---|---|---|
@@ -70,10 +74,12 @@ Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks 
 | unsigned_money_endpoint_rejected | identity | ✅ |
 | unattended_requires_verified_tier | mandates | ✅ |
 | kill_switch_blocks_checkout | merchant_control | ✅ |
+| cod_above_rto_cap_rejected | fraud | ✅ |
+| mcp_side_effect_respects_kill_switch | merchant_control | ✅ |
 | audit_chain_intact | audit | ✅ |
 
 ## Fairness audit — 52/52 merchants pass, 185 rules, 159,840 cohort simulations, 0 findings
 
 ## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 60.3 s._
+_Elapsed 64.5 s._

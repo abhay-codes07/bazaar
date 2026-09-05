@@ -1,0 +1,15 @@
+{
+  "vertical": "apparel",
+  "rows": [
+    {"name": "Lucknowi Chikankari Anarkali Kurta", "price_paise": 249900, "unit": "pc", "pack_size": 1, "stock": 7, "gst_rate_bp": null},
+    {"name": "Banarasi Silk Dupatta", "price_paise": 115000, "unit": "pc", "pack_size": 1, "stock": 12, "gst_rate_bp": null},
+    {"name": "Men's Nehru Jacket", "price_paise": 189900, "unit": "pc", "pack_size": 1, "stock": 5, "gst_rate_bp": null},
+    {"name": "High Waist Cotton Palazzo", "price_paise": 74900, "unit": "pc", "pack_size": 1, "stock": 18, "gst_rate_bp": null},
+    {"name": "Ajrakh Hand Block Print Mul Saree", "price_paise": 325000, "unit": "pc", "pack_size": 1, "stock": 4, "gst_rate_bp": null},
+    {"name": "Kids Dhoti Kurta Set", "price_paise": 99900, "unit": "pc", "pack_size": 1, "stock": 9, "gst_rate_bp": null},
+    {"name": "Pure Linen Shirt", "price_paise": 159900, "unit": "pc", "pack_size": 1, "stock": 11, "gst_rate_bp": null},
+    {"name": "Bandhani Georgette Dupatta", "price_paise": 65000, "unit": "pc", "pack_size": 1, "stock": 15, "gst_rate_bp": null},
+    {"name": "Stretch Denim Jeggings", "price_paise": 89900, "unit": "pc", "pack_size": 1, "stock": 21, "gst_rate_bp": null},
+    {"name": "Kolhapuri Leather Chappal", "price_paise": 125000, "unit": "pc", "pack_size": 1, "stock": 6, "gst_rate_bp": null}
+  ]
+}

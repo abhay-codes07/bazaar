@@ -15,15 +15,18 @@ from typing import TypedDict
 CANONICAL = ("name", "price", "unit", "stock", "gst", "description", "category", "sku")
 
 _HEADER_HINTS: dict[str, tuple[str, ...]] = {
-    "name": ("item", "product", "naam", "name", "title", "vastu"),
-    "price": ("price", "mrp", "rate", "amount", "daam", "cost"),
+    "name": ("item", "product", "naam", "name", "title", "vastu", "saman", "samaan", "cheez", "maal"),
+    "price": ("price", "mrp", "rate", "amount", "daam", "cost", "bhav", "keemat", "kimat"),
     "unit": ("unit", "pack", "qty unit", "size", "weight", "measure"),
-    "stock": ("stock", "available", "qty", "quantity", "inventory"),
+    "stock": ("stock", "available", "avail", "inventory"),
     "gst": ("gst", "tax"),
     "description": ("desc", "detail", "note", "about", "body"),
     "category": ("category", "type", "group", "collection"),
     "sku": ("sku", "code", "id"),
 }
+# bare qty/quantity is ambiguous — a kirana sheet's "quantity" is pack text ("10 kg bag"),
+# a Shopify export's "Variant Inventory Qty" is stock — so it is resolved in a second pass
+_WEAK_QTY = ("qty", "quantity", "qty.")
 
 
 class RawRow(TypedDict, total=False):
@@ -39,7 +42,8 @@ class RawRow(TypedDict, total=False):
 
 
 def map_headers(headers: list[str]) -> dict[int, str]:
-    """Map column index → canonical key using keyword hints; first match wins per key."""
+    """Map column index → canonical key. Two passes: unambiguous hints first, then bare
+    qty/quantity columns — stock if stock is still free, else the unit/pack column."""
     mapping: dict[int, str] = {}
     taken: set[str] = set()
     for i, h in enumerate(headers):
@@ -50,12 +54,20 @@ def map_headers(headers: list[str]) -> dict[int, str]:
             if key in taken:
                 continue
             if any(hint in hl for hint in hints):
-                # "qty unit" must map to unit, not stock
                 if key == "stock" and "unit" in hl:
-                    continue
+                    continue  # "qty unit" must map to unit, not stock
                 mapping[i] = key
                 taken.add(key)
                 break
+    for i, h in enumerate(headers):
+        if i in mapping:
+            continue
+        hl = h.strip().lower()
+        if any(w in hl for w in _WEAK_QTY):
+            key = "stock" if "stock" not in taken else ("unit" if "unit" not in taken else "")
+            if key:
+                mapping[i] = key
+                taken.add(key)
     return mapping
 
 
