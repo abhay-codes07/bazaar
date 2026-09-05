@@ -234,7 +234,7 @@ Every one of these still goes through propose → verify → execute: the model 
 
 ```bash
 pip install -e ".[dev]"            # Python 3.10+
-python -m pytest -q                # 92 tests, fully offline (incl. README-vs-results consistency)
+python -m pytest -q                # 96 tests, fully offline (incl. README-vs-results consistency)
 python -m bazaar.simulator.run     # regenerates results/
 uvicorn bazaar.gateway.app:default_app --factory --port 8000
 cd console && npm install && npm run dev   # http://localhost:5173

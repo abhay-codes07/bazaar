@@ -27,7 +27,7 @@ The diagrams live in the [README](README.md) (system, order sequence, compile pi
 | red team · fairness · conformance | 19/19 hand-written + 190/190 generated · 159,840 cohorts clean · 24/24 | same |
 | latency p50 / p95 | 47 / 62 ms (deterministic) | cache hit ≈ offline; a live gpt-4o proposal adds ~1.5–4 s |
 
-92 tests, fully offline, green in CI.
+96 tests, fully offline, green in CI.
 
 ## Honest limitations
 

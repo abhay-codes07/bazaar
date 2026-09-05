@@ -423,3 +423,49 @@ def test_webhook_ignores_capture_for_canceled_session(env):
     r = c.post("/webhooks/razorpay", content=raw, headers={"x-razorpay-signature": webhook_signature(raw, st.settings.razorpay_webhook_secret), "content-type": "application/json"})
     assert r.json()["status"] == "inactive_session"
     assert st.session(sid).status == "canceled"
+
+
+def test_untrusted_caller_cannot_self_declare_segment(env):
+    """S-1: an unauthenticated buyer must not claim a gated pricing segment; the merchant's own
+    console (admin token) may."""
+    st, c, _ = env
+    mid = _grocer_id(st)
+    anon = TestClient(c.app)  # no admin token, no signature
+    r = anon.post("/bazaar/v1/sessions", json={"merchant_id": mid, "segment": "b2b"})
+    assert r.status_code == 201 and r.json()["session"]["segment"] != "b2b"
+    # a brand-new anonymous caller is 'new', never 'returning'
+    assert anon.post("/bazaar/v1/sessions", json={"merchant_id": mid, "segment": "returning"}).json()["session"]["segment"] == "new"
+    # the admin-authenticated console keeps the segment it sets
+    assert c.post("/bazaar/v1/sessions", json={"merchant_id": mid, "segment": "b2b"}).json()["session"]["segment"] == "b2b"
+
+
+def test_grant_cannot_exceed_agent_tier_ceiling(env):
+    """S-3: an agent may not self-issue a grant larger than its own per-order tier ceiling."""
+    st, c, _ = env
+    mid = _grocer_id(st)
+    anon = TestClient(c.app)
+    b = BuyerAgentClient(anon)
+    b.register()  # T1 by default
+    ceiling = st.registry.get(b.keyid).max_order_paise
+    r = b.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "x@ok", "merchant_id": mid, "max_amount_paise": ceiling * 100})
+    assert r.status_code == 422 and r.json()["detail"]["error"] == "grant_exceeds_agent_ceiling"
+    assert b.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "x@ok", "merchant_id": mid, "max_amount_paise": ceiling}).status_code == 201
+
+
+def test_unsigned_session_cancel_requires_admin(env):
+    """S-5: an unsigned session has no owning key, so only an admin may cancel it."""
+    st, c, _ = env
+    mid = _grocer_id(st)
+    anon = TestClient(c.app)
+    sid = anon.post("/bazaar/v1/sessions", json={"merchant_id": mid}).json()["session"]["session_id"]
+    assert anon.post(f"/bazaar/v1/sessions/{sid}/cancel").status_code == 403
+    assert c.post(f"/bazaar/v1/sessions/{sid}/cancel").status_code == 200
+
+
+def test_admin_can_revoke_a_compromised_agent_key(env):
+    """P1-4: a revoked key can no longer authenticate a pay-tag route."""
+    st, c, buyer = env
+    mid = _grocer_id(st)
+    assert c.post(f"/bazaar/v1/agents/{buyer.keyid}/revoke").status_code == 200
+    r = buyer.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "x@ok", "merchant_id": mid, "max_amount_paise": 1000})
+    assert r.status_code == 401

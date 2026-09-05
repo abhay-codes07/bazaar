@@ -123,6 +123,23 @@ def _idem_key(request: Request, body: bytes) -> str | None:
     return f"{request.method}:{request.url.path}:{k}:{hashlib.sha256(body).hexdigest()[:16]}"
 
 
+def server_segment(state: BazaarState, keyid: str, merchant_id: str, requested: Segment) -> Segment:
+    """The pricing segment must reflect facts Bazaar owns, not a label an untrusted buyer
+    asserts (S-1): a caller could otherwise claim ``b2b`` for wholesale pricing or ``new`` for a
+    first-order discount it is not entitled to. ``any`` grants nothing extra, so it is left as
+    asked; a claimed ``b2b`` requires a merchant/admin-designated agent, so it is denied here;
+    ``new`` vs ``returning`` is decided by whether this agent already completed an order with the
+    merchant. Trusted callers (admin token — the merchant's own console and the simulator) keep
+    the segment they pass, since segments are the merchant's to define."""
+    if requested == Segment.ANY:
+        return Segment.ANY
+    returning = bool(keyid) and any(
+        x.agent_keyid == keyid and x.merchant_id == merchant_id and x.status == "completed"
+        for x in state.sessions.values()
+    )
+    return Segment.RETURNING if returning else Segment.NEW
+
+
 DEV_ADMIN_TOKEN = "dev-admin-token"
 DEV_WEBHOOK_SECRET = "bazaar-dev-webhook-secret"
 
@@ -249,6 +266,16 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         require_admin(request, st)
         return st.registry.set_tier(keyid, body.tier, body.reason).model_dump(mode="json")
 
+    @app.post("/bazaar/v1/agents/{keyid}/revoke")
+    def revoke_agent(keyid: str, request: Request):
+        # a compromised agent key must be cuttable without a restart (P1-4). Admin-only; a revoked
+        # identity fails signature verification on the next request.
+        require_admin(request, st)
+        if st.registry.get(keyid) is None:
+            raise HTTPException(404, detail={"error": "agent_not_found"})
+        st.registry.revoke(keyid, "revoked via admin API")
+        return {"keyid": keyid, "revoked": True}
+
     @app.post("/bazaar/v1/buyers/keys", status_code=201)
     def buyer_key(body: BuyerKey):
         return {"keyid": st.register_buyer_key(body.public_key_b64u)}
@@ -257,6 +284,14 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
     async def issue_grant(body: GrantIn, request: Request):
         caller = await identify(request, st, required_tag=TAG_PAY)
         _m(body.merchant_id)
+        # A grant cannot authorise more than the agent's own per-order tier ceiling (S-3): without
+        # this a T2 agent could self-issue a ₹1-crore block against Reserve Pay. Admin-issued grants
+        # (the merchant's own console) are trusted to override.
+        is_admin = request.headers.get("x-admin-token", "") == st.settings.bazaar_admin_token
+        ident = st.registry.get(caller.keyid)
+        ceiling = ident.max_order_paise if ident else 0
+        if not is_admin and ceiling and body.max_amount_paise > ceiling:
+            raise HTTPException(422, detail={"error": "grant_exceeds_agent_ceiling", "max_amount_paise": body.max_amount_paise, "agent_ceiling_paise": ceiling})
         g = st.grants.issue(body.buyer_ref, caller.keyid, body.merchant_id, body.max_amount_paise, body.ttl_minutes, body.single_use, payment_mandate_id=body.payment_mandate_id)
         st.audit.record({"session": "", "kind": "grant", "action": "issue", "outcome": "ok", "money": {"grant_id": g.grant_id, "max_amount_paise": g.max_amount_paise}, "note": f"agent {caller.keyid} for merchant {body.merchant_id}"})
         return g.model_dump(mode="json")
@@ -282,7 +317,9 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         m = _m(body.merchant_id)
         if m.policy.kill_switch:
             raise HTTPException(409, detail={"error": "merchant_agent_disabled"})
-        s = st.new_session(merchant_id=m.merchant_id, agent_keyid=caller.keyid, tier=caller.tier, segment=body.segment, language=body.language or "en")
+        is_admin = request.headers.get("x-admin-token", "") == st.settings.bazaar_admin_token
+        segment = body.segment if is_admin else server_segment(st, caller.keyid, m.merchant_id, body.segment)
+        s = st.new_session(merchant_id=m.merchant_id, agent_keyid=caller.keyid, tier=caller.tier, segment=segment, language=body.language or "en")
         st.audit.record({"session": s.session_id, "kind": "session", "action": "create", "outcome": "ok", "note": f"agent={caller.keyid or 'unsigned'} tier={int(caller.tier)}"})
         if body.message:
             return run_turn(st, s, body.message, caller.keyid, caller.tier)
@@ -343,8 +380,12 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         s = st.session(sid)
         if s is None:
             raise HTTPException(404, detail={"error": "session_not_found"})
-        # the session's own agent (signed) or an admin may cancel it — not any passer-by
-        if request.headers.get("x-admin-token", "") != st.settings.bazaar_admin_token and s.agent_keyid:
+        # the session's own agent (signed) or an admin may cancel it — not any passer-by. An
+        # unsigned (T0) session has no owning key, so only an admin may cancel it (S-5) —
+        # otherwise anyone with the publicly-listed id could cancel it and release its hold.
+        if request.headers.get("x-admin-token", "") != st.settings.bazaar_admin_token:
+            if not s.agent_keyid:
+                raise HTTPException(403, detail={"error": "unsigned_session_admin_only"})
             caller = await identify(request, st)
             if caller.keyid != s.agent_keyid:
                 raise HTTPException(403, detail={"error": "not_session_owner"})
