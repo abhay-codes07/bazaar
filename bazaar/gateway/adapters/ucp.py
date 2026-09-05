@@ -58,7 +58,7 @@ class CompleteIn(BaseModel):
     payment: dict[str, Any]  # {"handler": "razorpay", "grant_id": "spg_..."}
     checkout_mandate: dict[str, Any] | None = None
     payment_mandate: dict[str, Any] | None = None
-    human_confirmation: bool = True
+    human_confirmation: bool = False  # must be asserted explicitly; omitting it cannot satisfy the human-present gate
 
 
 def _state(request: Request):

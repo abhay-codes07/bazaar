@@ -66,7 +66,7 @@ class DelegateIn(BaseModel):
 class CompleteIn(BaseModel):
     payment_data: dict[str, Any]  # {"token": "spg_...", "provider": "razorpay"}
     buyer: dict[str, Any] | None = None
-    human_confirmation: bool = True
+    human_confirmation: bool = False  # must be asserted explicitly; omitting it cannot satisfy the human-present gate
 
 
 def _state(request: Request):

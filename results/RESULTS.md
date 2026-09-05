@@ -1,6 +1,6 @@
 # Bazaar — measured results
 
-Generated 2026-09-04T16:55:47Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
+Generated 2026-09-05T08:09:22Z by `python -m bazaar.simulator.run` (v0.1.0, llm=`fake`, payments=`fake`). Nothing here is hand-edited.
 
 ## Catalog compiler (52 merchants, messy CSV → agent-readable catalog)
 
@@ -20,7 +20,7 @@ Review rate 0.217 (items queued for the merchant instead of guessed) · injectio
 
 ## Transactions (200 buyer tasks, 111 possible / 89 impossible by construction)
 
-| metric | Bazaar | baseline: static price list (same-city only, no serviceability answers, no offers) |
+| metric | Bazaar | ablation: same catalog & index, negotiation off, same-city filter, no serviceability answers |
 |---|---|---|
 | orders | **127** | 121 |
 | task → order | 63.5% | 60.5% |
@@ -35,11 +35,11 @@ Lift: **+6 orders, −₹2,680 GMV (0.99×)**. The extra completions were bought
 
 Declines on impossible tasks — precision 1.000, recall 1.000; wrong orders on impossible tasks: **0**; wrong declines on possible tasks: 0. Overall task accuracy 100.0%. Errors: 0.
 
-By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 49.0 ms · p95 68.2 ms (in-process, llm=`fake`).
+By language: hi-Latn 100.0%, en 100.0%, hi 100.0%. Latency p50 56.1 ms · p95 73.3 ms (in-process, llm=`fake`).
 
 ## Trust
 
-- Audit entries 1270, hash chain intact: **True**, Merkle root `8f9c3736bab6747a…`
+- Audit entries 1270, hash chain intact: **True**, Merkle root `8ff5231ec298de31…`
 - Explanations present on 100.0% of agent turns
 - Grants issued 127, used 127; fairness-ledger entries 50, inconsistencies **0**
 
@@ -82,4 +82,4 @@ Same tasks, tighter merchant per-order cap. Wrong declines are *possible* tasks 
 
 ## Protocol conformance — 24/24 checks, conformant: **True**
 
-_Elapsed 64.5 s._
+_Elapsed 133.3 s._

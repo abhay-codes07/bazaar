@@ -16,7 +16,7 @@ The diagrams live in the [README](README.md) (system, order sequence, compile pi
 | Trust Fabric | `bazaar/trust` | Ed25519 agent registry with tiers T0–T3; RFC 9421 request signatures (nonce, skew, browse/pay tags); AP2-shaped digest-chained mandates; scoped payment grants; **policy gate of named machine-readable checks** (incl. a human-present threshold above ₹15,000 per the RBI e-mandate framing); hash-chained audit log + Merkle root + replay; fairness ledger + cohort auditor that gates rule publishing; `trust/uap.py` is the seam where NPCI's UAP binding lands |
 | Gateway | `bazaar/gateway` | Discover (deterministic ranking), ACP-shaped session state machine, checkout → Razorpay link → webhook (real payload shapes accepted: entity-wrapped, `payment_link.paid`, link-reference session matching); adapters `/acp` `/ucp` `/beckn`; global `bazaar-catalog` MCP at `/mcp`; merchant-mutating routes gated by `X-Admin-Token`; CORS restricted; refuses to boot in prod on dev secrets |
 | Console | `console/` | Vite + React + TS + Tailwind v4; six pages, light/dark, keyboard nav; the playground drives the same signed, mandated path an external agent takes |
-| Evidence | `bazaar/simulator`, `bazaar/conformance`, `results/` | 200 tasks with expected outcomes, baseline comparison, false-positive cost sweep; 17-probe red team; 24-check conformance kit runnable against any live gateway (`python -m bazaar.conformance <url>`); replay CLI; `RESULTS.md` generated, never hand-edited |
+| Evidence | `bazaar/simulator`, `bazaar/conformance`, `results/` | 200 tasks with expected outcomes, baseline comparison, false-positive cost sweep; 19-probe hand-written red team **plus** a 190-attack model-generated corpus scored end-to-end; 24-check conformance kit runnable against any live gateway (`python -m bazaar.conformance <url>`); replay CLI; a model-driven buyer; `RESULTS.md` generated, never hand-edited |
 
 ## Measured (both committed, both generated)
 
@@ -24,10 +24,10 @@ The diagrams live in the [README](README.md) (system, order sequence, compile pi
 |---|---|---|
 | 200 buyer tasks | 100% accuracy | 99.0% — both misses were impossible tasks it still refused |
 | wrong orders / wrong declines | 0 / 0 | 0 / 0 |
-| red team · fairness · conformance | 17/17 · 159,840 cohorts clean · 24/24 | same |
-| latency p50 / p95 | 88 / 130 ms | 117 ms / 3.2 s |
+| red team · fairness · conformance | 19/19 hand-written + 190/190 generated · 159,840 cohorts clean · 24/24 | same |
+| latency p50 / p95 | 47 / 62 ms | 54 ms / 4.0 s |
 
-78 tests, fully offline, green in CI.
+84 tests, fully offline, green in CI.
 
 ## Honest limitations
 

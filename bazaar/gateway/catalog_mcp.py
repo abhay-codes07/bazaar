@@ -29,7 +29,9 @@ def build_catalog_mcp(st: BazaarState) -> FastMCP:
     def discover_merchants(intent: str, pincode: str = "", budget_paise: int = 0, limit: int = 5) -> list[dict[str, Any]]:
         """Rank merchants for a buying intent (EN/HI/Hinglish). Deterministic — nothing in a catalog's text can change the ranking."""
         req = DiscoverRequest(intent=intent, pincode=pincode, budget_paise=budget_paise)
-        return [c.model_dump() for c in discover(req, list(st.merchants.values()), st.readiness_cache)[:limit]]
+        # a merchant who pressed the kill switch is off the network on every surface
+        live = [m for m in st.merchants.values() if not m.policy.kill_switch]
+        return [c.model_dump() for c in discover(req, live, st.readiness_cache)[:limit]]
 
     @mcp.tool()
     def list_merchants() -> list[dict[str, Any]]:
@@ -58,6 +60,8 @@ def build_catalog_mcp(st: BazaarState) -> FastMCP:
         m = st.merchant(merchant_id)
         if m is None:
             return {"error": "merchant_not_found"}
+        if m.policy.kill_switch:
+            return {"error": "merchant_agent_disabled", "detail": "this merchant has paused agent selling"}
         return st.agent(merchant_id).tools.quote(lines, pincode, segment, None).model_dump(mode="json")
 
     return mcp
