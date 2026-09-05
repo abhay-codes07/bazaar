@@ -57,14 +57,14 @@ API_VERSION = "2026-08-28"
 
 # ----------------------------------------------------------------------------- request models
 class SessionCreate(BaseModel):
-    merchant_id: str
-    message: str = ""
+    merchant_id: str = Field(max_length=64)
+    message: str = Field(default="", max_length=2000)
     segment: Segment = Segment.ANY
-    language: str = ""
+    language: str = Field(default="", max_length=16)
 
 
 class MessageIn(BaseModel):
-    message: str
+    message: str = Field(max_length=2000)
 
 
 class ChaosIn(BaseModel):
@@ -103,7 +103,7 @@ class TierIn(BaseModel):
 
 
 class CompileIn(BaseModel):
-    csv: str
+    csv: str = Field(max_length=100_000)
 
 
 class ReviewApply(BaseModel):
@@ -303,18 +303,24 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
             raise HTTPException(404, detail={"error": "session_not_found"})
         if s.status in ("completed", "canceled", "declined"):
             raise HTTPException(409, detail={"error": f"session_{s.status}"})
-        if s.agent_keyid and caller.keyid and caller.keyid != s.agent_keyid:
+        # a session opened by a signed agent may only be driven by that same signed agent —
+        # an unsigned caller must not inherit the session's tier (that was the privilege leak)
+        if s.agent_keyid and caller.keyid != s.agent_keyid:
             raise HTTPException(403, detail={"error": "session_belongs_to_another_agent"})
-        return run_turn(st, s, body.message, caller.keyid, caller.tier if caller.keyid else s.tier)
+        return run_turn(st, s, body.message, caller.keyid, caller.tier)
 
     @app.post("/bazaar/v1/sessions/{sid}/complete")
     async def complete(sid: str, request: Request, body: CompleteIn):
         raw = await request.body()
+        # verify the signature BEFORE serving any cached payload — otherwise the cache leaks a
+        # payment_url to any caller who guesses the Idempotency-Key. The key is scoped to the
+        # verified caller so one agent's key cannot replay another's result.
+        caller = await identify(request, st, required_tag=TAG_PAY)
         ik = _idem_key(request, raw)
+        ik = f"{caller.keyid}:{ik}" if ik else None
         if ik and ik in st.idempotency:
             code, payload = st.idempotency[ik]
             return Response(json.dumps(payload), status_code=code, media_type="application/json", headers={"Idempotent-Replayed": "true"})
-        caller = await identify(request, st, required_tag=TAG_PAY)
         s = st.session(sid)
         if s is None:
             raise HTTPException(404, detail={"error": "session_not_found"})
@@ -490,9 +496,12 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         if s is None or s.merchant_id != mid:
             raise HTTPException(404, detail={"error": "session_not_found"})
         try:
-            return session_summary(approve_review(st, s))
+            ok, s = approve_review(st, s)
         except ValueError as e:
             raise HTTPException(409, detail={"error": str(e)}) from e
+        if not ok:
+            raise HTTPException(422, detail={"error": "state_changed_since_review", "checks": s.last_checks})
+        return session_summary(s)
 
     @app.get("/bazaar/v1/merchants/{mid}/audit")
     def merchant_audit(mid: str, limit: int = 100):

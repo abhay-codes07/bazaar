@@ -48,8 +48,14 @@ class AgentRegistry:
     def register(self, public_key_raw: bytes, operator: str, profile_url: str = "", tier: AgentTier = AgentTier.T1_SIGNED) -> AgentIdentity:
         keyid = keys.keyid_for(public_key_raw)
         rl, cap = TIER_DEFAULTS.get(tier, TIER_DEFAULTS[AgentTier.T1_SIGNED])
-        ident = AgentIdentity(keyid=keyid, public_key_b64u=keys.b64u(public_key_raw), operator=operator, profile_url=profile_url, tier=tier, rate_limit_per_min=rl, max_order_paise=cap)
         with self._lock:
+            existing = self._agents.get(keyid)
+            if existing is not None:
+                # re-registering an existing key is idempotent — it must NOT reset tier or
+                # rewrite the operator (public keys are readable, so anyone could otherwise
+                # re-POST a T3 agent's key and demote it). Same key = same identity.
+                return existing
+            ident = AgentIdentity(keyid=keyid, public_key_b64u=keys.b64u(public_key_raw), operator=operator, profile_url=profile_url, tier=tier, rate_limit_per_min=rl, max_order_paise=cap)
             self._agents[keyid] = ident
             self.events.append({"event": "registered", "keyid": keyid, "tier": int(tier), "operator": operator})
         return ident

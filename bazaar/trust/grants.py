@@ -36,15 +36,24 @@ class ScopedPaymentGrant(BaseModel):
     payment_mandate_id: str = ""
     uses: list[GrantUse] = Field(default_factory=list)
 
+    # amounts reserved at checkout but not yet captured: session_id -> amount_paise
+    pending: dict[str, int] = Field(default_factory=dict)
+
     @property
     def spent_paise(self) -> int:
         return sum(u.amount_paise for u in self.uses)
 
     @property
-    def remaining_paise(self) -> int:
-        return max(0, self.max_amount_paise - self.spent_paise)
+    def committed_paise(self) -> int:
+        # money already used OR reserved by an in-flight checkout — both must count so a
+        # single-use grant cannot back two payment links at once (the capture-time TOCTOU)
+        return self.spent_paise + sum(self.pending.values())
 
-    def usable_for(self, merchant_id: str, agent_keyid: str, amount_paise: int, now: datetime | None = None) -> tuple[bool, str]:
+    @property
+    def remaining_paise(self) -> int:
+        return max(0, self.max_amount_paise - self.committed_paise)
+
+    def usable_for(self, merchant_id: str, agent_keyid: str, amount_paise: int, now: datetime | None = None, session_id: str = "") -> tuple[bool, str]:
         now = now or datetime.now(timezone.utc)
         if self.revoked:
             return False, "grant revoked"
@@ -54,9 +63,11 @@ class ScopedPaymentGrant(BaseModel):
             return False, "grant is scoped to a different merchant"
         if agent_keyid != self.agent_keyid:
             return False, "grant was issued to a different agent"
-        if self.single_use and self.uses:
-            return False, "single-use grant already used"
-        if amount_paise > self.remaining_paise:
+        # a single-use grant is spent once it has any use OR any pending reservation from a
+        # DIFFERENT session — the same session re-completing its own checkout is fine
+        if self.single_use and (self.uses or any(sid != session_id for sid in self.pending)):
+            return False, "single-use grant already used or reserved by another checkout"
+        if amount_paise > self.max_amount_paise - self.spent_paise - sum(a for sid, a in self.pending.items() if sid != session_id):
             return False, f"amount ₹{amount_paise / 100:.0f} exceeds remaining ₹{self.remaining_paise / 100:.0f}"
         return True, "ok"
 
@@ -84,9 +95,24 @@ class GrantStore:
     def get(self, grant_id: str) -> ScopedPaymentGrant | None:
         return self._g.get(grant_id)
 
+    def reserve_pending(self, grant_id: str, amount_paise: int, session_id: str) -> None:
+        """Hold the amount against the grant for the payment window so a concurrent checkout
+        cannot also spend it. Idempotent per session."""
+        with self._lock:
+            g = self._g.get(grant_id)
+            if g is not None:
+                g.pending[session_id] = amount_paise
+
+    def release_pending(self, grant_id: str, session_id: str) -> None:
+        with self._lock:
+            g = self._g.get(grant_id)
+            if g is not None:
+                g.pending.pop(session_id, None)
+
     def use(self, grant_id: str, amount_paise: int, session_id: str, order_id: str) -> ScopedPaymentGrant:
         with self._lock:
             g = self._g[grant_id]
+            g.pending.pop(session_id, None)  # convert the reservation into a use
             g.uses.append(GrantUse(at=datetime.now(timezone.utc), amount_paise=amount_paise, session_id=session_id, order_id=order_id))
         self._emit("grant.used", g, {"amount_paise": amount_paise, "order_id": order_id})
         return g

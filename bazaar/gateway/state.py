@@ -157,6 +157,12 @@ class BazaarState:
                 s = self._session_for_webhook(pay, payload)
                 if s is None:
                     return {"status": "unknown_order"}
+                if s.status not in ("in_progress", "awaiting_merchant_review"):
+                    # a capture on a canceled/declined/already-completed session (e.g. a stale
+                    # link paid late) must not complete it — keep the money visible for refund
+                    self.processed_payments.add(pay["id"])
+                    self.audit.record({"session": s.session_id, "kind": "money", "action": "payment_for_inactive_session", "outcome": "rejected", "money": {"order_id": s.order_id, "payment_id": pay["id"], "session_status": s.status}, "note": "capture arrived for a session that is not awaiting payment; route to refund/review"})
+                    return {"status": "inactive_session", "session_status": s.status}
                 q = Quote.model_validate(s.quote)
                 paid = int(pay.get("amount_paise", pay.get("amount", 0)))
                 if paid != q.total_paise:

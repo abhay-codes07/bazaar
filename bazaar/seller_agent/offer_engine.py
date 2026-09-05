@@ -153,6 +153,9 @@ def build_quote(m: Merchant, lines: list[CartLine], pincode: str = "", segment: 
             discount += dec.discount_paise
         applied.append(AppliedOffer(rule_id=rule.rule_id, rule_version=rule.version, type=rule.type, discount_paise=dec.discount_paise, segment_predicate=f"segment in ({rule.segment.value})", inputs_hash=_inputs_hash(rule, lines, segment, subtotal)))
 
+    # discount can never exceed the subtotal — stacked flat rules must not drive the quote
+    # negative (that would sail past every ≤ cap and then blow up at the payment link)
+    discount = min(discount, subtotal)
     # GST on the discounted line values (pro-rata), rounded per line at paise level
     taxable = subtotal - discount
     gst_total = 0

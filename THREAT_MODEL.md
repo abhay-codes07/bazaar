@@ -48,6 +48,7 @@ The published numbers are small-n demonstrations on one framework each, not popu
 
 ## What this does not cover
 
+- **Buyer identity is a demo shortcut.** In production the buyer key that signs the AP2 mandates must be presented by an authenticated channel (Login with Razorpay OAuth, or a UPI mandate id) and bound to the buyer at registration. Today a self-registered agent chooses its own `buyer_ref` and registers the buyer key that signs the mandates — so the mandate proves *some* registered key signed it, not that a specific human authorised it. The gate does enforce `mandate_binds_grant_buyer` (a mandate must be for the grant's buyer) and `grant_usable`, but the root of trust is agent-asserted until the OAuth/UPI binding lands. The ACP adapter's server-side buyer-key generation is a demo convenience for the same reason and must be removed for production.
 - **Real UPI mandates.** Reserve Pay is a sandbox ledger with NPCI's ₹10,000 / 90-day defaults; `trust/uap.py` is where a real binding lands once the Unified Agent Protocol is public.
 - **Distributed state.** Nonce cache, rate limits, reservations and sessions are in-memory; a multi-instance deployment needs Redis (planned for Phase 1).
 - **Vision inputs.** A rate-card photo is transcribed by a vision model and then treated like any other untrusted catalog text, but a photo carrying an injection has not been red-teamed yet.
