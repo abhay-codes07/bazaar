@@ -165,7 +165,7 @@ Razorpay's MCP server lets an agent *pay*. Bazaar's MCP lets an agent *find whom
 
 Everyone assumes Shopify-scale catalogs, GTINs and cards. Bazaar compiles a WhatsApp seller's Google Sheet and answers "deliver to 560034 by Friday?" — the 80% of the market the others cannot reach.
 
-**Economics (from the results):** quote maths, ranking and the policy gate never call a model, so cost does not scale with order value. The negotiator — the only model call on the money path — routes to a small model and caches, landing under ₹1 of model cost per completed order against ₹9–14 of take-rate revenue on a typical basket. Revenue lines: a take-rate on agent-originated GMV, a **Razorpay Agentic Plan** for brands with no Razorpay-hosted checkout (Shopify's Agentic plan, for India), and an agent-order protection bundle (RTO Shield + chargeback) priced per agent order.
+**Economics (measured, not claimed).** Quote maths, ranking and the policy gate never call a model, so cost does not scale with order value — only the seller's *propose* step does. A cold-cache probe (every call live and metered by the token counters in the LLM client) put the model cost at **₹3.37 per completed order on gpt-4o** — 40 tasks, 27 orders, ₹90.87 total ([`results/gpt4o_costprobe/RESULTS.md`](results/gpt4o_costprobe/RESULTS.md)). That is against ₹9–14 of take-rate revenue on a typical basket, and it drops roughly 10–15× when propose is routed to gpt-4o-mini (or to zero on the free gpt-oss backend), because the deterministic paths carry the rest. Revenue lines: a take-rate on agent-originated GMV, a **Razorpay Agentic Plan** for brands with no Razorpay-hosted checkout (Shopify's Agentic plan, for India), and an agent-order protection bundle (RTO Shield + chargeback) priced per agent order.
 
 ## What breaks, and what happens
 
@@ -217,6 +217,8 @@ Real incidents from this build, kept because the fixes became the architecture:
 | **held-out** compiler eval — 3 hand-written catalogs the generator never saw (kirana rate card, Shopify export, electronics price list) | price/stock/GST **1.000/1.000/1.000**, unit 0.906 — the parsers hold; names 0.094 (dictionary can't know brands, so 100% review-queued) | price/stock/GST **1.000/1.000/1.000**, unit 0.969, names 0.469 exact-match with 72% review-queued — money fields perfect on sheets nobody tuned for |
 | latency p50 / p95 | 47 / 62 ms (deterministic) | a cache hit ≈ the offline figures; a real gpt-4o proposal adds ~1.5–4 s (the p95 tracks how many calls in a run are live vs cached) |
 | model failovers during the run | — | 0 |
+
+> **Why report a 0.094?** The held-out `name` score is the *offline dictionary* backend's, and a dictionary literally cannot know a brand it was never given ("Aashirvaad", "Daawat") — that is exactly why a model backend exists, and gpt-4o lifts the same column to 0.469. It is reported anyway because it is honest and because it is **not a safety number**: a name the compiler is unsure of is sent to the merchant's review queue, never guessed, so a low name score costs review clicks, not a wrong price or a wrong order (those fields score 1.000 on both backends). Cost per completed order is a measured number, not a claim — see the economics section above.
 
 ### Real agents, not scripts
 

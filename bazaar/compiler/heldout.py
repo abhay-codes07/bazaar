@@ -32,7 +32,10 @@ def run_heldout(llm: LLM, heldout_dir: Path, merchants_by_vertical: dict[str, An
     rows_total = 0
     for csv_path in sorted(heldout_dir.glob("*.csv")):
         truth = json.loads(csv_path.with_suffix("").with_suffix(".truth.json").read_text(encoding="utf-8"))
-        template = merchants_by_vertical[truth["vertical"]].model_copy(update={"products": []})
+        base = merchants_by_vertical.get(truth["vertical"]) or next(iter(merchants_by_vertical.values()), None)
+        if base is None:
+            continue  # no merchant loaded to use as a template (e.g. a trimmed corpus)
+        template = base.model_copy(update={"products": []})
         compiled = compile_rows(read_csv(csv_path), template, llm, workers=workers)
         rows = truth["rows"]
         rows_total += len(rows)

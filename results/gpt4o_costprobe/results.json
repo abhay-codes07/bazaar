@@ -1,0 +1,261 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-09-05T11:57:45Z",
+  "backend": {
+    "llm": "openai",
+    "payments": "fake",
+    "model": "gpt-4o",
+    "compile_model": "gpt-4o-mini",
+    "cache": false,
+    "llm_usage": {
+      "prompt_tokens": 506706,
+      "completion_tokens": 54326,
+      "usd": 1.0327,
+      "inr": 90.87,
+      "inr_per_order": 3.3656
+    },
+    "llm_health": {
+      "backend": "openai",
+      "degraded": false,
+      "forced_down": false,
+      "total_failures": 0,
+      "total_failovers": 0,
+      "last_error": ""
+    }
+  },
+  "compiler": {
+    "merchants": 20,
+    "products": 387,
+    "accuracy": {
+      "name": 0.8113695090439277,
+      "price": 1.0,
+      "unit": 0.9664082687338501,
+      "pack_size": 0.9483204134366925,
+      "category": 0.917312661498708,
+      "gst": 0.9250645994832042,
+      "stock": 0.8914728682170543
+    },
+    "review_rate": 0.22997416020671835,
+    "injections_present": 10,
+    "injections_stripped": 10,
+    "readiness_mean": 96.3,
+    "readiness_min": 91,
+    "readiness_truth_mean": 100
+  },
+  "compiler_heldout": {
+    "catalogs": [
+      {
+        "catalog": "boutique_shopify",
+        "vertical": "apparel",
+        "rows": 10,
+        "compiled": 10,
+        "field_hits": {
+          "name": 9,
+          "price": 10,
+          "unit": 10,
+          "pack_size": 10,
+          "stock": 10,
+          "gst": 0
+        }
+      },
+      {
+        "catalog": "electronics_pricelist",
+        "vertical": "electronics_accessories",
+        "rows": 10,
+        "compiled": 10,
+        "field_hits": {
+          "name": 4,
+          "price": 10,
+          "unit": 10,
+          "pack_size": 9,
+          "stock": 10,
+          "gst": 0
+        }
+      },
+      {
+        "catalog": "kirana_rate_card",
+        "vertical": "grocery",
+        "rows": 12,
+        "compiled": 12,
+        "field_hits": {
+          "name": 3,
+          "price": 12,
+          "unit": 11,
+          "pack_size": 11,
+          "stock": 12,
+          "gst": 12
+        }
+      }
+    ],
+    "rows": 32,
+    "accuracy": {
+      "name": 0.5,
+      "price": 1.0,
+      "unit": 0.969,
+      "pack_size": 0.938,
+      "stock": 1.0,
+      "gst": 1.0
+    },
+    "scored_cells": {
+      "name": 32,
+      "price": 32,
+      "unit": 32,
+      "pack_size": 32,
+      "stock": 32,
+      "gst": 12
+    },
+    "review_rate": 0.719
+  },
+  "transactions": {
+    "tasks": 40,
+    "orders": 27,
+    "rerouted_orders": 2,
+    "task_to_order_rate": 0.675,
+    "possible_tasks": 25,
+    "possible_completion_rate": 1.0,
+    "gmv_paise": 6280212,
+    "discount_paise": 80230,
+    "negotiation_rounds": 9,
+    "declines": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "impossible_tasks": 15,
+      "wrong_orders_on_impossible": 0,
+      "wrong_declines_on_possible": 0
+    },
+    "policy_declines": 0,
+    "errors": 0,
+    "accuracy": 1.0,
+    "p50_latency_ms": 1689.5,
+    "p95_latency_ms": 4103.8,
+    "by_language": {
+      "hi-Latn": 1.0,
+      "en": 1.0,
+      "hi": 1.0
+    },
+    "outcomes": {
+      "buyer_walked_budget": 5,
+      "stock": 5,
+      "order": 27,
+      "no_merchant": 3
+    },
+    "expected": {
+      "decline_budget": 5,
+      "decline_stock": 5,
+      "order": 25,
+      "decline_unserviceable": 4,
+      "decline_unknown_item": 1
+    },
+    "declined_checks": {},
+    "errors_detail": []
+  },
+  "trust": {
+    "audit_entries": 258,
+    "chain_ok": true,
+    "merkle_root": "b843402f86485d8e529d080c12cf3907d78d3c4117ccd4a8e556d2e5ba3a799a",
+    "ledger": {
+      "entries": 9,
+      "distinct_rules": 8,
+      "inconsistencies": 0
+    },
+    "grants_issued": 27,
+    "grants_used": 27,
+    "explanations_present": 1.0
+  },
+  "baseline_no_bazaar": {
+    "orders": 23,
+    "task_to_order_rate": 0.575,
+    "possible_completion_rate": 0.84,
+    "gmv_paise": 5423008,
+    "definition": "same compiled catalog and index, but with negotiation OFF and a same-city-only filter, and no serviceability answers — an honest ablation of Bazaar's agent features, not a no-Bazaar world. The orders-unlocked metric below counts what this ablation cannot complete at all."
+  },
+  "lift": {
+    "orders": 4,
+    "gmv_paise": 857204,
+    "gmv_multiple": 1.16,
+    "orders_unlocked": {
+      "count": 4,
+      "by_reason": {
+        "bounded_offer": 3,
+        "other": 1
+      },
+      "gmv_paise": 889487,
+      "vernacular_share": 0.5,
+      "detail": [
+        {
+          "task_id": "t009",
+          "language": "en",
+          "baseline_outcome": "buyer_walked_budget",
+          "reason": "bounded_offer",
+          "gmv_paise": 56700
+        },
+        {
+          "task_id": "t026",
+          "language": "hi",
+          "baseline_outcome": "buyer_walked_budget",
+          "reason": "bounded_offer",
+          "gmv_paise": 42893
+        },
+        {
+          "task_id": "t035",
+          "language": "hi",
+          "baseline_outcome": "buyer_walked_budget",
+          "reason": "bounded_offer",
+          "gmv_paise": 640395
+        },
+        {
+          "task_id": "t037",
+          "language": "en",
+          "baseline_outcome": "stock",
+          "reason": "other",
+          "gmv_paise": 149499
+        }
+      ]
+    }
+  },
+  "false_positive_sweep": [
+    {
+      "max_order_paise": 5000000,
+      "orders": 27,
+      "gmv_paise": 6280212,
+      "wrong_declines_on_possible": 0,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 0,
+      "declined_checks": {}
+    },
+    {
+      "max_order_paise": 1000000,
+      "orders": 25,
+      "gmv_paise": 2668212,
+      "wrong_declines_on_possible": 2,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 3612000,
+      "declined_checks": {
+        "under_order_cap": 6
+      }
+    },
+    {
+      "max_order_paise": 500000,
+      "orders": 24,
+      "gmv_paise": 2027817,
+      "wrong_declines_on_possible": 3,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 4252395,
+      "declined_checks": {
+        "under_order_cap": 8
+      }
+    },
+    {
+      "max_order_paise": 200000,
+      "orders": 23,
+      "gmv_paise": 1626167,
+      "wrong_declines_on_possible": 4,
+      "wrong_orders_on_impossible": 0,
+      "lost_gmv_paise": 4654045,
+      "declined_checks": {
+        "under_order_cap": 11
+      }
+    }
+  ],
+  "elapsed_s": 573.3
+}
