@@ -250,6 +250,13 @@ select.input {
 :root[data-theme="dark"] select.input {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238c8577' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
+/* the native option list is transparent by default, so Windows Chrome paints the
+   dropdown popup in the OS light theme even under color-scheme: dark. Give options an
+   explicit themed background so the popup follows the app theme. */
+select.input option {
+  background-color: var(--paper-2);
+  color: var(--ink);
+}
 
 /* numeric fields read as data, not steppers */
 input[type="number"].input {
