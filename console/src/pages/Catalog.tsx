@@ -16,7 +16,7 @@ export default function Catalog() {
   const { merchantId, toast, refreshMerchants } = useStore();
   const [csv, setCsv] = useState("");
   const [busy, setBusy] = useState(false);
-  const [compiled, setCompiled] = useState<{ products: number; review_queue: ReviewItem[]; stripped_injections: number; readiness: Readiness; preview: Product[] } | null>(null);
+  const [compiled, setCompiled] = useState<{ products: number; review_queue: ReviewItem[]; stripped_injections: number; readiness: Readiness | null; preview: Product[]; previewOnly?: boolean } | null>(null);
   const [live, setLive] = useState<Product[]>([]);
   const [exports, setExports] = useState<Exports | null>(null);
   const [tab, setTab] = useState<"llms_txt" | "well_known_bazaar" | "acp_feed" | "beckn_on_search">("llms_txt");
@@ -38,10 +38,23 @@ export default function Catalog() {
     setBusy(true);
     try {
       const r = await api.compile(merchantId, csv);
-      setCompiled(r);
+      setCompiled({ ...r, previewOnly: false });
       toast(`Compiled ${r.products} products · ${r.review_queue.length} to review · ${r.stripped_injections} injection(s) stripped`, "ok");
     } catch (e) {
-      toast((e as Error).message, "danger");
+      const status = (e as { status?: number }).status;
+      if (status === 401 || status === 403) {
+        // No valid admin token (e.g. a judge on the public deploy). Fall back to the
+        // stateless, token-free preview so the compiler is always demoable — just not publishable.
+        try {
+          const p = await api.compilePreview(csv);
+          setCompiled({ products: p.products, review_queue: p.review_queue, stripped_injections: p.stripped_injections, readiness: null, preview: p.preview, previewOnly: true });
+          toast(`Preview: ${p.products} products · ${p.review_queue.length} to review · ${p.stripped_injections} injection(s) stripped — set your admin token to publish`, "ok");
+        } catch (e2) {
+          toast((e2 as Error).message, "danger");
+        }
+      } else {
+        toast((e as Error).message, "danger");
+      }
     } finally {
       setBusy(false);
     }
@@ -79,7 +92,7 @@ export default function Catalog() {
   };
 
   return (
-    <Page kicker="catalog compiler" title="From a messy sheet to agent-ready" actions={compiled && compiled.review_queue.length === 0 ? <button className="btn btn-primary" onClick={publish} disabled={busy}>{busy ? <Spinner /> : null} Go Bazaar — publish</button> : null}>
+    <Page kicker="catalog compiler" title="From a messy sheet to agent-ready" actions={compiled && !compiled.previewOnly && compiled.review_queue.length === 0 ? <button className="btn btn-primary" onClick={publish} disabled={busy}>{busy ? <Spinner /> : null} Go Bazaar — publish</button> : null}>
       <div className="grid lg:grid-cols-[1fr_1fr] gap-4">
         <Card title="1 · Paste or upload what you have" aside={<button className="btn btn-quiet h-7 text-[12px]" onClick={() => setCsv(SAMPLE)}>use sample</button>}>
           <textarea className="input mono text-[12px] min-h-[220px]" placeholder="Item, Price, Unit, Stock, GST, Description — any headers, Hinglish welcome" value={csv} onChange={(e) => setCsv(e.target.value)} onDrop={(e) => { e.preventDefault(); onFile(e.dataTransfer.files[0]); }} onDragOver={(e) => e.preventDefault()} />
@@ -96,7 +109,7 @@ export default function Catalog() {
           {!compiled ? (
             <Empty title="Nothing compiled yet" hint="Low-confidence fields land here instead of being guessed. Injected instructions are stripped and flagged." />
           ) : compiled.review_queue.length === 0 ? (
-            <Empty title="All clear" hint={`${compiled.products} products ready · readiness ${compiled.readiness.score}`} />
+            <Empty title="All clear" hint={compiled.previewOnly ? `${compiled.products} products compiled · preview only — set your admin token in the sidebar to publish` : `${compiled.products} products ready · readiness ${compiled.readiness?.score ?? "—"}`} />
           ) : (
             <div className="divide-y hairline max-h-[420px] overflow-auto">
               {compiled.review_queue.map((it) => (

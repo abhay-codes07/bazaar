@@ -29,6 +29,7 @@ export default function Playground() {
   const [cands, setCands] = useState<Candidate[] | null>(null);
   const [intent, setIntent] = useState("5 kg basmati rice");
   const [pin, setPin] = useState("560034");
+  const [modelDown, setModelDown] = useState(false);
   const endRef = useRef<HTMLDivElement>(null);
   const merchant = merchants.find((m) => m.merchant_id === merchantId);
 
@@ -93,6 +94,16 @@ export default function Playground() {
     setSteps([]);
   };
 
+  const toggleOutage = async (on: boolean) => {
+    try {
+      const r = await api.chaos(on);
+      setModelDown(r.model_down);
+      toast(r.model_down ? "Model taken down — the Seller Agent now answers via the deterministic fallback, same gate" : "Model restored", r.model_down ? "danger" : "ok");
+    } catch (e) {
+      toast((e as Error).message, "danger");
+    }
+  };
+
   return (
     <Page kicker="playground" title="Talk to your Seller Agent as a buyer agent would" actions={<button className="btn" onClick={reset}>New session</button>}>
       <div className="grid lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] gap-4">
@@ -104,7 +115,10 @@ export default function Playground() {
                   {["new", "returning", "any", "b2b"].map((s) => <option key={s}>{s}</option>)}
                 </select>
               </div>
-              {session && <Chip kind="accent">{session.status.replaceAll("_", " ")}</Chip>}
+              <div className="flex items-center gap-2">
+                <Toggle on={modelDown} onChange={toggleOutage} label="Model down" />
+                {session && <Chip kind="accent">{session.status.replaceAll("_", " ")}</Chip>}
+              </div>
             </div>
             <div className="h-[420px] overflow-auto px-5 py-4 space-y-3">
               {msgs.length === 0 && <Empty title={`Say hello to ${merchant?.name ?? "the merchant"}`} hint="Ask about delivery, quantities, prices, in English, Hindi or Hinglish. The agent proposes; policy verifies; only then does anything happen." />}

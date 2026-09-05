@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { adminToken, setAdminToken } from "./api";
 import { StoreProvider, useStore } from "./store";
@@ -26,6 +26,27 @@ function Mark() {
       <span className="absolute inset-0 rounded-full bg-accent" />
       <span className="relative w-2.5 h-2.5 rounded-full bg-paper" />
     </span>
+  );
+}
+
+function NoTokenBanner() {
+  const KEY = "bazaar-banner-dismissed";
+  const [show, setShow] = useState(() => {
+    try { return localStorage.getItem(KEY) !== "1"; } catch { return true; }
+  });
+  if (!show) return null;
+  const dismiss = () => {
+    try { localStorage.setItem(KEY, "1"); } catch { /* ignore */ }
+    setShow(false);
+  };
+  return (
+    <div className="mx-4 md:mx-6 mt-4 rounded-xl border hairline bg-paper-2 px-4 py-2.5 flex items-start gap-3 text-[12.5px]">
+      <span className="mt-[3px] w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+      <div className="text-ink-2 flex-1">
+        <span className="text-ink font-medium">Explore everything without a token.</span> Discovery, quotes, the buyer-agent playground, checkout and the audit trail all run read-only for anyone. The admin token only gates merchant writes — compile-publish, offers, policy and the kill switch — and the compiler falls back to a stateless preview without it.
+      </div>
+      <button className="btn btn-quiet h-6 px-2 text-[11.5px] shrink-0" onClick={dismiss}>Got it</button>
+    </div>
   );
 }
 
@@ -127,6 +148,7 @@ function Shell() {
             </NavLink>
           ))}
         </div>
+        <NoTokenBanner />
         <AnimatePresence mode="wait">
           <motion.div key={loc.pathname} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.12 } }} transition={{ duration: 0.2 }}>
             <ErrorBoundary>
