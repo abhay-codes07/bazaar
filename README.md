@@ -8,6 +8,8 @@ Agentic Payments lets an AI agent *pay*. Bazaar makes the long tail of merchants
 
 > Razorpay AI Buildathon 2026 · Track 1: AI Growth & Agentic Commerce
 
+**▶ [Watch the 5-minute demo](https://youtu.be/6MJ4q3AuXbE)** — messy sheet to agent-ready, a signed agent buying in Hindi, a real Razorpay test-mode payment, the money-gate catching a tampered mandate, and the results.
+
 ---
 
 ## Architecture
