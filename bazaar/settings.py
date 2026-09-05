@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     openai_base_url: str = ""
     bazaar_openai_model: str = "gpt-4o"
     bazaar_openai_model_compile: str = "gpt-4o-mini"  # catalog normalisation/enrichment: high volume, low stakes
+    groq_api_key: str = ""
+    bazaar_groq_model: str = "openai/gpt-oss-120b"  # free tier; OpenAI-compatible tool use
     bazaar_llm_cache: bool = True
     bazaar_llm_workers: int = 8
     bazaar_llm_fail_threshold: int = 3  # consecutive failures before the circuit opens

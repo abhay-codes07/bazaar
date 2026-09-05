@@ -1,0 +1,17 @@
+{
+ "backend": "groq",
+ "model": "openai/gpt-oss-120b",
+ "tasks": 20,
+ "orders": 9,
+ "accuracy": 0.45,
+ "accuracy_excl_rate_limited": 1.0,
+ "rate_limited": 11,
+ "reached_the_system": 9,
+ "wrong_orders": 0,
+ "gmv_paise": 5920880,
+ "outcomes": {
+  "error": 11,
+  "order": 9
+ },
+ "note": "The 11 errors are all HTTP 429 free-tier daily-quota limits on gpt-oss-120b, exhausted by repeated dev runs; they never reached the gateway. Of the 9 tasks that ran, the agent handled all 9 correctly with 0 wrong orders. Reproducible in full on a paid tier or fresh key."
+}

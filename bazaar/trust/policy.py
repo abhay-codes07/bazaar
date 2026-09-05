@@ -81,6 +81,13 @@ class PolicyEngine:
         if quote.total_paise > pol.human_present_above_paise:
             # RBI e-mandate framework (Apr 2026): no AFA-free debit above ₹15,000; CERT-In: human-in-the-loop above a threshold
             cs.append(Check(name="human_present_above_threshold", passed=human_confirmation, detail=f"₹{quote.total_paise / 100:.0f} > ₹{pol.human_present_above_paise / 100:.0f}: a person must confirm this amount"))
+        if checkout_mandate is not None and checkout_mandate.cod_ok:
+            # COD is granted, never assumed: a fixed rule table (value cap, tier, RTO zones) —
+            # the seam where RTO Shield / Vulcan order-risk replaces the scorer in P2
+            from bazaar.seller_agent.rto import cod_gate
+
+            v = cod_gate(m, quote.pincode, quote.total_paise, tier)
+            cs.append(Check(name="cod_gate", passed=v.allowed, detail=v.reason))
         cs.append(Check(name="pincode_serviceable", passed=bool(quote.pincode) and m.serviceability.serves(quote.pincode), detail=quote.pincode or "missing"))
         cs.append(Check(name="items_in_stock", passed=all((m.product(ln.sku) or None) is not None and m.product(ln.sku).stock >= ln.qty for ln in quote.lines)))  # type: ignore[union-attr]
 

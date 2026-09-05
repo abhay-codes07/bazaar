@@ -1,0 +1,17 @@
+{
+  "vertical": "grocery",
+  "rows": [
+    {"name": "Aashirvaad Atta", "price_paise": 43500, "unit": "kg", "pack_size": 10, "stock": 14, "gst_rate_bp": 500},
+    {"name": "Fortune Kachi Ghani Mustard Oil", "price_paise": 16800, "unit": "l", "pack_size": 1, "stock": 30, "gst_rate_bp": 500},
+    {"name": "Daawat Rozana Basmati Rice", "price_paise": 38900, "unit": "kg", "pack_size": 5, "stock": 9, "gst_rate_bp": 500},
+    {"name": "Tata Salt", "price_paise": 2800, "unit": "kg", "pack_size": 1, "stock": 60, "gst_rate_bp": 500},
+    {"name": "Maggi Noodles", "price_paise": 13200, "unit": "pack", "pack_size": 12, "stock": 22, "gst_rate_bp": 1200},
+    {"name": "Parle-G Biscuits", "price_paise": 8000, "unit": "g", "pack_size": 800, "stock": 45, "gst_rate_bp": 1800},
+    {"name": "Amul Taaza Milk", "price_paise": 7400, "unit": "l", "pack_size": 1, "stock": 26, "gst_rate_bp": 500},
+    {"name": "Madhur Sugar", "price_paise": 4500, "unit": "kg", "pack_size": 1, "stock": 80, "gst_rate_bp": 500},
+    {"name": "MDH Deggi Mirch", "price_paise": 7600, "unit": "g", "pack_size": 100, "stock": 17, "gst_rate_bp": 500},
+    {"name": "Toor Dal", "price_paise": 14800, "unit": "kg", "pack_size": 1, "stock": 35, "gst_rate_bp": 0},
+    {"name": "Haldiram Bhujia", "price_paise": 9500, "unit": "g", "pack_size": 400, "stock": 19, "gst_rate_bp": 1200},
+    {"name": "Red Label Tea", "price_paise": 29000, "unit": "g", "pack_size": 500, "stock": 11, "gst_rate_bp": 500}
+  ]
+}

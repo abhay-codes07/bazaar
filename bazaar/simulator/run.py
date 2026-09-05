@@ -34,7 +34,11 @@ from bazaar.trust.fairness_auditor import audit_merchant
 
 
 def _fresh_state(merchants, tmp: Path, fresh_stock: bool = True, llm=None) -> tuple[BazaarState, TestClient, BuyerAgentClient]:
-    st = BazaarState(audit_path=tmp / "audit.jsonl", llm=llm)
+    from bazaar.razorpay_client.fake import FakeRazorpay
+
+    # the simulator always runs on the sandbox payments client, whatever .env says —
+    # 200 tasks against live test mode would spray real payment links and hit rate limits
+    st = BazaarState(audit_path=tmp / "audit.jsonl", llm=llm, payments=FakeRazorpay())
     for m in merchants:
         mm = m.model_copy(deep=True)
         if fresh_stock:
@@ -92,7 +96,9 @@ def run_false_positive_sweep(sim_merchants, tasks, main_results, tmp: Path, llm,
 def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | None = None, redteam: bool = True, fairness: bool = True, conformance: bool = True, max_merchants: int = 0, sweep: bool = True) -> dict[str, Any]:
     import logging
 
-    logging.getLogger("httpx").setLevel(logging.WARNING)  # the MCP import turns on request logging
+    # the MCP import (via create_app) installs a rich INFO handler and re-enables request
+    # logging; a 200-task run emits ~10k such lines and crawls. Gate INFO globally for the run.
+    logging.disable(logging.INFO)
     t0 = time.time()
     corpus_dir = corpus_dir or get_settings().data_dir / "synthetic"
     out_dir = out_dir or ROOT / "results"
@@ -106,7 +112,7 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
         merchants = merchants[:max_merchants]
     s = get_settings()
     llm = get_llm()
-    backend: dict[str, Any] = {"llm": s.bazaar_llm, "payments": s.bazaar_razorpay}
+    backend: dict[str, Any] = {"llm": s.bazaar_llm, "payments": "fake"}  # sim always sandboxes payments
     if s.bazaar_llm == "openai":
         backend.update({"model": s.bazaar_openai_model, "compile_model": s.bazaar_openai_model_compile, "cache": s.bazaar_llm_cache})
     report: dict[str, Any] = {"version": __version__, "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "backend": backend}
@@ -123,6 +129,17 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     ev = evaluate(pairs)
     readiness = [readiness_score(c.merchant).score for c, _ in pairs]
     report["compiler"] = {**ev.model_dump(), "readiness_mean": round(statistics.mean(readiness), 1), "readiness_min": min(readiness), "readiness_truth_mean": round(statistics.mean(readiness_score(m).score for m in merchants), 1)}
+
+    # held-out eval: hand-written catalogs the corpus generator did not produce
+    heldout_dir = s.data_dir / "heldout"
+    if heldout_dir.exists():
+        from bazaar.compiler.heldout import run_heldout
+
+        byv: dict[str, Any] = {}
+        for m in merchants:
+            byv.setdefault(m.vertical.value, m)
+        report["compiler_heldout"] = run_heldout(llm, heldout_dir, byv, workers=s.bazaar_llm_workers)
+        log("held-out compiler eval done")
 
     # ---- transactions (Bazaar) vs baseline — tasks are generated from the exact stock the run starts with
     sim_merchants = []
@@ -158,6 +175,26 @@ def run_all(n_tasks: int = 200, out_dir: Path | None = None, corpus_dir: Path | 
     report["baseline_no_bazaar"] = {k: base[k] for k in ("orders", "task_to_order_rate", "possible_completion_rate", "gmv_paise")}
     report["baseline_no_bazaar"]["definition"] = "buyer reads a static price list: proceeds only for same-city merchants, cannot ask serviceability, gets no offers; without Bazaar these merchants are not agent-transactable at all (0 agent-originated orders)"
     report["lift"] = {"orders": summ["orders"] - base["orders"], "gmv_paise": summ["gmv_paise"] - base["gmv_paise"], "gmv_multiple": round(summ["gmv_paise"] / max(1, base["gmv_paise"]), 2)}
+    # the honest growth number: orders the baseline could not complete AT ALL — because the
+    # buyer needed a serviceability answer, or a bounded offer to fit the budget
+    unlocked = [
+        {
+            "task_id": t.task_id,
+            "language": t.language,
+            "baseline_outcome": rb.outcome,
+            "reason": "bounded_offer" if rb.outcome == "buyer_walked_budget" and rz.discount_paise > 0 else ("serviceability_answer" if rb.outcome == "unserviceable" else "other"),
+            "gmv_paise": rz.gmv_paise,
+        }
+        for t, rz, rb in zip(tasks, results, base_results, strict=True)
+        if rz.outcome == "order" and rb.outcome != "order"
+    ]
+    report["lift"]["orders_unlocked"] = {
+        "count": len(unlocked),
+        "by_reason": dict(Counter(u["reason"] for u in unlocked)),
+        "gmv_paise": sum(u["gmv_paise"] for u in unlocked),
+        "vernacular_share": round(sum(u["language"] != "en" for u in unlocked) / max(1, len(unlocked)), 3),
+        "detail": unlocked,
+    }
 
     # ---- false-positive cost: what each notch of policy strictness wrongly declines, and what it costs
     if sweep:
@@ -213,6 +250,18 @@ def render_markdown(r: dict[str, Any]) -> str:
         *[f"| {k} | {v:.3f} |" for k, v in c["accuracy"].items()],
         "",
         f"Review rate {c['review_rate']:.3f} (items queued for the merchant instead of guessed) · injections neutralised **{c['injections_stripped']}/{c['injections_present']}** · readiness mean {c['readiness_mean']} (min {c['readiness_min']}).",
+        *(
+            [
+                "",
+                (
+                    lambda h: f"**Held-out eval** — {len(h['catalogs'])} hand-written catalogs the generator did not produce (kirana rate card, Shopify export, electronics price list; {h['rows']} rows): "
+                    + " · ".join(f"{k} {v:.3f}" for k, v in h["accuracy"].items() if v is not None)
+                    + f" · review rate {h['review_rate']:.3f}. Cells the source doesn't state (e.g. GST on a Shopify export) are review-queued, never guessed."
+                )(r["compiler_heldout"]),
+            ]
+            if "compiler_heldout" in r
+            else []
+        ),
         "",
         f"## Transactions ({t['tasks']} buyer tasks, {t['possible_tasks']} possible / {t['declines']['impossible_tasks']} impossible by construction)",
         "",
@@ -227,6 +276,16 @@ def render_markdown(r: dict[str, Any]) -> str:
         "",
         f"Lift: **{lf['orders']:+d} orders, {_signed_rs(lf['gmv_paise'])} GMV ({lf['gmv_multiple']}×)**."
         + (f" The extra completions were bought with {_rs(t['discount_paise'])} of rule-bounded discounts — conversion up, GMV per order slightly down, exactly what bounded offers are for." if lf["gmv_paise"] < 0 <= lf["orders"] else ""),
+        "",
+        (
+            lambda ou: (
+                f"**{ou['count']} orders ({_rs(ou['gmv_paise'])}) could not have happened at all without Bazaar** — "
+                + ", ".join(f"{v} needed a {k.replace('_', ' ')}" for k, v in sorted(ou["by_reason"].items()))
+                + f"; {ou['vernacular_share']:.0%} of them arrived in Hindi or Hinglish. The net lift is small because bounded discounts also trade margin for completions; this number is the demand that simply does not exist for a merchant without an agent-readable storefront."
+                if ou and ou["count"]
+                else ""
+            )
+        )(lf.get("orders_unlocked")),
         "",
         f"Declines on impossible tasks — precision {t['declines']['precision']:.3f}, recall {t['declines']['recall']:.3f}; wrong orders on impossible tasks: **{t['declines']['wrong_orders_on_impossible']}**; wrong declines on possible tasks: {t['declines']['wrong_declines_on_possible']}. Overall task accuracy {t['accuracy']:.1%}. Errors: {t['errors']}.",
         "",

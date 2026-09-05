@@ -506,6 +506,28 @@ def create_app(state: BazaarState | None = None, load_corpus: bool = False) -> F
         llm = st.llm.status() if hasattr(st.llm, "status") else {"backend": st.llm.name, "degraded": False}
         return {"merchants": len(st.merchants), "agents": len(st.registry.all()), "sessions": len(ss), "completed": sum(s.status == "completed" for s in ss), "gmv_paise": sum((s.quote or {}).get("total_paise", 0) for s in ss if s.status == "completed"), "audit_entries": len(st.audit.entries), "chain_ok": st.audit.verify_chain()[0], "ledger": st.ledger.summary(), "llm": llm}
 
+    @app.post("/bazaar/v1/dev/compile-preview")
+    def compile_preview(body: CompileIn):
+        """Judge-facing sandbox: compile ANY CSV and see exactly what the pipeline does — no
+        token, because nothing is stored, published or attached to a merchant."""
+        if len(body.csv) > 100_000:
+            raise HTTPException(413, detail={"error": "csv_too_large", "limit_bytes": 100_000})
+        try:
+            rows = read_csv_text(body.csv)
+        except ValueError as e:
+            raise HTTPException(422, detail={"error": str(e)}) from e
+        if len(rows) > 60:
+            raise HTTPException(413, detail={"error": "too_many_rows", "limit": 60})
+        template = next(iter(st.merchants.values())).model_copy(update={"products": []})
+        compiled = compile_rows(rows, template, st.llm)
+        return {
+            "products": len(compiled.merchant.products),
+            "stripped_injections": compiled.stripped_injections,
+            "review_queue": [r.model_dump() for r in compiled.review_queue],
+            "preview": [p.model_dump(mode="json") for p in compiled.merchant.products[:60]],
+            "note": "stateless preview — nothing was stored or published; publishing requires the merchant's admin token",
+        }
+
     @app.post("/bazaar/v1/dev/chaos")
     def chaos(body: ChaosIn, request: Request):
         """Demo/testing: simulate a model outage. The Seller Agent keeps answering via the
@@ -538,8 +560,12 @@ def _mount_console(app: FastAPI) -> None:
 
     @app.get("/{path:path}", include_in_schema=False)
     def console_spa(path: str):
-        target = dist / path
-        if path and target.is_file():
+        # containment: only files that resolve inside dist are served; anything else is the SPA
+        try:
+            target = (dist / path).resolve()
+        except (OSError, ValueError):
+            target = dist
+        if path and target.is_file() and target.is_relative_to(dist):
             return FileResponse(target)
         return FileResponse(dist / "index.html")
 

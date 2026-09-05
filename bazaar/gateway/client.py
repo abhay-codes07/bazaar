@@ -45,8 +45,8 @@ class BuyerAgentClient:
         return self.call(method, path, body, tag=TAG_PAY, extra_headers=extra)
 
     # ------------------------------------------------------------------ mandates
-    def mandates_for(self, quote: dict[str, Any], merchant_id: str, buyer_ref: str, max_amount_paise: int, human_present: bool = True) -> tuple[dict, dict]:
-        cm = CheckoutMandate.open(buyer_ref, max_amount_paise, pincode=quote.get("pincode", ""), human_present=human_present).close(quote["quote_id"], merchant_id, quote["total_paise"])
+    def mandates_for(self, quote: dict[str, Any], merchant_id: str, buyer_ref: str, max_amount_paise: int, human_present: bool = True, cod_ok: bool = False) -> tuple[dict, dict]:
+        cm = CheckoutMandate.open(buyer_ref, max_amount_paise, pincode=quote.get("pincode", ""), human_present=human_present, cod_ok=cod_ok).close(quote["quote_id"], merchant_id, quote["total_paise"])
         cm.sign(self.buyer_priv, self.buyer_keyid)
         pm = PaymentMandate.open(buyer_ref, max_amount_paise).close(cm)
         pm.sign(self.buyer_priv, self.buyer_keyid)

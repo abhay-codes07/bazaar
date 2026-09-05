@@ -171,7 +171,32 @@ def run_redteam(client: BuyerAgentClient, state) -> list[Case]:
     orders_after = sum(1 for s in state.sessions.values() if s.order_id)
     cases.append(Case(name="kill_switch_blocks_checkout", category="merchant_control", passed=r.status_code == 422 and "kill_switch_off" in r.json().get("reason", "") and orders_before == orders_after, detail=f"{r.status_code} {r.text[:160]}"))
 
-    # 15. Audit chain integrity after all of the above
+    # 15. COD above the RTO gate's value cap is refused even with a cod_ok mandate
+    r = client.call("POST", "/bazaar/v1/sessions", {"merchant_id": mid, "message": f"20 kg basmati rice to {m.base_pincode}"})
+    sid7, q7 = r.json()["session"]["session_id"], r.json()["session"]["quote"]
+    cod_probe_valid = bool(q7) and q7["total_paise"] > 2_000_00
+    if cod_probe_valid:
+        g7 = client.pay_call("POST", "/bazaar/v1/grants", {"buyer_ref": "cod", "merchant_id": mid, "max_amount_paise": q7["total_paise"]}).json()["grant_id"]
+        cm, pm = client.mandates_for(q7, mid, "cod", q7["total_paise"], cod_ok=True)
+        r = client.pay_call("POST", f"/bazaar/v1/sessions/{sid7}/complete", {"grant_id": g7, "checkout_mandate": cm, "payment_mandate": pm, "human_confirmation": True})
+        cases.append(Case(name="cod_above_rto_cap_rejected", category="fraud", passed=r.status_code == 422 and "cod_gate" in r.json().get("reason", ""), detail=f"{r.status_code} ₹{q7['total_paise'] / 100:.0f} {r.text[:120]}"))
+    else:
+        cases.append(Case(name="cod_above_rto_cap_rejected", category="fraud", passed=False, detail=f"probe quote unusable: {str(q7)[:120]}"))
+
+    # 16. The MCP surface enforces merchant authority too (kill switch on side-effect tools)
+    import asyncio
+    import json as _json
+
+    from bazaar.seller_agent.mcp_server import build_mcp
+
+    m_mcp = m.model_copy(deep=True)
+    m_mcp.policy.kill_switch = True
+    out = asyncio.run(build_mcp(m_mcp).call_tool("apply_offer", {"quote_id": "q_probe", "rule_id": "NEW10"}))
+    blocks = out[0] if isinstance(out, tuple) else out
+    d = _json.loads(blocks[0].text)
+    cases.append(Case(name="mcp_side_effect_respects_kill_switch", category="merchant_control", passed=bool(d.get("declined")) and any(c["name"] == "kill_switch_off" and not c["passed"] for c in d.get("policy_checks", [])), detail=str(d)[:120]))
+
+    # 17. Audit chain integrity after all of the above
     ok, bad = state.audit.verify_chain()
     cases.append(Case(name="audit_chain_intact", category="audit", passed=ok, detail=f"{len(state.audit.entries)} entries"))
     return cases

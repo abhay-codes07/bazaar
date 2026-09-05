@@ -129,3 +129,34 @@ def test_mcp_server_lists_tools(grocer):
     assert {t.name for t in tools} == {"search_products", "get_availability", "check_serviceability", "quote", "apply_offer", "reserve"}
     out = asyncio.run(mcp.call_tool("search_products", {"query": "basmati"}))
     assert out and "Basmati" in str(out)
+
+
+def test_mcp_side_effect_tools_respect_verify(merchants):
+    """The MCP surface must enforce merchant authority like the HTTP path: kill switch,
+    rule existence, negotiation caps — not just deterministic maths."""
+    import asyncio
+    import json as _json
+
+    from bazaar.seller_agent.mcp_server import build_mcp
+
+    def call(mcp, name, args):
+        out = asyncio.run(mcp.call_tool(name, args))
+        blocks = out[0] if isinstance(out, tuple) else out
+        return _json.loads(blocks[0].text)
+
+    m = next(x for x in merchants if x.vertical.value == "grocery").model_copy(deep=True)
+    for p in m.products:
+        p.stock = max(p.stock, 25)
+
+    killed = m.model_copy(deep=True)
+    killed.policy.kill_switch = True
+    out = call(build_mcp(killed), "apply_offer", {"quote_id": "q_x", "rule_id": "NEW10"})
+    assert out.get("declined") and any(c["name"] == "kill_switch_off" and not c["passed"] for c in out["policy_checks"])
+
+    mcp = build_mcp(m)
+    q = call(mcp, "quote", {"lines": [{"sku": m.products[0].sku, "qty": 2}], "pincode": m.base_pincode, "segment": "new"})
+    quote_id = (q.get("result") or q)["quote_id"]
+    out = call(mcp, "apply_offer", {"quote_id": quote_id, "rule_id": "NOT_A_RULE"})
+    assert out.get("declined") and any(c["name"] == "offer_rule_exists" and not c["passed"] for c in out["policy_checks"])
+    out = call(mcp, "reserve", {"quote_id": quote_id})
+    assert not out.get("declined") and (out.get("result") or {}).get("reservation_id")
