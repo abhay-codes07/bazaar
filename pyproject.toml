@@ -7,6 +7,8 @@ name = "bazaar"
 version = "0.1.0"
 description = "Bazaar — agentic-commerce layer that makes any Razorpay merchant transactable by AI agents."
 requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+classifiers = ["License :: OSI Approved :: Apache Software License"]
 dependencies = [
     "fastapi>=0.110",
     "uvicorn>=0.29",
