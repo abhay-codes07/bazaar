@@ -67,7 +67,7 @@ class PolicyEngine:
         cs.append(Check(name="kill_switch_off", passed=not pol.kill_switch, detail="merchant disabled agent" if pol.kill_switch else ""))
         cs.append(Check(name="quote_fresh", passed=now <= quote.valid_until, detail="quote expired" if now > quote.valid_until else ""))
         cs.append(Check(name="quote_merchant_matches", passed=quote.merchant_id == m.merchant_id))
-        cs.append(Check(name="quote_amount_valid", passed=quote.total_paise >= 100, detail=f"₹{quote.total_paise / 100:.2f} below the ₹1 minimum a payment link accepts"))
+        cs.append(Check(name="quote_amount_valid", passed=quote.total_paise >= 100, detail="" if quote.total_paise >= 100 else f"₹{quote.total_paise / 100:.2f} below the ₹1 minimum a payment link accepts"))
 
         ident = self.registry.get(agent_keyid)
         cs.append(Check(name="agent_registered", passed=ident is not None and not ident.revoked, detail=agent_keyid or "unsigned"))
